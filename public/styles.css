@@ -9,16 +9,27 @@ body {
   text-align: center;
   margin: 0;
   min-height: 100vh;
+  width: 100vw;
 }
 
 main, header, footer {
     width: 75%;
 }
 
+header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 main {
     display: flex;
     flex-direction: column;
     flex: 1;
+}
+
+#main-home {
+  background-color: #A13D51;
 }
 
 footer {
@@ -41,9 +52,14 @@ h2 {
 
 nav {
   padding-top: 25px;
-  padding-bottom: 25px;
+  padding-bottom: 10px;
   background-color: olivedrab;
   color:white;
+  justify-content: center;
+}
+
+#home-img-container {
+  margin: auto;
 }
 
 #home-img {
@@ -74,12 +90,12 @@ nav {
 ul {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-around;
+  padding: 0;
 }
 
 li {
   list-style-type: none;
-  margin-left: 20px;
 }
 
 table {
