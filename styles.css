@@ -1,5 +1,75 @@
+.body-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.nav {
+  padding-top: 25px;
+  padding-bottom: 25px;
+  background-color: olivedrab;
+  color:olivedrab;
+}
+
+.info {
+  padding-top: 25px;
+  padding-bottom: 25px;
+  background-color: orange;
+  margin: 10px;
+}
+
+
+.table {
+  padding-top: 25px;
+  background-color: orange;
+  flex-direction: column;
+  padding-bottom: 25px;
+  margin: 10px;
+}
+
+.search {
+  padding-top: 25px;
+  display: flex;
+  background-color: burlywood;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 25px;
+  margin: 10px;
+}
+
+.add {
+  padding-top: 25px;
+  display: flex;
+  background-color: crimson;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 25px;
+  margin: 10px;
+}
+
+.edit {
+  padding-top: 25px;
+  display: flex;
+  background-color: burlywood;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 25px;
+  margin: 10px;
+}
+
+.delete {
+  padding-top: 25px;
+  display: flex;
+  background-color: olivedrab;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 25px;
+  margin: 10px;
+}
+
 body {
-  background-color: #22272E;  
+  background-color: wheat;  
   color: beige;
   text-align: center;
 }
@@ -15,9 +85,39 @@ li {
   margin-left: 20px;
 }
 
+table {
+  color:olivedrab;
+  border-color: orangered;
+  border-radius: 100px;
+  border-color: #22272E;
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed; /* Set the table layout to fixed */
+}
+
+tbody {
+  display: table;
+  width: 100%;
+}
+
+tr {
+  display: table-row;
+}
+
+td {
+  display: table-cell; /* Make each cell behave like a table cell */
+  text-align: center; /* Align the content within the cell horizontally (center, left, right, etc.) */
+  padding: 10px; /* Add padding to create space around the content */
+  border: 1px solid #ccc; /* Add borders to the cells (optional) */
+}
+
 a {
   text-decoration: none;
   color: white;
+}
+
+a:hover {
+  color: burlywood;
 }
 
 fieldset {

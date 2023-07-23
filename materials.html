@@ -7,22 +7,38 @@
   <title>Materials</title>
 </head>
 <body>
+  <div class="body-div">
 
-  <h1>Materials</h1>
+    <div class="nav">
+      <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="customers.html">Customers</a></li>
+            <li><a href="invoices.html">Invoices</a></li>
+            <li><a href="sales.html">Sales</a></li>
+            <li><a href="weapons.html">Weapons</a></li>
+            <li><a href="materials.html">Materials</a></li>
+            <li><a href="weaponMaterials.html">Weapon Materials</a></li>
+        </ul>
+      </nav>
+    </div>
 
-  <nav>
-    <ul>
-        <li><a href="/customers.html">Customers</a></li>
-        <li><a href="/invoices.html">Invoices</a></li>
-        <li><a href="/sales.html">Sales</a></li>
-        <li><a href="/weapons.html">Weapons</a></li>
-        <li><a href="/materials.html">Materials</a></li>
-    </ul>
-  </nav> 
+  <!-- Materials table -->
+  <div class="table">
+    <h1>Materials</h1>
+    <table>
+        <tr>
+            <th>material_id</th>
+            <th>name</th>
+            <th>cost_per_pound</th>
+            <th>pounds-available</th>
+        </tr>
+    </table>
+   </div> 
 
   <!-- search for material -->
-  <div class="get-form">
-    <form action="GET">
+  <div class="search">
+    <form action="/submit" method="GET">
       <fieldset>
         <legend><strong>Search materials:</strong></legend>
         <label for="material">Material:</label>
@@ -33,8 +49,8 @@
   </div>
 
   <!-- add material -->
-  <div class="post-form">
-    <form action="POST">
+  <div class="add">
+    <form action="/submit" method="POST">
       <fieldset>
         <legend><strong>Add new material:</strong></legend>
         <label for="material">Material:</label>
@@ -49,8 +65,8 @@
   </div>
 
   <!-- update sale -->
-  <div class="put-form">
-    <form action="PUT">
+  <div class="edit">
+    <form action="/submit" method="PUT">
       <fieldset>
         <legend><strong>Update material:</strong></legend>
         <label for="update-material">Material:</label>
@@ -65,8 +81,8 @@
   </div>
 
   <!-- delete sale -->
-  <div class="delete-form">
-    <form action="DELETE">
+  <div class="delete">
+    <form action="/submit" method="DELETE">
       <fieldset>
         <legend><strong>Delete material:</strong></legend>
         <label for="delete-material">Material:</label>
@@ -75,6 +91,6 @@
       </fieldset>
     </form>
   </div>
-
+  </div>
 </body>
 </html>

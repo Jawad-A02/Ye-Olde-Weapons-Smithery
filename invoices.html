@@ -7,18 +7,23 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Invoices</h1>
-  <nav>
-    <ul>
-        <li><a href="/customers.html">Customers</a></li>
-        <li><a href="/invoices.html">Invoices</a></li>
-        <li><a href="/sales.html">Sales</a></li>
-        <li><a href="/weapons.html">Weapons</a></li>
-        <li><a href="/materials.html">Materials</a></li>
-    </ul>
-  </nav>
+  <div class="nav">
+    <nav>
+      <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="customers.html">Customers</a></li>
+          <li><a href="invoices.html">Invoices</a></li>
+          <li><a href="sales.html">Sales</a></li>
+          <li><a href="weapons.html">Weapons</a></li>
+          <li><a href="materials.html">Materials</a></li>
+          <li><a href="weaponMaterials.html">Weapon Materials</a></li>
+      </ul>
+    </nav>
+  </div>
 
   <!-- Invoices table -->
+  <div class="table">
+  <h1>Invoices</h1>
   <table>
     <tr>
         <th>invoice_id</th>
@@ -27,10 +32,11 @@
         <th>date</th>
     </tr>
   </table>
-
+  </div>
+  
   <!-- search for invoices -->
-  <div class="get-form">
-    <form action="GET">
+  <div class="search">
+    <form action="/submit" method="GET">
       <fieldset>
         <legend><strong>Search invoices:</strong></legend>
         <label for="name">By customer:</label>
@@ -42,7 +48,7 @@
   </div>
 
   <!-- add invoice -->
-  <div class="post-form">
+  <div class="add">
     <form action="POST">
       <fieldset>
         <legend><strong>Add new invoice:</strong></legend>
@@ -56,11 +62,11 @@
     </form>
   </div>
 
-  <!-- add invoice -->
-  <div class="put-form">
-    <form action="PUT">
+  <!-- edit invoice -->
+  <div class="edit">
+    <form action="/submit" method="PUT">
       <fieldset>
-        <legend><strong>Add new invoice:</strong></legend>
+        <legend><strong>Edit invoice:</strong></legend>
         <label for="name">Customer:</label>
         <input id="invoice-add-name" name="name" type="text">
         <label for="sale">Add sale:</label>
@@ -72,8 +78,8 @@
   </div>
 
   <!-- delete invoice -->
-  <div class="delete-form">
-    <form action="DELETE">
+  <div class="delete">
+    <form action="/submit" method="DELETE">
       <fieldset>
         <legend><strong>Delete invoice:</strong></legend>
         <label for="name">Customer:</label>
@@ -85,6 +91,6 @@
       </fieldset>
     </form>
   </div>
-
+  </div>
 </body>
 </html>

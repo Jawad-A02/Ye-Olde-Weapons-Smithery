@@ -7,70 +7,88 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Customers</h1>
-  <nav>
-    <ul>
-        <li><a href="/customers.html">Customers</a></li>
-        <li><a href="/invoices.html">Invoices</a></li>
-        <li><a href="/sales.html">Sales</a></li>
-        <li><a href="/weapons.html">Weapons</a></li>
-        <li><a href="/materials.html">Materials</a></li>
-    </ul>
-  </nav>
-  <table>
-    <tr>
-        <th>customer_id</th>
-        <th>name</th>
-        <th>level</th>
-    </tr>
-  </table>
-    <div class="search-customers">
-        <form method="GET">
-            <fieldset class="fields">
+  <div class="body-div">  
+    <div class="nav">
+        <nav>
+          <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="customers.html">Customers</a></li>
+              <li><a href="invoices.html">Invoices</a></li>
+              <li><a href="sales.html">Sales</a></li>
+              <li><a href="weapons.html">Weapons</a></li>
+              <li><a href="materials.html">Materials</a></li>
+              <li><a href="weaponMaterials.html">Weapon Materials</a></li>
+          </ul>
+        </nav>
+      </div>
+
+  <!-- Customers table -->
+  <div class="table">
+    <h1>Customers</h1>
+    <table>
+        <tr>
+            <th>customer_id</th>
+            <th>name</th>
+            <th>level</th>
+        </tr>
+    </table>
+   </div> 
+
+  <!-- search for Customers -->
+    <div class="search">
+        <form action="/submit" method="GET">
+            <fieldset>
                 <legend><strong>Search Customer</strong></legend>
                 <label for="customer-search-name">Name:</label>
-                <input id="customer-search-name" name="name" type="text"><br>
+                <input id="customer-search-name" name="name" type="text">
                 <label for="customer-search-level">Level:</label>
-                <input id="customer-search-level" name="level" type="int"><br>
+                <input id="customer-search-level" name="level" type="int">
                 <button type="button">Submit</button>
             </fieldset>
         </form>
     </div>
-    <div class="add-customers">
-        <form method="POST">
-            <fieldset class="fields">
+
+  <!-- add Customers -->
+    <div class="add">
+        <form action="/submit" method="POST">
+            <fieldset>
                 <legend><strong>Add Customer</strong></legend>
                 <label for="customer-add-name">Name:</label>
-                <input id="customer-add-name" name="name" type="text"><br>
+                <input id="customer-add-name" name="name" type="text">
                 <label for="customer-add-level">Level:</label>
-                <input id="customer-add-level" name="level" type="int"><br>
+                <input id="customer-add-level" name="level" type="int">
                 <button type="button">Submit</button>
             </fieldset>
         </form>
     </div>
-    <div class="edit-customers">
-        <form method="PUT">
-            <fieldset class="fields">
+
+  <!-- edit Customers -->
+    <div class="edit">
+        <form action="/submit" method="PUT">
+            <fieldset>
                 <legend><strong>Edit Customer</strong></legend>
                 <label for="customer-edit-name">Name:</label>
-                <input id="customer-edit-name" name="name" type="text"><br>
+                <input id="customer-edit-name" name="name" type="text">
                 <label for="customer-edit-level">Level:</label>
-                <input id="customer-edit-level" name="level" type="int"><br>
+                <input id="customer-edit-level" name="level" type="int">
                 <button type="button">Submit</button>
             </fieldset>
         </form>
     </div>
-    <div class="delete customers">
-        <form method="DELETE">
-            <fieldset class="fields">
+
+  <!-- delete Customers -->
+    <div class="delete">
+        <form action="/submit" method="DELETE">
+            <fieldset>
                 <legend><strong>Delete Customer</strong></legend>
                 <label for="customer-delete-name">Name:</label>
-                <input id="customer-delete-name" name="name" type="text"><br>
+                <input id="customer-delete-name" name="name" type="text">
                 <label for="customer-delete-level">Level:</label>
-                <input id="customer-delete-level" name="level" type="int"><br>
+                <input id="customer-delete-level" name="level" type="int">
                 <button type="button">Submit</button>
             </fieldset>
         </form>
+    </div>
     </div>
 </body>
 </html>
