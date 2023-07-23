@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weapons</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Weapons</h1>
+  <nav>
+    <ul>
+        <li><a href="/customers.html">Customers</a></li>
+        <li><a href="/invoices.html">Invoices</a></li>
+        <li><a href="/sales.html">Sales</a></li>
+        <li><a href="/weapons.html">Weapons</a></li>
+        <li><a href="/materials.html">Materials</a></li>
+    </ul>
+  </nav>
+  <table>
+    <tr>
+        <th>Weapon_id</th>
+        <th>name</th>
+        <th>level</th>
+        <th>magical_ability</th>
+        <th>total_cost</th>
+    </tr>
+  </table>
+    <div class="search-weapons">
+        <form method="GET">
+            <fieldset class="fields">
+                <legend><strong>Search Weapons</strong></legend>
+                <label for="weapon-search-name">Name:</label>
+                <input id="weapon-search-name" name="name" type="text"><br>
+                <label for="weapon-search-level">Level:</label>
+                <input id="weapon-search-level" name="level" type="int"><br>
+                <label for="weapon-search-magic">magical_ability:</label>
+                <input id="weapon-search-magic" name="level" type="text"><br>
+                <label for="weapon-search-total_cost">total_cost:</label>
+                <input id="weapon-search-total_cost" name="level" type="int"><br>
+                <button type="button">Submit</button>
+            </fieldset>
+        </form>
+    </div>
+    <div class="add-customers">
+        <form method="POST">
+            <fieldset class="fields">
+                <legend><strong>Add Customer</strong></legend>
+                <label for="weapon-add-name">Name:</label>
+                <input id="weapon-add-name" name="name" type="text"><br>
+                <label for="weapon-add-level">Level:</label>
+                <input id="weapon-add-level" name="level" type="int"><br>
+                <label for="weapon-add-magic">magical_ability:</label>
+                <input id="weapon-add-magic" name="level" type="text"><br>
+                <label for="weapon-add-total_cost">total_cost:</label>
+                <input id="weapon-add-total_cost" name="level" type="int"><br>
+                <button type="button">Submit</button>
+            </fieldset>
+        </form>
+    </div>
+    <div class="edit-customers">
+        <form method="PUT">
+            <fieldset class="fields">
+                <legend><strong>Edit Customer</strong></legend>
+                <label for="weapon-edit-name">Name:</label>
+                <input id="weapon-edit-name" name="name" type="text"><br>
+                <label for="weapon-edit-level">Level:</label>
+                <input id="weapon-edit-level" name="level" type="int"><br>
+                <label for="weapon-edit-magic">magical_ability:</label>
+                <input id="weapon-edit-magic" name="level" type="text"><br>
+                <label for="weapon-edit-total_cost">total_cost:</label>
+                <input id="weapon-edit-total_cost" name="level" type="int"><br>
+                <button type="button">Submit</button>
+            </fieldset>
+        </form>
+    </div>
+    <div class="delete customers">
+        <form method="DELETE">
+            <fieldset class="fields">
+                <legend><strong>Delete Customer</strong></legend>
+                <label for="weapon-delete-name">Name:</label>
+                <input id="weapon-delete-name" name="name" type="text"><br>
+                <label for="weapon-delete-level">Level:</label>
+                <input id="weapon-delete-level" name="level" type="int"><br>
+                <label for="weapon-delete-magic">magical_ability:</label>
+                <input id="weapon-delete-magic" name="level" type="text"><br>
+                <label for="weapon-delete-total_cost">total_cost:</label>
+                <input id="weapon-delete-total_cost" name="level" type="int"><br>
+                <button type="button">Submit</button>
+            </fieldset>
+        </form>
+    </div>
+</body>
+</html>

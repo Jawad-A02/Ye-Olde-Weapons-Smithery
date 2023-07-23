@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customers</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Customers</h1>
+  <nav>
+    <ul>
+        <li><a href="/customers.html">Customers</a></li>
+        <li><a href="/invoices.html">Invoices</a></li>
+        <li><a href="/sales.html">Sales</a></li>
+        <li><a href="/weapons.html">Weapons</a></li>
+        <li><a href="/materials.html">Materials</a></li>
+    </ul>
+  </nav>
+  <table>
+    <tr>
+        <th>customer_id</th>
+        <th>name</th>
+        <th>level</th>
+    </tr>
+  </table>
+    <div class="search-customers">
+        <form method="GET">
+            <fieldset class="fields">
+                <legend><strong>Search Customer</strong></legend>
+                <label for="customer-search-name">Name:</label>
+                <input id="customer-search-name" name="name" type="text"><br>
+                <label for="customer-search-level">Level:</label>
+                <input id="customer-search-level" name="level" type="int"><br>
+                <button type="button">Submit</button>
+            </fieldset>
+        </form>
+    </div>
+    <div class="add-customers">
+        <form method="POST">
+            <fieldset class="fields">
+                <legend><strong>Add Customer</strong></legend>
+                <label for="customer-add-name">Name:</label>
+                <input id="customer-add-name" name="name" type="text"><br>
+                <label for="customer-add-level">Level:</label>
+                <input id="customer-add-level" name="level" type="int"><br>
+                <button type="button">Submit</button>
+            </fieldset>
+        </form>
+    </div>
+    <div class="edit-customers">
+        <form method="PUT">
+            <fieldset class="fields">
+                <legend><strong>Edit Customer</strong></legend>
+                <label for="customer-edit-name">Name:</label>
+                <input id="customer-edit-name" name="name" type="text"><br>
+                <label for="customer-edit-level">Level:</label>
+                <input id="customer-edit-level" name="level" type="int"><br>
+                <button type="button">Submit</button>
+            </fieldset>
+        </form>
+    </div>
+    <div class="delete customers">
+        <form method="DELETE">
+            <fieldset class="fields">
+                <legend><strong>Delete Customer</strong></legend>
+                <label for="customer-delete-name">Name:</label>
+                <input id="customer-delete-name" name="name" type="text"><br>
+                <label for="customer-delete-level">Level:</label>
+                <input id="customer-delete-level" name="level" type="int"><br>
+                <button type="button">Submit</button>
+            </fieldset>
+        </form>
+    </div>
+</body>
+</html>

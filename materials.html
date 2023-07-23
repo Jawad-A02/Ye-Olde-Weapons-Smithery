@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>Materials</title>
+</head>
+<body>
+
+  <h1>Materials</h1>
+
+  <nav>
+    <ul>
+        <li><a href="/customers.html">Customers</a></li>
+        <li><a href="/invoices.html">Invoices</a></li>
+        <li><a href="/sales.html">Sales</a></li>
+        <li><a href="/weapons.html">Weapons</a></li>
+        <li><a href="/materials.html">Materials</a></li>
+    </ul>
+  </nav> 
+
+  <!-- search for material -->
+  <div class="get-form">
+    <form action="GET">
+      <fieldset>
+        <legend><strong>Search materials:</strong></legend>
+        <label for="material">Material:</label>
+        <input id="search-material" name="material" type="text">
+        <input type="submit">	
+      </fieldset>
+    </form>
+  </div>
+
+  <!-- add material -->
+  <div class="post-form">
+    <form action="POST">
+      <fieldset>
+        <legend><strong>Add new material:</strong></legend>
+        <label for="material">Material:</label>
+        <input id="add-material" name="sale" type="text">
+        <label for="add-cost-per-pound">Cost per pound:</label>
+        <input id="add-cost-per-pound" name="add-cost-per-pound" type="text">
+        <label for="pounds-available">Pounds available:</label>
+        <input id="add-pounds-available" name="add-pounds-available" type="text">
+        <input type="submit">	
+      </fieldset>
+    </form>
+  </div>
+
+  <!-- update sale -->
+  <div class="put-form">
+    <form action="PUT">
+      <fieldset>
+        <legend><strong>Update material:</strong></legend>
+        <label for="update-material">Material:</label>
+        <input id="update-material" name="update-material" type="text">
+        <label for="update-cost-per-pound">Cost per pound:</label>
+        <input id="update-cost-per-pound" name="update-cost-per-pound" type="text">
+        <label for="update-pounds-available">Pounds available:</label>
+        <input id="update-pounds-available" name="update-pounds-available" type="text">
+        <input type="submit">	
+      </fieldset>
+    </form>
+  </div>
+
+  <!-- delete sale -->
+  <div class="delete-form">
+    <form action="DELETE">
+      <fieldset>
+        <legend><strong>Delete material:</strong></legend>
+        <label for="delete-material">Material:</label>
+        <input id="delete-material" name="delete-material" type="drop">
+        <input type="submit">	
+      </fieldset>
+    </form>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+body {
+  background-color: #22272E;  
+  color: beige;
+  text-align: center;
+}
+
+ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+li {
+  list-style-type: none;
+  margin-left: 20px;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+fieldset {
+  width: fit-content;
+  margin: 20px auto;
+}
+
+form {
+  display: block;
+}
+
+input, label {
+  display: block;
+}
+
+label {
+  margin-top: 20px;
+  text-align: left;
+}
+
+input {
+  margin: 5px auto;
+}
+
+fieldset {
+  display: block;
+}
+
+#form {
+  display: flex;
+  flex-direction: column;
+}

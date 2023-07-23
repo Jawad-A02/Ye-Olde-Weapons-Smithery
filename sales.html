@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>Sales</title>
+</head>
+<body>
+  <h1>Sales</h1>
+  <nav>
+    <ul>
+        <li><a href="/customers.html">Customers</a></li>
+        <li><a href="/invoices.html">Invoices</a></li>
+        <li><a href="/sales.html">Sales</a></li>
+        <li><a href="/weapons.html">Weapons</a></li>
+        <li><a href="/materials.html">Materials</a></li>
+    </ul>
+  </nav> 
+
+  <table>
+    <tr>
+        <th>sale_id</th>
+        <th>price</th>
+        <th>invoice_id</th>
+        <th>weapon_id</th>
+    </tr>
+  </table>
+
+  <!-- search for sale -->
+  <div class="get-form">
+    <form action="GET">
+      <fieldset>
+        <legend><strong>Search sales:</strong></legend>
+        <label for="sale-search-customer">By customer:</label>
+        <input id="sale-search-customer" name="customer" type="text">
+        <label for="sale-search-date">By date:</label>
+        <input id="sale-search-date" name="date" type="text">
+        <label for="sale-search-weapon">By weapon:</label>
+        <input id="sale-search-weapon" name="weapon" type="text">
+        <label for="sale-search-price">By price:</label>
+        <input id="sale-search-price" name="weapon" type="text">
+        <input type="submit">	
+      </fieldset>
+    </form>
+  </div>
+
+  <!-- add sale -->
+  <div class="post-form">
+    <form action="POST">
+      <fieldset>
+        <legend><strong>Add new sale:</strong></legend>
+        <label for="customer">Customer:</label>
+        <input id="sale-add-customer" name="customer" type="text">
+        <label for="invoice">Invoice:</label>
+        <input id="sale-add-invoice" name="invoice" type="text">
+        <label for="weapon">Weapon:</label>
+        <input id="sale-add-weapon" name="sale" type="text">
+        <label for="price">Price:</label>
+        <input id="sale-add-price" name="price" type="text">
+      </fieldset>
+    </form>
+  </div>
+
+  <!-- update sale -->
+  <div class="put-form">
+    <form action="PUT">
+      <fieldset>
+        <legend><strong>Update sale:</strong></legend>
+        <label for="customer">Customer:</label>
+        <input id="sale-update-customer" name="customer" type="text">
+        <label for="invoice">Invoice:</label>
+        <input id="sale-update-invoice" name="invoice" type="text">
+        <label for="weapon">Weapon:</label>
+        <input id="sale-update-weapon" name="sale" type="text">
+        <label for="price">Price:</label>
+        <input id="sale-update-price" name="price" type="text">
+      </fieldset>
+    </form>
+  </div>
+
+  <!-- delete sale -->
+  <div class="delete-form">
+    <form action="DELETE">
+      <fieldset>
+        <legend><strong>Delete sale:</strong></legend>
+        <label for="customer">Customer:</label>
+        <input id="sale-delete-customer" name="customer" type="text">
+        <label for="invoice">Invoice:</label>
+        <input id="sale-delete-invoice" name="delete" type="text">
+        <input type="submit">	
+      </fieldset>
+    </form>
+  </div>
+
+</body>
+</html>

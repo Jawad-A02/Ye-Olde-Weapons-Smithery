@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weapon Materials</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Weapon Materials</h1>
+  <nav>
+    <ul>
+        <li><a href="/customers.html">Customers</a></li>
+        <li><a href="/invoices.html">Invoices</a></li>
+        <li><a href="/sales.html">Sales</a></li>
+        <li><a href="/weapons.html">Weapons</a></li>
+        <li><a href="/materials.html">Materials</a></li>
+    </ul>
+  </nav>
+  <table>
+    <tr>
+        <th>material_name</th>
+        <th>weapon_name</th>
+        <th>pounds</th>
+    </tr>
+  </table>
+    <div class="search-weaponMaterials">
+        <form method="GET">
+            <fieldset class="fields">
+                <legend><strong>Search WeaponMaterials</strong></legend>
+                <label for="weaponMaterials-search-weaponName">Name:</label>
+                <input id="weaponMaterials-search-weaponName" name="name" type="text"><br>
+                <label for="weaponMaterials-search-materialName">Level:</label>
+                <input id="weaponMaterials-search-materialName" name="level" type="text"><br>
+                <label for="weaponMaterials-add-pounds">Level:</label>
+                <input id="weaponMaterials-add-pounds" name="level" type="int"><br>
+                <button type="button">Submit</button>
+            </fieldset>
+        </form>
+    </div>
+    <div class="add-customers">
+        <form method="POST">
+            <fieldset class="fields">
+                <legend><strong>Add WeaponMaterials</strong></legend>
+                <label for="weaponMaterials-add-weaponName">Name:</label>
+                <input id="weaponMaterials-add-weaponName" name="name" type="text"><br>
+                <label for="weaponMaterials-add-materialName">Level:</label>
+                <input id="weaponMaterials-add-materialName" name="level" type="text"><br>
+                <label for="weaponMaterials-add-pounds">Level:</label>
+                <input id="weaponMaterials-add-pounds" name="level" type="int"><br>
+                <button type="button">Submit</button>
+            </fieldset>
+        </form>
+    </div>
+    <div class="edit-customers">
+        <form method="PUT">
+            <fieldset class="fields">
+                <legend><strong>Edit WeaponMaterials</strong></legend>
+                <label for="weaponMaterials-edit-weaponName">Name:</label>
+                <input id="weaponMaterials-edit-weaponName" name="name" type="text"><br>
+                <label for="weaponMaterials-edit-materialName">Level:</label>
+                <input id="weaponMaterials-edit-materialName" name="level" type="text"><br>
+                <label for="weaponMaterials-add-pounds">Level:</label>
+                <input id="weaponMaterials-add-pounds" name="level" type="int"><br>
+                <button type="button">Submit</button>
+            </fieldset>
+        </form>
+    </div>
+    <div class="delete customers">
+        <form method="DELETE">
+            <fieldset class="fields">
+                <legend><strong>Delete WeaponMaterials</strong></legend>
+                <label for="weaponMaterials-delete-weaponName">Name:</label>
+                <input id="weaponMaterials-delete-weaponName" name="name" type="text"><br>
+                <label for="weaponMaterials-delete-materialName">Level:</label>
+                <input id="weaponMaterials-delete-materialName" name="level" type="text"><br>
+                <label for="weaponMaterials-add-pounds">Level:</label>
+                <input id="weaponMaterials-add-pounds" name="level" type="int"><br>
+                <button type="button">Submit</button>
+            </fieldset>
+        </form>
+    </div>
+</body>
+</html>

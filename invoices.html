@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoices</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Invoices</h1>
+  <nav>
+    <ul>
+        <li><a href="/customers.html">Customers</a></li>
+        <li><a href="/invoices.html">Invoices</a></li>
+        <li><a href="/sales.html">Sales</a></li>
+        <li><a href="/weapons.html">Weapons</a></li>
+        <li><a href="/materials.html">Materials</a></li>
+    </ul>
+  </nav>
+
+  <!-- Invoices table -->
+  <table>
+    <tr>
+        <th>invoice_id</th>
+        <th>name</th>
+        <th>total_price</th>
+        <th>date</th>
+    </tr>
+  </table>
+
+  <!-- search for invoices -->
+  <div class="get-form">
+    <form action="GET">
+      <fieldset>
+        <legend><strong>Search invoices:</strong></legend>
+        <label for="name">By customer:</label>
+        <input id="invoice-search-name" name="name" type="text">
+        <label for="name">By date:</label>
+        <input id="invoice-search-date" name="date" type="text">
+      </fieldset>
+    </form>
+  </div>
+
+  <!-- add invoice -->
+  <div class="post-form">
+    <form action="POST">
+      <fieldset>
+        <legend><strong>Add new invoice:</strong></legend>
+        <label for="name">Customer:</label>
+        <input id="invoice-add-name" name="name" type="text">
+        <label for="sale">Add sale:</label>
+        <input id="invoice-add-sale" name="sale" type="text">
+        <label for="sale">Add date:</label>
+        <input id="invoice-add-date" name="date" type="text">
+      </fieldset>
+    </form>
+  </div>
+
+  <!-- add invoice -->
+  <div class="put-form">
+    <form action="PUT">
+      <fieldset>
+        <legend><strong>Add new invoice:</strong></legend>
+        <label for="name">Customer:</label>
+        <input id="invoice-add-name" name="name" type="text">
+        <label for="sale">Add sale:</label>
+        <input id="invoice-add-sale" name="sale" type="text">
+        <label for="sale">Add date:</label>
+        <input id="invoice-add-date" name="date" type="text">
+      </fieldset>
+    </form>
+  </div>
+
+  <!-- delete invoice -->
+  <div class="delete-form">
+    <form action="DELETE">
+      <fieldset>
+        <legend><strong>Delete invoice:</strong></legend>
+        <label for="name">Customer:</label>
+        <input id="invoice-add-name" name="name" type="text">
+        <label for="sale">Add sale:</label>
+        <input id="invoice-add-sale" name="sale" type="text">
+        <label for="sale">Add date:</label>
+        <input id="invoice-add-date" name="date" type="text">
+      </fieldset>
+    </form>
+  </div>
+
+</body>
+</html>
