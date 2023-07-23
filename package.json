@@ -1,0 +1,15 @@
+{
+  "name": "Ye Olde Weapons Smithery",
+  "version": "1.0.0",
+  "description": "Weapon blacksmith database software",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Abdullah Jawad, Jeffrey Valcher",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
