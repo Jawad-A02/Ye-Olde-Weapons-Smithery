@@ -1,94 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Customers</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div class="body-div">  
-    <div class="nav">
-        <nav>
-          <ul>
-              <li><a href="index.html">Home</a></li>
-              <li><a href="customers.html">Customers</a></li>
-              <li><a href="invoices.html">Invoices</a></li>
-              <li><a href="sales.html">Sales</a></li>
-              <li><a href="weapons.html">Weapons</a></li>
-              <li><a href="materials.html">Materials</a></li>
-              <li><a href="weaponMaterials.html">Weapon Materials</a></li>
-          </ul>
-        </nav>
-      </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customers</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <!-- navigation bar -->
+      <nav>
+        <h1>Ye Olde Weapons Smithery</h1>
+        <h2>Customers</h1>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="customers.html">Customers</a></li>
+          <li><a href="invoices.html">Invoices</a></li>
+          <li><a href="sales.html">Sales</a></li>
+          <li><a href="weapons.html">Weapons</a></li>
+          <li><a href="materials.html">Materials</a></li>
+          <li><a href="weaponMaterials.html">Weapon Materials</a></li>
+        </ul>
+      </nav>
+    </header>
 
-  <!-- Customers table -->
-  <div class="table">
-    <h1>Customers</h1>
-    <table>
-        <tr>
+    <main>
+      <!-- Customers table -->
+      <div class="table-container">
+        <table>
+          <tr>
             <th>customer_id</th>
             <th>name</th>
             <th>level</th>
-        </tr>
-    </table>
-   </div> 
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Bob Johnson</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Beverly the Brave</td>
+            <td>9</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Lothar the Terrible</td>
+            <td>4</td>
+          </tr>
+        </table>
+      </div>
 
-  <!-- search for Customers -->
-    <div class="search">
-        <form action="/submit" method="GET">
+      <!-- forms -->
+      <div class="forms-container">
+        <!-- add Customers -->
+        <div class="add">
+          <form action="/submit" method="POST">
             <fieldset>
-                <legend><strong>Search Customer</strong></legend>
-                <label for="customer-search-name">Name:</label>
-                <input id="customer-search-name" name="name" type="text">
-                <label for="customer-search-level">Level:</label>
-                <input id="customer-search-level" name="level" type="int">
-                <button type="button">Submit</button>
+              <legend><strong>Add Customer</strong></legend>
+              <label for="customer-add-name">Name:</label>
+              <input id="customer-add-name" name="name" type="text" />
+              <label for="customer-add-level">Level:</label>
+              <input id="customer-add-level" name="level" type="int" />
+              <button type="button">Submit</button>
             </fieldset>
-        </form>
-    </div>
+          </form>
+        </div>
+        <!-- edit Customers -->
+        <div class="edit">
+          <form action="/submit" method="PUT">
+            <fieldset>
+              <legend><strong>Edit Customer</strong></legend>
+              <select name="id" id="customer-edit-ids">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+              <label for="customer-edit-name">Name:</label>
+              <input id="customer-edit-name" name="name" type="text" />
+              <label for="customer-edit-level">Level:</label>
+              <input id="customer-edit-level" name="level" type="int" />
+              <button type="button">Submit</button>
+            </fieldset>
+          </form>
+        </div>
+        <!-- delete Customers -->
+        <div class="delete">
+          <form action="/submit" method="DELETE">
+            <fieldset>
+              <legend><strong>Delete Customer</strong></legend>
+              <select name="name" id="customer-delete-names">
+                <option value="Bob Johnson">Bob Johnson</option>
+                <option value="Beverly the Brave">Beverly the Brave</option>
+                <option value="Lothar the Terrible">Lothar the Terrible</option>
+              </select>
+              <button type="button">Submit</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </main>
 
-  <!-- add Customers -->
-    <div class="add">
-        <form action="/submit" method="POST">
-            <fieldset>
-                <legend><strong>Add Customer</strong></legend>
-                <label for="customer-add-name">Name:</label>
-                <input id="customer-add-name" name="name" type="text">
-                <label for="customer-add-level">Level:</label>
-                <input id="customer-add-level" name="level" type="int">
-                <button type="button">Submit</button>
-            </fieldset>
-        </form>
-    </div>
-
-  <!-- edit Customers -->
-    <div class="edit">
-        <form action="/submit" method="PUT">
-            <fieldset>
-                <legend><strong>Edit Customer</strong></legend>
-                <label for="customer-edit-name">Name:</label>
-                <input id="customer-edit-name" name="name" type="text">
-                <label for="customer-edit-level">Level:</label>
-                <input id="customer-edit-level" name="level" type="int">
-                <button type="button">Submit</button>
-            </fieldset>
-        </form>
-    </div>
-
-  <!-- delete Customers -->
-    <div class="delete">
-        <form action="/submit" method="DELETE">
-            <fieldset>
-                <legend><strong>Delete Customer</strong></legend>
-                <label for="customer-delete-name">Name:</label>
-                <input id="customer-delete-name" name="name" type="text">
-                <label for="customer-delete-level">Level:</label>
-                <input id="customer-delete-level" name="level" type="int">
-                <button type="button">Submit</button>
-            </fieldset>
-        </form>
-    </div>
-    </div>
-</body>
+    <footer>
+      <p>Created by Jawad Abdullah, Jeffrey Valcher -- &copy; 2023</p>
+    </footer>
+  </body>
 </html>

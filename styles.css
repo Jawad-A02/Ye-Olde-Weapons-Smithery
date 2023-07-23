@@ -1,78 +1,69 @@
-.body-div {
+body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  background-color: wheat;  
+  color: beige;
+  text-align: center;
+  margin: 0;
+  height: 100vh;
+  min-height: 100%;
 }
 
-.nav {
+main, header, footer {
+    width: 75%;
+}
+
+main {
+    height: 100%;
+}
+
+nav {
   padding-top: 25px;
   padding-bottom: 25px;
   background-color: olivedrab;
-  color:olivedrab;
+  color:white;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
 }
 
 .info {
   padding-top: 25px;
   padding-bottom: 25px;
   background-color: orange;
-  margin: 10px;
+}
+
+#home-img {
+    height: 500px;
 }
 
 
-.table {
+.table-container {
   padding-top: 25px;
-  background-color: orange;
+  background-color: #C87E1D;
   flex-direction: column;
   padding-bottom: 25px;
-  margin: 10px;
 }
 
-.search {
-  padding-top: 25px;
-  display: flex;
-  background-color: burlywood;
-  flex-direction: column;
-  align-items: center;
-  padding-bottom: 25px;
-  margin: 10px;
-}
-
-.add {
+.forms-container {
   padding-top: 25px;
   display: flex;
-  background-color: crimson;
-  flex-direction: column;
+  flex-direction: row;
+  background-color: #A13D51;
+  justify-content: space-around;
   align-items: center;
   padding-bottom: 25px;
-  margin: 10px;
+  width: 100%;
 }
 
-.edit {
-  padding-top: 25px;
-  display: flex;
-  background-color: burlywood;
-  flex-direction: column;
-  align-items: center;
-  padding-bottom: 25px;
-  margin: 10px;
-}
-
-.delete {
-  padding-top: 25px;
-  display: flex;
-  background-color: olivedrab;
-  flex-direction: column;
-  align-items: center;
-  padding-bottom: 25px;
-  margin: 10px;
-}
-
-body {
-  background-color: wheat;  
-  color: beige;
-  text-align: center;
-}
 
 ul {
   display: flex;
@@ -86,13 +77,10 @@ li {
 }
 
 table {
-  color:olivedrab;
-  border-color: orangered;
-  border-radius: 100px;
-  border-color: #22272E;
+  color: white;
   border-collapse: collapse;
-  width: 100%;
   table-layout: fixed; /* Set the table layout to fixed */
+  margin: 0 auto;
 }
 
 tbody {
@@ -104,11 +92,11 @@ tr {
   display: table-row;
 }
 
-td {
+th,td {
   display: table-cell; /* Make each cell behave like a table cell */
   text-align: center; /* Align the content within the cell horizontally (center, left, right, etc.) */
   padding: 10px; /* Add padding to create space around the content */
-  border: 1px solid #ccc; /* Add borders to the cells (optional) */
+  border: 1px solid white; /* Add borders to the cells (optional) */
 }
 
 a {
@@ -123,6 +111,7 @@ a:hover {
 fieldset {
   width: fit-content;
   margin: 20px auto;
+  padding: 20px;
 }
 
 form {
@@ -134,7 +123,7 @@ input, label {
 }
 
 label {
-  margin-top: 20px;
+  margin-top: 10px;
   text-align: left;
 }
 
@@ -146,7 +135,18 @@ fieldset {
   display: block;
 }
 
-#form {
-  display: flex;
-  flex-direction: column;
+select {
+    min-width: 25%;
+}
+
+option {
+    text-align: center;
+}
+
+
+footer {
+    background-color: #464CA9;
+    height: 50px;
+    bottom: 0;
+    color: white;
 }
