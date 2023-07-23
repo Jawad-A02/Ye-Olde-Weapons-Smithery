@@ -7,95 +7,173 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="body-div">
-
-    <div class="nav">
+    <header>
+      <!-- navigation bar -->
       <nav>
+        <h1>Ye Olde Weapons Smithery</h1>
+        <h2>Weapon Materials</h1>
         <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="customers.html">Customers</a></li>
-            <li><a href="invoices.html">Invoices</a></li>
-            <li><a href="sales.html">Sales</a></li>
-            <li><a href="weapons.html">Weapons</a></li>
-            <li><a href="materials.html">Materials</a></li>
-            <li><a href="weaponMaterials.html">Weapon Materials</a></li>
+          <li><a href="index.html">Home</a></li>
+          <li>-</li>
+          <li><a href="customers.html">Customers</a></li>
+          <li>-</li>
+          <li><a href="invoices.html">Invoices</a></li>
+          <li>-</li>
+          <li><a href="sales.html">Sales</a></li>
+          <li>-</li>
+          <li><a href="weapons.html">Weapons</a></li>
+          <li>-</li>
+          <li><a href="materials.html">Materials</a></li>
+          <li>-</li>
+          <li><a href="weaponMaterials.html">Weapon Materials</a></li>
         </ul>
       </nav>
-    </div>
+    </header>
 
-  <!-- Weapon Materials table -->
-    <div class="table">
-    <h1>Weapon Materials</h1>
-    <table>
-        <tr>
-            <th>material_name</th>
-            <th>weapon_name</th>
-            <th>pounds</th>
-        </tr>
-    </table>
-    </div>
+    <main>
+      <!-- table -->
+      <div class="table-container">
+        <table>
+          <tr>
+            <th>weapon_id</th>
+            <th>material_id</th>
+            <th>pounds_used</th>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>2</td>
+            <td>2</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>3</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>1</td>
+            <td>3</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>2</td>
+            <td>3</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>4</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>1</td>
+            <td>4</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>2</td>
+            <td>3</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>2</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>4</td>
+            <td>1</td>
+          </tr>
+        </table>
+      </div>
 
-  <!-- search for Weapon Materials -->
-    <div class="search">
-        <form action="/submit" method="GET">
+      <!-- forms -->
+      <div class="forms-container">
+        <!-- add weapon material -->
+        <div class="add">
+          <form action="/submit" method="POST">
             <fieldset>
-                <legend><strong>Search WeaponMaterials</strong></legend>
-                <label for="weaponMaterials-search-weaponName">material_id:</label>
-                <input id="weaponMaterials-search-weaponName" name="name" type="text">
-                <label for="weaponMaterials-search-materialName">weapon_id:</label>
-                <input id="weaponMaterials-search-materialName" name="level" type="text">
-                <label for="weaponMaterials-add-pounds">pounds:</label>
-                <input id="weaponMaterials-add-pounds" name="level" type="int">
-                <button type="button">Submit</button>
+              <legend><strong>Add Weapon Material</strong></legend>
+              <label for="weapon-add-weapon-id">Weapon ID:</label>
+              <select name="weapon-add-weapon-id" id="weapon-add-weapon-id">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <label for="weapon-add-material-id">Material ID:</label>
+              <select name="weapon-add-weapon-id" id="weapon-add-weapon-id">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <label for="weapmat-add-pounds">Pounds used:</label>
+              <input id="weapmat-add-pounds" name="weapmat-add-pounds" type="text" />
+              <button type="button">Add</button>
             </fieldset>
-        </form>
-    </div>
-
-  <!-- Add Weapon Materials -->
-    <div class="add">
-        <form action="/submit" method="POST">
+          </form>
+        </div>
+        <!-- edit material -->
+        <div class="edit">
+          <form action="/submit" method="PUT">
             <fieldset>
-                <legend><strong>Add WeaponMaterials</strong></legend>
-                <label for="weaponMaterials-search-weaponName">material_id:</label>
-                <input id="weaponMaterials-search-weaponName" name="name" type="text">
-                <label for="weaponMaterials-search-materialName">weapon_id:</label>
-                <input id="weaponMaterials-search-materialName" name="level" type="text">
-                <label for="weaponMaterials-add-pounds">pounds:</label>
-                <input id="weaponMaterials-add-pounds" name="level" type="int">
-                <button type="button">Submit</button>
+              <legend><strong>Edit Weapon</strong></legend>
+              <label for="weapon-edit-weapon-id">Weapon ID:</label>
+              <select name="weapon-edit-weapon-id" id="weapon-edit-weapon-id">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <hr>
+              <label for="weapon-edit-material-id">Material ID:</label>
+              <select name="weapon-edit-weapon-id" id="weapon-edit-weapon-id">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <label for="weapmat-add-pounds">Pounds used:</label>
+              <input id="weapmat-add-pounds" name="weapmat-add-pounds" type="text" />
+              <button type="button">Edit</button>
             </fieldset>
-        </form>
-    </div>
-
-  <!-- Edit Weapon Materials -->
-    <div class="edit">
-        <form action="/submit" method="PUT">
+          </form>
+        </div>
+        <!-- delete weapon material -->
+        <div class="delete">
+          <form action="/submit" method="DELETE">
             <fieldset>
-                <legend><strong>Edit WeaponMaterials</strong></legend>
-                <label for="weaponMaterials-search-weaponName">material_id:</label>
-                <input id="weaponMaterials-search-weaponName" name="name" type="text">
-                <label for="weaponMaterials-search-materialName">weapon_id:</label>
-                <input id="weaponMaterials-search-materialName" name="level" type="text">
-                <label for="weaponMaterials-add-pounds">pounds:</label>
-                <input id="weaponMaterials-add-pounds" name="level" type="int">
-                <button type="button">Submit</button>
+              <legend><strong>Delete Weapon Material</strong></legend>
+              <label for="weapmat-delete-id">Weapon ID:</label>
+              <select name="id" id="weapmat-delete-id">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <hr>
+              <label for="weapon-edit-material-id">Material ID:</label>
+              <select name="weapon-edit-weapon-id" id="weapon-edit-weapon-id">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <button type="button">Delete</button>
             </fieldset>
-        </form>
-    </div>
+          </form>
+        </div>
+      </div>
+    </main>
 
-  <!-- delete Weapon Materials -->
-    <div class="delete">
-        <form action="/submit" method="DELETE">
-            <fieldset>
-                <legend><strong>Delete WeaponMaterials</strong></legend>
-                <label for="weaponMaterials-search-weaponName">material_id:</label>
-                <input id="weaponMaterials-search-weaponName" name="name" type="text">
-                <label for="weaponMaterials-search-materialName">weapon_id:</label>
-                <input id="weaponMaterials-search-materialName" name="level" type="text">
-                <button type="button">Submit</button>
-            </fieldset>
-        </form>
-    </div>
-    </div>
+    <footer>
+      <p>Created by Jawad Abdullah, Jeffrey Valcher -- &copy; 2023</p>
+    </footer>
 </body>
 </html>

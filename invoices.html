@@ -7,90 +7,115 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="nav">
-    <nav>
-      <ul>
+  <body>
+    <header>
+      <!-- navigation bar -->
+      <nav>
+        <h1>Ye Olde Weapons Smithery</h1>
+        <h2>Invoices</h1>
+        <ul>
           <li><a href="index.html">Home</a></li>
+          <li>-</li>
           <li><a href="customers.html">Customers</a></li>
+          <li>-</li>
           <li><a href="invoices.html">Invoices</a></li>
+          <li>-</li>
           <li><a href="sales.html">Sales</a></li>
+          <li>-</li>
           <li><a href="weapons.html">Weapons</a></li>
+          <li>-</li>
           <li><a href="materials.html">Materials</a></li>
+          <li>-</li>
           <li><a href="weaponMaterials.html">Weapon Materials</a></li>
-      </ul>
-    </nav>
-  </div>
+        </ul>
+      </nav>
+    </header>
 
-  <!-- Invoices table -->
-  <div class="table">
-  <h1>Invoices</h1>
-  <table>
-    <tr>
-        <th>invoice_id</th>
-        <th>name</th>
-        <th>total_price</th>
-        <th>date</th>
-    </tr>
-  </table>
-  </div>
-  
-  <!-- search for invoices -->
-  <div class="search">
-    <form action="/submit" method="GET">
-      <fieldset>
-        <legend><strong>Search invoices:</strong></legend>
-        <label for="name">By customer:</label>
-        <input id="invoice-search-name" name="name" type="text">
-        <label for="name">By date:</label>
-        <input id="invoice-search-date" name="date" type="text">
-      </fieldset>
-    </form>
-  </div>
+    <main>
+      <!-- table -->
+      <div class="table-container">
+        <table>
+          <tr>
+            <th>invoice_id</th>
+            <th>customer_id</th>
+            <th>total_price</th>
+            <th>date</th>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>$575.75</td>
+            <td>1200-10-07</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>3</td>
+            <td>$150.00</td>
+            <td>1200-07-05</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>2</td>
+            <td>$100.75</td>
+            <td>1200-04-03</td>
+          </tr>
+        </table>
+      </div>
 
-  <!-- add invoice -->
-  <div class="add">
-    <form action="POST">
-      <fieldset>
-        <legend><strong>Add new invoice:</strong></legend>
-        <label for="name">Customer:</label>
-        <input id="invoice-add-name" name="name" type="text">
-        <label for="sale">Add sale:</label>
-        <input id="invoice-add-sale" name="sale" type="text">
-        <label for="sale">Add date:</label>
-        <input id="invoice-add-date" name="date" type="text">
-      </fieldset>
-    </form>
-  </div>
+      <!-- forms -->
+      <div class="forms-container">
+        <!-- add invoice -->
+        <div class="add">
+          <form action="/submit" method="POST">
+            <fieldset>
+              <legend><strong>Add invoice</strong></legend>
+              <label for="invoice-add-customer-id">Customer ID:</label>
+              <input id="invoice-add-customer-id" name="invoice-add-customer-id" type="text" />
+              <label for="invoice-add-date">Date:</label>
+              <input id="invoice-add-date" name="invoice-add-date" type="date" />
+              <button type="button">Add</button>
+            </fieldset>
+          </form>
+        </div>
+        <!-- edit invoice -->
+        <div class="edit">
+          <form action="/submit" method="PUT">
+            <fieldset>
+              <legend><strong>Edit Invoice</strong></legend>
+              <select name="id" id="invoice-edit-ids">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+              <hr>
+              <label for="invoice-add-customer-id">Customer ID:</label>
+              <input id="invoice-add-customer-id" name="invoice-add-customer-id" type="text" />
+              <label for="invoice-add-date">Date:</label>
+              <input id="invoice-add-date" name="invoice-add-date" type="date" />
+              <button type="button">Edit</button>
+            </fieldset>
+          </form>
+        </div>
+        <!-- delete invoice -->
+        <div class="delete">
+          <form action="/submit" method="DELETE">
+            <fieldset>
+              <legend><strong>Delete Invoice</strong></legend>
+              <select name="id" id="invoice-edit-ids">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+              <hr>
+              <button type="button">Delete</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </main>
 
-  <!-- edit invoice -->
-  <div class="edit">
-    <form action="/submit" method="PUT">
-      <fieldset>
-        <legend><strong>Edit invoice:</strong></legend>
-        <label for="name">Customer:</label>
-        <input id="invoice-add-name" name="name" type="text">
-        <label for="sale">Add sale:</label>
-        <input id="invoice-add-sale" name="sale" type="text">
-        <label for="sale">Add date:</label>
-        <input id="invoice-add-date" name="date" type="text">
-      </fieldset>
-    </form>
-  </div>
-
-  <!-- delete invoice -->
-  <div class="delete">
-    <form action="/submit" method="DELETE">
-      <fieldset>
-        <legend><strong>Delete invoice:</strong></legend>
-        <label for="name">Customer:</label>
-        <input id="invoice-add-name" name="name" type="text">
-        <label for="sale">Add sale:</label>
-        <input id="invoice-add-sale" name="sale" type="text">
-        <label for="sale">Add date:</label>
-        <input id="invoice-add-date" name="date" type="text">
-      </fieldset>
-    </form>
-  </div>
-  </div>
+    <footer>
+      <p>Created by Jawad Abdullah, Jeffrey Valcher -- &copy; 2023</p>
+    </footer>
 </body>
 </html>

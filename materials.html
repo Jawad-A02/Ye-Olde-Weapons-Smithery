@@ -7,90 +7,126 @@
   <title>Materials</title>
 </head>
 <body>
-  <div class="body-div">
-
-    <div class="nav">
+    <header>
+      <!-- navigation bar -->
       <nav>
+        <h1>Ye Olde Weapons Smithery</h1>
+        <h2>Materials</h1>
         <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="customers.html">Customers</a></li>
-            <li><a href="invoices.html">Invoices</a></li>
-            <li><a href="sales.html">Sales</a></li>
-            <li><a href="weapons.html">Weapons</a></li>
-            <li><a href="materials.html">Materials</a></li>
-            <li><a href="weaponMaterials.html">Weapon Materials</a></li>
+          <li><a href="index.html">Home</a></li>
+          <li>-</li>
+          <li><a href="customers.html">Customers</a></li>
+          <li>-</li>
+          <li><a href="invoices.html">Invoices</a></li>
+          <li>-</li>
+          <li><a href="sales.html">Sales</a></li>
+          <li>-</li>
+          <li><a href="weapons.html">Weapons</a></li>
+          <li>-</li>
+          <li><a href="materials.html">Materials</a></li>
+          <li>-</li>
+          <li><a href="weaponMaterials.html">Weapon Materials</a></li>
         </ul>
       </nav>
-    </div>
+    </header>
 
-  <!-- Materials table -->
-  <div class="table">
-    <h1>Materials</h1>
-    <table>
-        <tr>
+    <main>
+      <!-- table -->
+      <div class="table-container">
+        <table>
+          <tr>
             <th>material_id</th>
             <th>name</th>
+            <th>pounds_available</th>
             <th>cost_per_pound</th>
-            <th>pounds-available</th>
-        </tr>
-    </table>
-   </div> 
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>steel</td>
+            <td>100</td>
+            <td>20</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>wood</td>
+            <td>100</td>
+            <td>10</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>gold</td>
+            <td>10</td>
+            <td>60</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>ruby</td>
+            <td>5</td>
+            <td>75</td>
+          </tr>
+        </table>
+      </div>
 
-  <!-- search for material -->
-  <div class="search">
-    <form action="/submit" method="GET">
-      <fieldset>
-        <legend><strong>Search materials:</strong></legend>
-        <label for="material">Material:</label>
-        <input id="search-material" name="material" type="text">
-        <input type="submit">	
-      </fieldset>
-    </form>
-  </div>
+      <!-- forms -->
+      <div class="forms-container">
+        <!-- add material -->
+        <div class="add">
+          <form action="/submit" method="POST">
+            <fieldset>
+              <legend><strong>Add Material</strong></legend>
+              <label for="material-add-name">Name:</label>
+              <input id="material-add-name" name="name" type="text" />
+              <label for="material-add-pounds">Pounds available:</label>
+              <input id="material-add-pounds" name="material-add-pounds" type="text" />
+              <label for="material-add-cost">Cost per pound</label>
+              <input id="material-add-cost" name="material-add-cost" type="text" />
+              <button type="button">Add</button>
+            </fieldset>
+          </form>
+        </div>
+        <!-- edit material -->
+        <div class="edit">
+          <form action="/submit" method="PUT">
+            <fieldset>
+              <legend><strong>Edit Material</strong></legend>
+              <select name="id" id="material-edit-ids">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <hr>
+              <label for="material-edit-name">Name:</label>
+              <input id="material-edit-name" name="name" type="text" />
+              <label for="material-edit-pounds">Pounds available:</label>
+              <input id="material-edit-pounds" name="material-edit-pounds" type="text" />
+              <label for="material-edit-cost">Cost per pound</label>
+              <input id="material-edit-cost" name="material-edit-cost" type="text" />
+              <button type="button">Edit</button>
+            </fieldset>
+          </form>
+        </div>
+        <!-- delete Customers -->
+        <div class="delete">
+          <form action="/submit" method="DELETE">
+            <fieldset>
+              <legend><strong>Delete Material</strong></legend>
+              <select name="id" id="material-delete-ids">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <hr>
+              <button type="button">Delete</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </main>
 
-  <!-- add material -->
-  <div class="add">
-    <form action="/submit" method="POST">
-      <fieldset>
-        <legend><strong>Add new material:</strong></legend>
-        <label for="material">Material:</label>
-        <input id="add-material" name="sale" type="text">
-        <label for="add-cost-per-pound">Cost per pound:</label>
-        <input id="add-cost-per-pound" name="add-cost-per-pound" type="text">
-        <label for="pounds-available">Pounds available:</label>
-        <input id="add-pounds-available" name="add-pounds-available" type="text">
-        <input type="submit">	
-      </fieldset>
-    </form>
-  </div>
-
-  <!-- update sale -->
-  <div class="edit">
-    <form action="/submit" method="PUT">
-      <fieldset>
-        <legend><strong>Update material:</strong></legend>
-        <label for="update-material">Material:</label>
-        <input id="update-material" name="update-material" type="text">
-        <label for="update-cost-per-pound">Cost per pound:</label>
-        <input id="update-cost-per-pound" name="update-cost-per-pound" type="text">
-        <label for="update-pounds-available">Pounds available:</label>
-        <input id="update-pounds-available" name="update-pounds-available" type="text">
-        <input type="submit">	
-      </fieldset>
-    </form>
-  </div>
-
-  <!-- delete sale -->
-  <div class="delete">
-    <form action="/submit" method="DELETE">
-      <fieldset>
-        <legend><strong>Delete material:</strong></legend>
-        <label for="delete-material">Material:</label>
-        <input id="delete-material" name="delete-material" type="drop">
-        <input type="submit">	
-      </fieldset>
-    </form>
-  </div>
-  </div>
+    <footer>
+      <p>Created by Jawad Abdullah, Jeffrey Valcher -- &copy; 2023</p>
+    </footer>
 </body>
 </html>

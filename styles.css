@@ -8,8 +8,7 @@ body {
   color: beige;
   text-align: center;
   margin: 0;
-  height: 100vh;
-  min-height: 100%;
+  min-height: 100vh;
 }
 
 main, header, footer {
@@ -17,7 +16,27 @@ main, header, footer {
 }
 
 main {
-    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+footer {
+    position: fixed;
+    background-color: #464CA9;
+    height: 50px;
+    bottom: 0;
+    color: white;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-top: 0;
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 2rem;
 }
 
 nav {
@@ -25,20 +44,6 @@ nav {
   padding-bottom: 25px;
   background-color: olivedrab;
   color:white;
-}
-
-h1 {
-    font-size: 2.5rem;
-}
-
-h2 {
-    font-size: 2rem;
-}
-
-.info {
-  padding-top: 25px;
-  padding-bottom: 25px;
-  background-color: orange;
 }
 
 #home-img {
@@ -59,9 +64,10 @@ h2 {
   flex-direction: row;
   background-color: #A13D51;
   justify-content: space-around;
-  align-items: center;
+  align-items: top;
   padding-bottom: 25px;
   width: 100%;
+  flex: 1;
 }
 
 
@@ -95,7 +101,7 @@ tr {
 th,td {
   display: table-cell; /* Make each cell behave like a table cell */
   text-align: center; /* Align the content within the cell horizontally (center, left, right, etc.) */
-  padding: 10px; /* Add padding to create space around the content */
+  padding: 3px 10px; /* Add padding to create space around the content */
   border: 1px solid white; /* Add borders to the cells (optional) */
 }
 
@@ -105,21 +111,22 @@ a {
 }
 
 a:hover {
+  text-decoration: bold;
+}
+
+a:hover {
   color: burlywood;
 }
 
 fieldset {
   width: fit-content;
+  min-width: 200px;
   margin: 20px auto;
-  padding: 20px;
-}
-
-form {
-  display: block;
 }
 
 input, label {
   display: block;
+  width: 80%;
 }
 
 label {
@@ -127,26 +134,26 @@ label {
   text-align: left;
 }
 
-input {
-  margin: 5px auto;
+input[type="text"] {
+  margin: 5px 0;
+  width: 100px;
 }
 
-fieldset {
-  display: block;
+#weapon-edit-magic,
+#weapon-add-magic {
+  width: 90%;
+}
+
+button {
+    margin: 10px 0;
 }
 
 select {
-    min-width: 25%;
+  display: block;
+  margin-top: 5px;
+  min-width: 50px;
 }
 
-option {
-    text-align: center;
-}
-
-
-footer {
-    background-color: #464CA9;
-    height: 50px;
-    bottom: 0;
-    color: white;
+hr {
+  margin: 20px;
 }
