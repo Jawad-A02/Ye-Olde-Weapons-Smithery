@@ -9,29 +9,21 @@ Sample data manipulation queries
     Customers
 */
 
--- Query for searching a specific customer
+-- populate table
 SELECT * FROM Customers;
-SELECT * FROM Customers 
-    WHERE name = :name;
-SELECT * FROM Customers 
-    WHERE name = :name AND level = :level;
 
-
--- Query for adding a new customer functionality with colon : character being used to 
--- denote the variables that will have data from the backend programming language
+-- create new customer
 INSERT INTO Customers
     (name, level)
 VALUES
     (:name, :level);
 
-
---Query for updating a specfic customer's information
+-- update existing customer name, level
 UPDATE Customers
-    SET level = :level
-    WHERE name = :name;
+    SET level = :level, name = :name
+    WHERE customer_id = :customer_id;
 
-
---Query for deleting a specific customer's information
+-- delete customer
 DELETE FROM Customers WHERE name = :name;
 
 
@@ -39,112 +31,89 @@ DELETE FROM Customers WHERE name = :name;
     Weapon queries
 */
 
--- Query for searching a specific customer
+-- populate table
 SELECT * FROM Weapons;
-SELECT * FROM Weapons 
-    WHERE name = :name;
-SELECT * FROM Weapons 
-    WHERE level = :level AND total_cost <= :total_cost;
 
-
--- Query for adding a new customer functionality with colon : character being used to 
--- denote the variables that will have data from the backend programming language
+-- add new weapon
 INSERT INTO Weapons
-    (name, level, total_cost)
+    (name, level, magical_ability, total_cost)
 VALUES
-    (:name, :level, :total_cost);
+    (:name, :level, :magical_ability, :total_cost);
 
-
---Query for updating a specfic customer's information
+-- update existing weapon
 UPDATE Weapons
-    SET level = :level
-    WHERE name = :name;
+    SET name = :name, level = :level, magical_ability = :magical_ability, total_cost = :total_cost
+    WHERE weapon_id = :weapon_id;
 
-
---Query for deleting a specific customer's information
+-- delete weapon 
 DELETE FROM Weapons 
-    WHERE name = :name;
+    WHERE weapon_id = :weapon_id;
 
 
 /*
     Materials
 */
 
--- Query for searching a specific customer
-SELECT * FROM Materials;
-SELECT * FROM Materials WHERE name = :name;
-SELECT * FROM Materials WHERE name = :name AND pounds_available = :pounds_available;
-SELECT * FROM Materials 
-    WHERE cost_per_pound = :cost_per_pound 
-    AND pounds_available = :pounds_available;
+-- populate table
+SELECT * FROM Customers;
 
-
--- Query for adding a new customer functionality with colon : character being used to 
--- denote the variables that will have data from the backend programming language
+-- add new material
 INSERT INTO Materials
     (name, pounds_available, cost_per_pound)
 VALUES
     (:name, :pounds_available, :cost_per_pound);
 
-
---Query for updating a specfic customer's information
+-- update existing material
 UPDATE Materials
-    SET cost_per_pound = :cost_per_pound
-    WHERE name = :name;
+    SET name = :name, pounds_available = :pounds_available, cost_per_pound = :cost_per_pound
+    WHERE material_id = :material_id;
 
-
---Query for deleting a specific customer's information
-DELETE FROM Materials WHERE name = :name;
+-- delete weapon 
+DELETE FROM Materials
+    WHERE material_id = :material_id;
 
 /*
     Sales
 */
 
--- Query for searching a specific sale
+-- Populate Table
 SELECT * FROM Sales;
-SELECT * FROM Sales
-    INNER JOIN Invoices ON Sales.invoice_id = Invoices.invoice_id
-    INNER JOIN Customers ON Invoices.customer_id = Customers.customer_id;
-SELECT * FROM Sales WHERE price = :price;
-
-
--- Query for adding a new sales functionality with colon : character being used to 
--- denote the variables that will have data from the backend programming language
+    
+-- add new sale
 INSERT INTO Sales
-    (sale_id, invoice_id, weapon_id, price)
+    (invoice_id, weapon_id, price)
 VALUES
-    (:sale_id, :invoice_id, :weapon_id, :price);
+    (:invoice_id, :weapon_id, :price);
 
-
---Query for updating a specfic sale's price
+-- update existing sale
 UPDATE Sales
-    SET price = :price
-    WHERE weapon_id = (SELECT weapon_id FROM Weapons WHERE name=:name);
+    SET price = :price, weapon_id = weapon_id, invoice_id = :invoice_id
+    WHERE sale_id = :sale_id;
 
-
---Query for deleting a specific sale's information
-DELETE FROM Sales WHERE price = :price;
+-- delete sale
+DELETE FROM Sales WHERE sale_id = :sale_id;
 
 
 /*
     Invoices
 */
 
--- Invoice queries
+-- Populate table
 SELECT * FROM Invoices;
-SELECT * FROM Invoices
-    INNER JOIN Customers ON Invoices.customer_id = Customers.customer_id
-    WHERE Customers.customer_name = :name;
 
--- Add new invoice with sales
+-- Add new invoice
 INSERT INTO Invoices
-    (invoice_id, total_price, date)
+    (customer_id, date)
 VALUES
-    (:invoice_id, :total_price, :date);
+    (:customer_id, :date);
     
-    
-INSERT INTO Invoices
-    (customer_id)
+-- Update Existing invoices
+UPDATE Invoices
+    SET customer_id = :customer_id, data = :date
+    WHERE invoice_id = :invoice_id;
+
+-- Delete an Invoice
+DELETE FROM Inoivces WHERE invoice_id = invoice_id;
 
 
 
@@ -152,29 +121,21 @@ INSERT INTO Invoices
     WeaponMaterials
 */
 
--- Query for searching a specific sale
-SELECT * FROM Sales;
-SELECT * FROM Sales
-    INNER JOIN Invoices ON Sales.invoice_id = Invoices.invoice_id
-    INNER JOIN Customers ON Invoices.customer_id = Customers.customer_id;
-SELECT * FROM Sales WHERE price = :price;
+-- Populate Weapon Materials
+SELECT * FROM WeaponMaterials;
 
+-- Add new Weapon Materials
+INSERT INTO WeaponMaterials
+    (weapon_id, material_id, pounds)
+VALUES 
+    (:weapon_id, :material_id, :pounds);
 
--- Query for adding a new sales functionality with colon : character being used to 
--- denote the variables that will have data from the backend programming language
-INSERT INTO Sales
-    (sale_id, invoice_id, weapon_id, price)
-VALUES
-    (:sale_id, :invoice_id, :weapon_id, :price);
+-- Update Existing Weapon Materials
+UPDATE Invoices
+    SET material_id = :material_id, pounds = :pounds
+    WHERE weapon_id = :weapon_id;
 
+-- Delete a Weapon Materials
+DELETE FROM WeaponMaterials WHERE weapon_id = :weapon_id AND material_id = :material_id;
 
---Query for updating a specfic sale's price
-SELECT weapon_id FROM Weapons WHERE name=:name;
-UPDATE Sales
-    SET price = :price
-    WHERE weapon_id = weapon_id;
-
-
---Query for deleting a specific sale's information
-DELETE FROM Sales WHERE price = :price;
 
