@@ -1,0 +1,25 @@
+{
+  "name": "cs340_project",
+  "version": "1.0.0",
+  "description": "<div>OSU -- CS-340 -- Group 45</div> <br> <div><img src=\"https://medievalbritain.com/wp-content/uploads/2020/01/Gorleston_Blacksmiths_1303.jpg\" height=500px /></div>",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jvalcher/cs340_project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jvalcher/cs340_project/issues"
+  },
+  "homepage": "https://github.com/jvalcher/cs340_project#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "pm2": "^5.3.0"
+  }
+}

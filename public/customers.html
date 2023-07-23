@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customers</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <!-- navigation bar -->
+      <nav>
+        <h1>Ye Olde Weapons Smithery</h1>
+        <h2>Customers</h1>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li>-</li>
+          <li><a href="customers.html">Customers</a></li>
+          <li>-</li>
+          <li><a href="invoices.html">Invoices</a></li>
+          <li>-</li>
+          <li><a href="sales.html">Sales</a></li>
+          <li>-</li>
+          <li><a href="weapons.html">Weapons</a></li>
+          <li>-</li>
+          <li><a href="materials.html">Materials</a></li>
+          <li>-</li>
+          <li><a href="weaponMaterials.html">Weapon Materials</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <!-- table -->
+      <div class="table-container">
+        <table>
+          <tr>
+            <th>customer_id</th>
+            <th>name</th>
+            <th>level</th>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Akame</td>
+            <td>10</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Nova</td>
+            <td>7</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Dash</td>
+            <td>3</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- forms -->
+      <div class="forms-container">
+        <!-- add Customers -->
+        <div class="add">
+          <form action="/submit" method="POST">
+            <fieldset>
+              <legend><strong>Add Customer</strong></legend>
+              <label for="customer-add-name">Name:</label>
+              <input id="customer-add-name" name="name" type="text" />
+              <label for="customer-add-level">Level:</label>
+              <select name="customer-add-level" id="customer-add-level">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">3</option>
+                <option value="5">3</option>
+                <option value="6">3</option>
+                <option value="7">3</option>
+                <option value="8">3</option>
+                <option value="9">3</option>
+                <option value="10">3</option>
+              </select>
+              <button type="button">Add</button>
+            </fieldset>
+          </form>
+        </div>
+        <!-- edit Customers -->
+        <div class="edit">
+          <form action="/submit" method="PUT">
+            <fieldset>
+              <legend><strong>Edit Customer</strong></legend>
+              <select name="id" id="customer-edit-ids">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+              <hr>
+              <label for="customer-edit-name">Name:</label>
+              <input id="customer-edit-name" name="name" type="text" />
+              <label for="customer-edit-level">Level:</label>
+              <select name="customer-edit-level" id="customer-edit-level">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">3</option>
+                <option value="5">3</option>
+                <option value="6">3</option>
+                <option value="7">3</option>
+                <option value="8">3</option>
+                <option value="9">3</option>
+                <option value="10">3</option>
+              </select>
+              <button type="button">Edit</button>
+            </fieldset>
+          </form>
+        </div>
+        <!-- delete Customers -->
+        <div class="delete">
+          <form action="/submit" method="DELETE">
+            <fieldset>
+              <legend><strong>Delete Customer</strong></legend>
+              <select name="name" id="customer-delete-names">
+                <option value="Akame">Akame</option>
+                <option value="Nova">Nova</option>
+                <option value="Dash">Dash</option>
+              </select>
+              <hr>
+              <button type="button">Delete</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>Created by Jawad Abdullah, Jeffrey Valcher -- &copy; 2023</p>
+    </footer>
+  </body>
+</html>
