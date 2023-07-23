@@ -66,6 +66,10 @@ nav {
     height: 500px;
 }
 
+#home-img-container p {
+  margin: 0;
+}
+
 
 .table-container {
   padding-top: 25px;
