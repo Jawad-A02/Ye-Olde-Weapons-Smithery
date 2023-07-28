@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>Sales</title>
+</head>
+<body>
+    <header>
+      <!-- navigation bar -->
+      <nav>
+        <h1>Ye Olde Weapons Smithery</h1>
+        <h2>Sales</h1>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li>-</li>
+          <li><a href="customers.html">Customers</a></li>
+          <li>-</li>
+          <li><a href="invoices.html">Invoices</a></li>
+          <li>-</li>
+          <li><a href="sales.html">Sales</a></li>
+          <li>-</li>
+          <li><a href="weapons.html">Weapons</a></li>
+          <li>-</li>
+          <li><a href="materials.html">Materials</a></li>
+          <li>-</li>
+          <li><a href="weaponMaterials.html">Weapon Materials</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <!-- table -->
+      <div class="table-container">
+        <table>
+          <tr>
+            <th>sale_id</th>
+            <th>invoice_id</th>
+            <th>weapon_id</th>
+            <th>price</th>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>3</td>
+            <td>$300.25</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>1</td>
+            <td>2</td>
+            <td>$275.50</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>2</td>
+            <td>1</td>
+            <td>$150.00</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>3</td>
+            <td>4</td>
+            <td>$100.75</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- forms -->
+      <div class="forms-container">
+        <!-- add material -->
+        <div class="add">
+          <form action="/submit" method="POST">
+            <fieldset>
+              <legend><strong>Add Sale</strong></legend>
+              <label for="sale-edit-invoice-id">Invoice ID:</label>
+              <select name="id" id="invoice-add-id">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+              <label for="sale-add-weapon-id">Weapon ID:</label>
+              <select name="id" id="sale-add-id">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <label for="sale-add-price">Price:</label>
+              <input id="sale-add-price" name="sale-add-price" type="text" />
+              <button type="button">Add</button>
+            </fieldset>
+          </form>
+        </div>
+        <!-- edit material -->
+        <div class="edit">
+          <form action="/submit" method="PUT">
+            <fieldset>
+              <legend><strong>Edit Sale</strong></legend>
+              <label for="sale-edit-invoice-id">Sale ID:</label>
+              <select name="id" id="sale-edit-ids">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <hr>
+              <label for="sale-edit-invoice-id">Invoice ID:</label>
+              <select name="id" id="invoice-edit-ids">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+              <label for="sale-edit-weapon-id">Weapon ID:</label>
+              <select name="id" id="sale-edit-ids">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <label for="sale-add-price">Price:</label>
+              <input id="sale-add-price" name="sale-add-price" type="text" />
+              <button type="button">Edit</button>
+            </fieldset>
+          </form>
+        </div>
+        <!-- delete sale -->
+        <div class="delete">
+          <form action="/submit" method="DELETE">
+            <fieldset>
+              <label for="sale-delete-sale-id">Sale ID:</label>
+              <legend><strong>Delete Sale</strong></legend>
+              <select name="id" id="sale-delete-id">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <hr>
+              <button type="button">Delete</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>Created by Jawad Abdullah, Jeffrey Valcher -- &copy; 2023</p>
+    </footer>
+</body>
+</html>
