@@ -35,9 +35,9 @@
       <div class="table-container">
         <table>
           <tr>
-            <th>customer_id</th>
-            <th>name</th>
-            <th>level</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Level</th>
           </tr>
           <tr>
             <td>1</td>
@@ -71,13 +71,13 @@
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
-                <option value="4">3</option>
-                <option value="5">3</option>
-                <option value="6">3</option>
-                <option value="7">3</option>
-                <option value="8">3</option>
-                <option value="9">3</option>
-                <option value="10">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
               </select>
               <button type="button">Add</button>
             </fieldset>
@@ -88,10 +88,18 @@
           <form action="/submit" method="PUT">
             <fieldset>
               <legend><strong>Edit Customer</strong></legend>
+              <label for="customer-edit-id">Level:</label>
               <select name="id" id="customer-edit-ids">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
               </select>
               <hr>
               <label for="customer-edit-name">Name:</label>
@@ -101,13 +109,13 @@
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
-                <option value="4">3</option>
-                <option value="5">3</option>
-                <option value="6">3</option>
-                <option value="7">3</option>
-                <option value="8">3</option>
-                <option value="9">3</option>
-                <option value="10">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
               </select>
               <button type="button">Edit</button>
             </fieldset>
@@ -118,6 +126,7 @@
           <form action="/submit" method="DELETE">
             <fieldset>
               <legend><strong>Delete Customer</strong></legend>
+              <label for="customer-delete-id">Name:</label>
               <select name="name" id="customer-delete-names">
                 <option value="Akame">Akame</option>
                 <option value="Nova">Nova</option>

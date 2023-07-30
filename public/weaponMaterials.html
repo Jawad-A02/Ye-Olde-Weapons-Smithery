@@ -35,59 +35,34 @@
       <div class="table-container">
         <table>
           <tr>
-            <th>weapon_id</th>
-            <th>material_id</th>
-            <th>pounds_used</th>
+            <th>Weapon</th>
+            <th>Material</th>
+            <th>Pounds  Used</th>
           </tr>
           <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>5</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>2</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>3</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>1</td>
-            <td>3</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>2</td>
-            <td>3</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>4</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>1</td>
+            <td>Axe</td>
+            <td>Steel</td>
             <td>4</td>
           </tr>
           <tr>
-            <td>3</td>
-            <td>2</td>
+            <td>Axe</td>
+            <td>Wood</td>
             <td>3</td>
           </tr>
           <tr>
-            <td>4</td>
-            <td>2</td>
+            <td>Boomerang</td>
+            <td>wood</td>
             <td>1</td>
           </tr>
           <tr>
-            <td>4</td>
-            <td>4</td>
-            <td>1</td>
+            <td>Crossbow</td>
+            <td>Steel</td>
+            <td>2</td>
+          </tr>
+          <tr>
+            <td>Crossbow</td>
+            <td>Wood</td>
+            <td>3</td>
           </tr>
         </table>
       </div>
@@ -99,19 +74,17 @@
           <form action="/submit" method="POST">
             <fieldset>
               <legend><strong>Add Weapon Material</strong></legend>
-              <label for="weapon-add-weapon-id">Weapon ID:</label>
+              <label for="weapon-add-weapon-id">Weapon Name:</label>
               <select name="weapon-add-weapon-id" id="weapon-add-weapon-id">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+                <option value="Axe">Axe</option>
+                <option value="Boomerang">Boomerang</option>
+                <option value="Crossbow">Crossbow</option>
               </select>
-              <label for="weapon-add-material-id">Material ID:</label>
+              <label for="weapon-add-material-id">Material Name:</label>
               <select name="weapon-add-weapon-id" id="weapon-add-weapon-id">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+                <option value="Wood">Wood</option>
+                <option value="Steel">Steel</option>
+                <option value="Ruby">Ruby</option>
               </select>
               <label for="weapmat-add-pounds">Pounds used:</label>
               <input id="weapmat-add-pounds" name="weapmat-add-pounds" type="text" />
@@ -124,20 +97,18 @@
           <form action="/submit" method="PUT">
             <fieldset>
               <legend><strong>Edit Weapon</strong></legend>
-              <label for="weapon-edit-weapon-id">Weapon ID:</label>
+              <label for="weapon-edit-weapon-id">Weapon Name:</label>
               <select name="weapon-edit-weapon-id" id="weapon-edit-weapon-id">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+                <option value="Axe">Axe</option>
+                <option value="Boomerang">Boomerang</option>
+                <option value="Crossbow">Crossbow</option>
               </select>
               <hr>
-              <label for="weapon-edit-material-id">Material ID:</label>
+              <label for="weapon-edit-material-id">Material Name:</label>
               <select name="weapon-edit-weapon-id" id="weapon-edit-weapon-id">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+                <option value="Wood">Wood</option>
+                <option value="Steel">Steel</option>
+                <option value="Ruby">Ruby</option>
               </select>
               <label for="weapmat-add-pounds">Pounds used:</label>
               <input id="weapmat-add-pounds" name="weapmat-add-pounds" type="text" />
@@ -150,20 +121,18 @@
           <form action="/submit" method="DELETE">
             <fieldset>
               <legend><strong>Delete Weapon Material</strong></legend>
-              <label for="weapmat-delete-id">Weapon ID:</label>
+              <label for="weapmat-delete-id">Weapon Name:</label>
               <select name="id" id="weapmat-delete-id">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+                <option value="Axe">Axe</option>
+                <option value="Boomerang">Boomerang</option>
+                <option value="Crossbow">Crossbow</option>
               </select>
               <hr>
-              <label for="weapon-edit-material-id">Material ID:</label>
+              <label for="weapon-edit-material-id">Material Name:</label>
               <select name="weapon-edit-weapon-id" id="weapon-edit-weapon-id">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+                <option value="Wood">Wood</option>
+                <option value="Steel">Steel</option>
+                <option value="Ruby">Ruby</option>
               </select>
               <button type="button">Delete</button>
             </fieldset>

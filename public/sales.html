@@ -35,33 +35,33 @@
       <div class="table-container">
         <table>
           <tr>
-            <th>sale_id</th>
-            <th>invoice_id</th>
-            <th>weapon_id</th>
-            <th>price</th>
+            <th>Sale ID</th>
+            <th>Invoice ID</th>
+            <th>Weapon Name</th>
+            <th>Price</th>
           </tr>
           <tr>
             <td>1</td>
             <td>1</td>
-            <td>3</td>
+            <td>Axe</td>
             <td>$300.25</td>
           </tr>
           <tr>
             <td>2</td>
             <td>1</td>
-            <td>2</td>
+            <td>Crossbow</td>
             <td>$275.50</td>
           </tr>
           <tr>
             <td>3</td>
             <td>2</td>
-            <td>1</td>
+            <td>Great Sword</td>
             <td>$150.00</td>
           </tr>
           <tr>
             <td>4</td>
             <td>3</td>
-            <td>4</td>
+            <td>Boomerang</td>
             <td>$100.75</td>
           </tr>
         </table>
@@ -80,12 +80,12 @@
                 <option value="2">2</option>
                 <option value="3">3</option>
               </select>
-              <label for="sale-add-weapon-id">Weapon ID:</label>
+              <label for="sale-add-weapon-id">Weapon Name:</label>
               <select name="id" id="sale-add-id">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+                <option value="Axe">Axe</option>
+                <option value="Boomerang">Boomerang</option>
+                <option value="Crossbow">Crossbow</option>
+                <option value="Great sword">Great sword</option>
               </select>
               <label for="sale-add-price">Price:</label>
               <input id="sale-add-price" name="sale-add-price" type="text" />
@@ -108,16 +108,18 @@
               <hr>
               <label for="sale-edit-invoice-id">Invoice ID:</label>
               <select name="id" id="invoice-edit-ids">
+                <option value=""></option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
               </select>
-              <label for="sale-edit-weapon-id">Weapon ID:</label>
+              <label for="sale-edit-weapon-id">Weapon name:</label>
               <select name="id" id="sale-edit-ids">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+                <option value=""></option>
+                <option value="Axe">Axe</option>
+                <option value="Boomerang">Boomerang</option>
+                <option value="Crossbow">Crossbow</option>
+                <option value="Great sword">Great sword</option>
               </select>
               <label for="sale-add-price">Price:</label>
               <input id="sale-add-price" name="sale-add-price" type="text" />

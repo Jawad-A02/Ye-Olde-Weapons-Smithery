@@ -96,12 +96,12 @@
               </select>
               <label for="weapon-add-magic">Magical ability:</label>
               <input id="weapon-add-magic" name="weapon-add-magic" type="text" />
-              <label for="weapon-add-weapon-id">Weapon ID:</label>
-              <select name="id" id="weapon-add-id">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+              <label for="weapon-edit-weapon-id">Weapon ID:</label>
+              <select name="weapon-edit-weapon-id" id="weapon-edit-weapon-id">
+                <option value="Axe">1</option>
+                <option value="Boomerang">2</option>
+                <option value="Crossbow">3</option>
+                <option value="Great sword">3</option>
               </select>
               <label for="weapon-add-cost">Total cost:</label>
               <input id="weapon-add-cost" name="weapon-add-cost" type="text" />
@@ -114,12 +114,12 @@
           <form action="/submit" method="PUT">
             <fieldset>
               <legend><strong>Edit Weapon</strong></legend>
-              <label for="weapon-edit-weapon-id">Weapon ID:</label>
-              <select name="id" id="weapon-edit-weapon-id">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+              <label for="weapon-edit-weapon-id">Weapon Name:</label>
+              <select name="weapon-edit-weapon-id" id="weapon-edit-weapon-id">
+                <option value="Axe">Axe</option>
+                <option value="Boomerang">Boomerang</option>
+                <option value="Crossbow">Crossbow</option>
+                <option value="Great sword">Great sword</option>
               </select>
               <hr>
               <label for="weapon-edit-name">Name:</label>
@@ -150,12 +150,12 @@
           <form action="/submit" method="DELETE">
             <fieldset>
               <legend><strong>Delete Weapon</strong></legend>
-              <label for="weapon-delete-id">Weapon ID:</label>
-              <select name="id" id="weapon-delete-id">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+              <label for="weapon-delete-id">Weapon Name:</label>
+              <select name="weapon-edit-weapon-id" id="weapon-edit-weapon-id">
+                <option value="Axe">Axe</option>
+                <option value="Boomerang">Boomerang</option>
+                <option value="Crossbow">Crossbow</option>
+                <option value="Great sword">Great sword</option>
               </select>
               <hr>
               <button type="button">Delete</button>

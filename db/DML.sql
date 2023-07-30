@@ -10,7 +10,12 @@ Sample data manipulation queries
 */
 
 -- populate table
-SELECT * FROM Customers;
+SELECT 
+    customer_id as ID,
+    name as Name,
+    level as Level
+FROM Customers;
+
 
 -- create new customer
 INSERT INTO Customers
@@ -25,6 +30,11 @@ UPDATE Customers
 
 -- delete customer
 DELETE FROM Customers WHERE name = :name;
+
+-- update form dropdowns dynamically
+SELECT level FROM Customers;
+SELECT customer_id FROM Customers;
+SELECT name from Customers;
 
 
 /*
@@ -49,13 +59,23 @@ UPDATE Weapons
 DELETE FROM Weapons 
     WHERE weapon_id = :weapon_id;
 
+-- update drowpdowns
+SELECT level FROM Weapons;
+SELECT weapon_id FROM Weapons;
+
 
 /*
     Materials
 */
 
 -- populate table
-SELECT * FROM Customers;
+SELECT 
+    material_id as "ID",
+    name as "Name",
+    pounds_available as "Pounds available",
+    cost_per_pound as "Cost per Pound"
+FROM Materials;
+
 
 -- add new material
 INSERT INTO Materials
@@ -72,12 +92,22 @@ UPDATE Materials
 DELETE FROM Materials
     WHERE material_id = :material_id;
 
+-- update dropdowns dynamically
+SELECT material_id from Materials;
+
 /*
     Sales
 */
 
 -- Populate Table
-SELECT * FROM Sales;
+SELECT
+    s.sale_id,
+    s.invoice_id,
+    w.name AS "Weapon's name",
+    s.price
+FROM Sales s
+INNER JOIN Weapons w
+    ON s.weapon_id = w.weapon_id;
     
 -- add new sale
 INSERT INTO Sales
@@ -93,13 +123,22 @@ UPDATE Sales
 -- delete sale
 DELETE FROM Sales WHERE sale_id = :sale_id;
 
+-- update dropdowns
+SELECT invoice_id FROM Invoices;
+SELECT weapon_id FROM Invoices;
+SELECT sale_id FROM Sales;
 
 /*
     Invoices
 */
 
 -- Populate table
-SELECT * FROM Invoices;
+SELECT Invoices.invoice_id, Customers.name AS "cutomer's name", 
+    Invoices.date, SUM(Sales.price) AS "total cost"
+FROM Invoices
+LEFT JOIN Sales ON Invoices.invoice_id = Sales.invoice_id
+INNER JOIN Customers ON Invoices.customer_id = Customers.customer_id
+GROUP BY Invoices.invoice_id, Invoices.total_price;
 
 -- Add new invoice
 INSERT INTO Invoices
@@ -113,8 +152,10 @@ UPDATE Invoices
     WHERE invoice_id = :invoice_id;
 
 -- Delete an Invoice
-DELETE FROM Inoivces WHERE invoice_id = invoice_id;
+DELETE FROM Inoivces WHERE invoice_id = :invoice_id;
 
+-- update dropdowns
+SELECT invoice_id FROM Invoices;
 
 
 /*
@@ -122,7 +163,16 @@ DELETE FROM Inoivces WHERE invoice_id = invoice_id;
 */
 
 -- Populate Weapon Materials
-SELECT * FROM WeaponMaterials;
+SELECT 
+    w.name as "Weapon",
+    m.name as "Material",
+    wm.pounds_used as "Pounds Used"
+FROM WeaponMaterials wm
+JOIN Weapons w
+    ON wm.weapon_id = w.weapon_id
+JOIN Materials m
+    ON wm.material_id = m.material_id;
+
 
 -- Add new Weapon Materials
 INSERT INTO WeaponMaterials
@@ -138,4 +188,6 @@ UPDATE Invoices
 -- Delete a Weapon Materials
 DELETE FROM WeaponMaterials WHERE weapon_id = :weapon_id AND material_id = :material_id;
 
-
+-- update dropdowns
+SELECT weapon_id FROM WeaponMaterials;
+SELECT material_id FROM WeaponMaterials;

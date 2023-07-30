@@ -35,10 +35,10 @@
       <div class="table-container">
         <table>
           <tr>
-            <th>material_id</th>
-            <th>name</th>
-            <th>pounds_available</th>
-            <th>cost_per_pound</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Pounds Available</th>
+            <th>Cost per Pound</th>
           </tr>
           <tr>
             <td>1</td>
@@ -89,11 +89,12 @@
           <form action="/submit" method="PUT">
             <fieldset>
               <legend><strong>Edit Material</strong></legend>
+              <label for="material-edit-name">Material Name:</label>
               <select name="id" id="material-edit-ids">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+                <option value="Wood">Wood</option>
+                <option value="Steel">Steel</option>
+                <option value="Ruby">Ruby</option>
+                <option value="Ruby">Gold</option>
               </select>
               <hr>
               <label for="material-edit-name">Name:</label>
@@ -111,11 +112,12 @@
           <form action="/submit" method="DELETE">
             <fieldset>
               <legend><strong>Delete Material</strong></legend>
+              <label for="material-add-name">Material Name:</label>
               <select name="id" id="material-delete-ids">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+                <option value="Wood">Wood</option>
+                <option value="Steel">Steel</option>
+                <option value="Ruby">Ruby</option>
+                <option value="Ruby">Gold</option>
               </select>
               <hr>
               <button type="button">Delete</button>

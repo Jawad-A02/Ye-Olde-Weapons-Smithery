@@ -43,14 +43,13 @@ CREATE TABLE Weapons (
 -- Create WeaponMaterials intersection table
 DROP TABLE IF EXISTS WeaponMaterials;
 CREATE TABLE WeaponMaterials (
-    weapon_id INT(11) NOT NULL,
-    material_id INT(11) NOT NULL,
-    pounds_used INT(11) NOT NULL,
+    weapon_id INT(11),
+    material_id INT(11),
+    pounds_used INT(11),
     FOREIGN KEY (weapon_id) REFERENCES Weapons (weapon_id)
-        ON DELETE CASCADE,
+        ON DELETE SET NULL,
     FOREIGN KEY (material_id) REFERENCES Materials (material_id)
-        ON DELETE CASCADE,
-    PRIMARY KEY (weapon_id, material_id)
+        ON DELETE SET NULL
 );
 
 -- Create Sales table
@@ -58,25 +57,25 @@ DROP TABLE IF EXISTS Sales;
 CREATE TABLE Sales (
     sale_id INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
     invoice_id INT(11) NOT NULL,
-    weapon_id INT(11) NOT NULL,
+    weapon_id INT(11),
     price DECIMAL(10,2) NOT NULL,
     PRIMARY KEY (sale_id),
     FOREIGN KEY (invoice_id) REFERENCES Invoices (invoice_id)
         ON DELETE CASCADE,
     FOREIGN KEY (weapon_id) REFERENCES Weapons (weapon_id)
-        ON DELETE CASCADE
+        ON DELETE SET NULL
 );
 
 -- Create Invoices table
 DROP TABLE IF EXISTS Invoices;
 CREATE TABLE Invoices (
     invoice_id INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
-    customer_id INT(11) NOT NULL,
+    customer_id INT(11),
     total_price DECIMAL(10,2) NOT NULL,
-    date DATETIME NOT NULL,
+    date DATE NOT NULL,
     PRIMARY KEY (invoice_id),
     FOREIGN KEY (customer_id) REFERENCES Customers (customer_id)
-        ON DELETE CASCADE
+        ON DELETE SET NULL
 );
 
 -- Insert sample data into Customers table
