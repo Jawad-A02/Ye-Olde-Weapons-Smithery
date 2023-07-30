@@ -10,41 +10,37 @@ const setAnchor = (page, href) => {
   return page === href ? 'style=pointer-events:none' : `href="/${href}"`;
 }
 
-
 /**************
   Page Scripts
  **************/
 
 const Scripts = () => {
+  return /*js*/`
 
-  /*
-    Add dropdown menu options
-    -------------------------
-    selectId = 'customer-add-name'
-    options = ['1', '2', '3']
-  */
-  const addOpts = `
+<script>
 
-    const addOptions = (selectId, options) => {
+/*
+  Add dropdown menu options
+  -------------------------
+  selectId = 'customer-add-name'
+  options = ['1', '2', '3']
+*/
+const addoptions = (selectid, options) => {
 
-      // TODO: fetch options
+// TODO: dynamic fetching
 
-      const selectElem = document.getElementById(selectId);
-      options.forEach((val) => {
-        const option = document.createElement('option');
-        option.value = val;
-        option.text = val;
-        selectElem.appendChild(option);
-      });
-    };
+const selectelem = document.getelementbyid(selectid);
+  options.foreach((val) => {
+    const option = document.createelement('option');
+    option.value = val;
+    option.text = val;
+    selectelem.appendchild(option);
+  });
+};
 
-  `;
+</script>
 
-  return `
-    <script>
-      ${addOpts}
-    </script>
-  `;
+`;
 };
 
 
@@ -112,12 +108,23 @@ const Footer = () => {
   -------------
   arr = [<th>, <th>, <th>]
 */
-const Table = (arr) => {
+const Table = (arr, data) => {
 
+  // th 
   let ths = '';
   arr.forEach((th) => {
     ths += `<th>${th}</th>`;
   });
+
+  // td 
+  let rows = ``;
+  for (let i = 0; i < data.length; i++) {
+    let tds = "";
+    for (let [key, value] of Object.entries(data[i])) {
+      tds += `<td>${value}</td>`;
+    }
+    rows += `<tr>${tds}</tr>`;
+  }
 
   return /*html*/`
 
@@ -126,6 +133,7 @@ const Table = (arr) => {
     <tr>
       ${ths}
     </tr>
+    ${rows}
   </table>
 </div>
 
@@ -141,12 +149,12 @@ const Table = (arr) => {
   button = 'Add'
 
 */
-const Form = (divClass, method, legend, inputs, button) => {
+const Form = (divClass, action, method, legend, inputs, button) => {
   return /*html*/`
 
 <div class="forms-container">
   <div class="${divClass}">
-    <form action="/submit" method="${method}">
+    <form action="${action}" method="${method}">
       <fieldset>
         <legend><strong>${legend}</strong></legend>
         ${inputs}
@@ -159,16 +167,19 @@ const Form = (divClass, method, legend, inputs, button) => {
 `};
 
 
+
+
 /*
   Input
   ------
   type = 'text', 'dropdown'
   forId = 'customer-add-name'
   label = 'Name:'
-  selectVals = ['1', '2', '3']
+  data = database object
+  query = attribute match e.g. "customer_id"
   hr = 'hr', 'none'
 */
-const Input = (type, forId, label, selectVals, hr='none') => {
+const Input = (type, forId, label, data, query, hr='') => {
 
   let input = '';
   let hr_elem = hr === true ? "<hr>" : "";
@@ -180,14 +191,51 @@ const Input = (type, forId, label, selectVals, hr='none') => {
       ${hr_elem}
     `;
   } else if (type === 'dropdown') {
-    input = /*html*/`
+
+    let options = ``;
+    if (data) {
+      for (let i = 0; i < data.length; i++) {
+        for (let [key, value] of Object.entries(data[i])){
+          if (key === query){
+            options += `<option value=${value}>${value}</option>`;
+          }
+        }
+      }
+      input = /*html*/`
+      <label for="${forId}">${label}</label>
+      <select name="${forId}" id="${forId}">
+        ${options}
+      </select>
+      ${hr_elem}
+    `;
+    } else {
+      input = /*html*/`
       <label for="${forId}">${label}</label>
       <select name="${forId}" id="${forId}">
         <!-- populated with addOptions() -->
       </select>
       ${hr_elem}
     `;
-  };
+    }
+  } else if (type === 'date') {
+    input = /*html*/`
+      <label for="${forId}">${label}</label>
+      <input id="${forId}" name="${forId}" type="date" />
+      ${hr_elem}
+    `;
+  } else if (type === 'dropdown_level') {
+    let options = "";
+    for (let i = 1; i<=10; i++){
+      options += `<option value="${i}">${i}</option>`;
+    }
+    input = /*html*/`
+      <label for="${forId}">${label}</label>
+      <select name="${forId}" id="${forId}">
+        ${options}
+      </select>
+      ${hr_elem}
+    `;
+  }
 
   return input;
 };
@@ -221,21 +269,21 @@ ${Footer()}
 
 
 // Customers
-const Customers = () => {
+const Customers = (data) => {
 
   let addInputs = `
     ${Input('text', 'customer-add-name', 'Name:')}
-    ${Input('dropdown', 'customer-add-level', 'Level:')}
+    ${Input('dropdown_level', 'customer-add-level', 'Level:')}
   `;
 
   let editInputs = `
-    ${Input('dropdown', 'customer-edit-ids', 'Customer ID:', 'hr')}
+    ${Input('dropdown', 'customer-edit-ids', 'Customer ID:', data, "customer_id", 'hr')}
     ${Input('text', 'customer-edit-name', 'Name:')}
-    ${Input('dropdown', 'customer-edit-level', 'Edit level:')}
+    ${Input('dropdown_level', 'customer-edit-level', 'Edit level:')}
   `;
 
   let deleteInput = `
-    ${Input('dropdown', 'customer-delete-name', 'Customer:', 'hr')}
+    ${Input('dropdown', 'customer-delete-name', 'Customer Name:', data, "name", 'hr')}
   `;
 
   return `
@@ -243,7 +291,7 @@ const Customers = () => {
 ${Head('Customers')}
 ${Header('customers')}
 
-${Table(['Customer ID', 'Name', 'Level'])}
+${Table(['Customer ID', 'Name', 'Level'], data)}
 
 ${Form('add', 'POST', 'Add Customer', addInputs, 'Add')}
 ${Form('edit', 'PUT', 'Edit Customer', editInputs, 'Edit')}
@@ -258,7 +306,7 @@ ${Footer()}
 const Invoices = () => {
 
   let addInputs = `
-    ${Input('text', 'invoice-add-customer-id', 'Customer ID;')}
+    ${Input('text', 'invoice-add-customer-id', 'Customer ID:')}
     ${Input('date', 'invoice-add-date', 'Date:')}
   `;
 
