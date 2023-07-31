@@ -309,9 +309,9 @@ ${Header('invoices')}
 
 ${Table(['Invoice ID', 'Customer ID', 'Total price', 'Date'])}
 
-${Form('add', 'POST', 'Add Invoice', addInputs, 'Add')}
-${Form('edit', 'PUT', 'Edit Invoice', editInputs, 'Edit')}
-${Form('delete', 'DELETE', 'Delete Invoice', deleteInput, 'Delete')}
+${Form('add', 'POST', '/invoices', 'POST', 'Add Invoice', addInputs, 'Add')}
+${Form('edit', 'POST', '/invoices', 'PUT', 'Edit Invoice', editInputs, 'Edit')}
+${Form('delete', 'POST', '/invoices', 'DELETE', 'Delete Invoice', deleteInput, 'Delete')}
 
 ${Footer()}
 
@@ -345,9 +345,9 @@ ${Header('materials')}
 
 ${Table(['Material ID', 'Name', 'Pounds available', 'Cost per pound'])}
 
-${Form('add', 'POST', 'Add Material', addInputs, 'Add')}
-${Form('edit', 'PUT', 'Edit Material', editInputs, 'Edit')}
-${Form('delete', 'DELETE', 'Delete Material', deleteInput, 'Delete')}
+${Form('add', 'POST', '/materials', 'POST', 'Add Material', addInputs, 'Add')}
+${Form('edit', 'POST', '/materials', 'PUT', 'Edit Material', editInputs, 'Edit')}
+${Form('delete', 'POST', '/materials', 'DELETE', 'Delete Material', deleteInput, 'Delete')}
 
 ${Footer()}
 
@@ -381,9 +381,9 @@ ${Header('sales')}
 
 ${Table(['Sale ID', 'Invoice ID', 'Weapon ID', 'Price'])}
 
-${Form('add', 'POST', 'Add Sale', addInputs, 'Add')}
-${Form('edit', 'PUT', 'Edit Sale', editInputs, 'Edit')}
-${Form('delete', 'DELETE', 'Delete Sale', deleteInput, 'Delete')}
+${Form('add', 'POST', '/sales', 'POST', 'Add Sale', addInputs, 'Add')}
+${Form('edit', 'POST', '/sales', 'PUT', 'Edit Sale', editInputs, 'Edit')}
+${Form('delete', 'POST', '/sales', 'DELETE', 'Delete Sale', deleteInput, 'Delete')}
 
 ${Footer()}
 
@@ -420,9 +420,9 @@ ${Header('weapons')}
 
 ${Table(['Weapon ID', 'Name', 'Level', 'Magical Ability', 'Total Cost'])}
 
-${Form('add', 'POST', 'Add Weapon', addInputs, 'Add')}
-${Form('edit', 'PUT', 'Edit Weapon', editInputs, 'Edit')}
-${Form('delete', 'DELETE', 'Delete Weapon', deleteInput, 'Delete')}
+${Form('add', 'POST', '/weapons', 'POST', 'Add Weapon', addInputs, 'Add')}
+${Form('edit', 'POST', '/weapons', 'PUT', 'Edit Weapon', editInputs, 'Edit')}
+${Form('delete', 'POST', '/weapons', 'DELETE', 'Delete Weapon', deleteInput, 'Delete')}
 
 ${Footer()}
 
@@ -456,9 +456,9 @@ ${Header('weaponMaterials')}
 
 ${Table(['Weapon ID', 'Material ID', 'Pounds Used'])}
 
-${Form('add', 'POST', 'Add Weapon Material', addInputs, 'Add')}
-${Form('edit', 'PUT', 'Edit Weapon Material', editInputs, 'Edit')}
-${Form('delete', 'DELETE', 'Delete Weapon Material', deleteInput, 'Delete')}
+${Form('add', 'POST', '/weaponMaterials', 'POST', 'Add Weapon Material', addInputs, 'Add')}
+${Form('edit', 'POST', '/weaponMaterials', 'PUT', 'Edit Weapon Material', editInputs, 'Edit')}
+${Form('delete', 'POST', '/weaponMaterials', 'DELETE', 'Delete Weapon Material', deleteInput, 'Delete')}
 
 ${Footer()}
 ${Scripts()}
