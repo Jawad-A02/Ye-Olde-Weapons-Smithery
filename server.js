@@ -39,68 +39,44 @@ app.get(['/', '/home'], async (req, res) => {
 });
 
 app.get('/customers', async (req, res) => {
-  try {
-
-    let query = "SELECT customer_id,name,level FROM Customers;";
-
-    db.pool.query(query, function(error, rows, fields) {
-      
-      if (error) {
-        console.error(`DB get customers error: \n${error}`);
-        res.status(400);
-        return ;
-      }
-      let customers = rows;
-      res.send(Customers(customers));
-    });
-
-  } catch (err) {
-    console.log(`GET / error: \n${err}`);
-    res.status(500);
+  let data = get_table("Customers");
+  if (data[1] === true) {
+    let customers = data[0];
+    res.send(Customers(customers));
+  } else {
+    console.error(`DB get customers error: \n${data[0]}`);
+    res.status(400);
   }
 });
 
 app.post('/customers', (req,res) => {
+  // add customer
+  let data = req.body;
+  let level = parseInt(data["customer-add-level"]);
+  let name = data["customer-add-name"];
 
-  try {
-    // add customer
-    let data = req.body
-    let level = parseInt(data["customer-add-level"]);
-    let name = data["customer-add-name"];
+  let query = `
+    INSERT INTO 
+      Customers (name, level) 
+    VALUES 
+      ("${name}", ${level}) ;`;
 
-    let query1 = `
-      INSERT INTO 
-        Customers (name, level) 
-      VALUES 
-        ("${name}", ${level}) ;`;
-
-    db.pool.query(query1, function(error, rows, fields) {
-      if (error) {
-        console.error(`DB Add Customer error: \n${error}`);
-        res.status(400);
-        return ;
-      }
-    });
-
-    // return new page
-    let query2 = `
-      SELECT 
-        customer_id,
-        name,
-        level 
-      FROM 
-        Customers;`;
-
-    db.pool.query(query2, (error, rows, fields) => {
-      let customers = rows;
-      res.send(Customers(customers));
-    });
-
-  } catch (err) {
-    console.log(`POST / error: \n${err}`);
-    res.status(400);
+  //result of adding customer
+  let result = insert_table(query);
+  if (result[1] === false) {
+      console.error(`DB Add Customer error: \n${error}`);
+      res.status(400);
   }
 
+  //new data
+  let data2 = get_table("Customers");
+  if (data2[1] === true) {
+    let customers = data2[0];
+    res.send(Customers(customers));
+  } else {
+    console.error(`DB get customers error: \n${data2[0]}`);
+    res.status(400);
+  }
 });
 
 app.put('/customers', (req,res) => {
@@ -109,88 +85,59 @@ app.put('/customers', (req,res) => {
   let name = req.body["customer-edit-name"];
   let level = parseInt(req.body["customer-edit-level"]);
 
-  try {
+  // edit customer
+  let query = `
+    UPDATE Customers 
+    SET 
+      level = ${level}, 
+      name = "${name}"
+    WHERE 
+      customer_id = ${customer_id}`;
 
-    // add customer
-    let query1 = `
-      UPDATE Customers 
-      SET 
-        level = ${level}, 
-        name = "${name}"
-      WHERE 
-        customer_id = ${customer_id}`;
-
-    db.pool.query(query1, function(error, rows, fields) {
-      if (error) {
-        console.error(`DB Edit Customer error: \n${error}`);
-        res.status(400);
-        return ;
-      }
-    });
-
-    // return new page
-    let query2 = `
-      SELECT 
-        customer_id,
-        name,
-        level 
-      FROM 
-        Customers;`;
-
-    db.pool.query(query2, (error, rows, fields) => {
-      let customers = rows;
-      res.send(Customers(customers));
-    });
-
-  } catch (err) {
-
-    console.log(`PUT /customers error: \n${err}`);
-    res.status(400);
+  //result of editing customer
+  let result = edit_table(query);
+  if (result[1] === false) {
+      console.error(`DB Edit Customer error: \n${error}`);
+      res.status(400);
   }
 
+  //send new data
+  let data2 = get_table("Customers");
+  if (data2[1] === true) {
+    let customers = data2[0];
+    res.send(Customers(customers));
+  } else {
+    console.error(`DB get customers error: \n${data2[0]}`);
+    res.status(400);
+  }
 });
 
 app.delete('/customers', (req,res) => {
-
-  try {
-
-    // add customer
+    // query for deleting customer
     let name = req.body["customer-delete-name"];
 
-    let query1 = `
+    let query = `
       DELETE FROM
         Customers
       WHERE 
         name = "${name}"`;
 
-    db.pool.query(query1, (error, rows, fields) => {
-      if (error) {
-        console.error(`DB Add Customer error: \n${error}`);
-        res.status(400);
-        return ;
-      }
-    });
-
-    // return new page
-    let query2 = `
-      SELECT 
-        customer_id,
-        name,
-        level 
-      FROM 
-        Customers;`;
-
-    db.pool.query(query2, (error, rows, fields) => {
-      let customers = rows;
-      res.send(Customers(customers));
-    });
-
-  } catch (err) {
-
-    console.log(`DELETE /customers error: \n${err}`);
-    res.status(400);
+  //result of adding customer
+  let result = delete_table(query);
+  if (result[1] === false) {
+      console.error(`DB delete Customer error: \n${error}`);
+      res.status(400);
   }
 
+  //send new data
+  let data2 = get_table("Customers");
+  if (data2[1] === true) {
+    let customers = data2[0];
+    res.send(Customers(customers));
+  } else {
+    console.error(`DB get customers error: \n${data2[0]}`);
+    res.status(400);
+  }
 });
 
 
@@ -248,3 +195,69 @@ app.get('/weaponMaterials', async (req, res) => {
 app.listen(PORT, function () {
   console.log(`Express started on http://localhost:${PORT} -- Press Ctrl-C to terminate.`);
 });
+
+
+
+
+const get_table = async (table) => {
+  try {
+
+    //get the data
+    query = `SELECT * FROM ${table};`;
+    db.pool.query(query, function(error, rows, fields) {
+      if (error) {
+        return [error, false];
+      }
+      let customers = rows;
+      return [rows, true];
+    });
+  } catch (err) {
+    return [err, false];
+  }
+};
+
+const insert_table = async (query) => {
+  try {
+
+    //insert the query
+    db.pool.query(query, function(error, rows, fields) {
+      if (error) {
+        return [error, false];
+      }
+      return [rows, true];
+    });
+  } catch (err) {
+    return [err, false];
+  }
+};
+
+const edit_table = async (query) => {
+  try {
+
+    //edit the table
+    db.pool.query(query, function(error, rows, fields) {
+      if (error) {
+        return [error, false];
+      }
+      return [rows, true];
+    });
+  } catch (err) {
+    return [err, false];
+  }
+};
+
+
+const delete_table = async (query) => {
+  try {
+
+    //deleting the row
+    db.pool.query(query, (error, rows, fields) => {
+      if (error) {
+        return [error, false];
+      }
+      return [rows, true];
+    });
+  } catch (err) {
+    return [err, false];
+  }
+};
