@@ -19,25 +19,6 @@ const Scripts = () => {
 
 <script>
 
-/*
-  Add dropdown menu options
-  -------------------------
-  selectId = 'customer-add-name'
-  options = ['1', '2', '3']
-*/
-const addoptions = (selectid, options) => {
-
-// TODO: dynamic fetching
-
-const selectelem = document.getelementbyid(selectid);
-  options.foreach((val) => {
-    const option = document.createelement('option');
-    option.value = val;
-    option.text = val;
-    selectelem.appendchild(option);
-  });
-};
-
 </script>
 
 `;
@@ -66,13 +47,14 @@ const Head = (title) => {
 
 
 // Header
-const Header = (page) => {
+const Header = (title, page) => {
   return /*html*/`
 
 <body>
   <header>
     <nav>
       <h1>Ye Olde Weapons Smithery</h1>
+      <h2>${title}</h2>
       <ul>
         <li><a ${setAnchor(page, 'home')}>Home</a></li>
         <li><a ${setAnchor(page, 'customers')}>Customers</a></li>
@@ -149,16 +131,16 @@ const Table = (arr, data) => {
   button = 'Add'
 
 */
-const Form = (divClass, action, method, legend, inputs, button) => {
+const Form = (divClass, method, path, action, legend, inputs, button) => {
   return /*html*/`
 
 <div class="forms-container">
   <div class="${divClass}">
-    <form action="${action}" method="${method}">
+    <form method="${method}" action="${path}?_method=${action}">
       <fieldset>
         <legend><strong>${legend}</strong></legend>
-        ${inputs}
-        <button type="button">${button}</button>
+          ${inputs}
+        <button type="submit">${button}</button>
       </fieldset>
     </form>
   </div>
@@ -197,7 +179,7 @@ const Input = (type, forId, label, data, query, hr='') => {
       for (let i = 0; i < data.length; i++) {
         for (let [key, value] of Object.entries(data[i])){
           if (key === query){
-            options += `<option value=${value}>${value}</option>`;
+            options += `<option value="${value}">${value}</option>`;
           }
         }
       }
@@ -277,7 +259,7 @@ const Customers = (data) => {
   `;
 
   let editInputs = `
-    ${Input('dropdown', 'customer-edit-ids', 'Customer ID:', data, "customer_id", 'hr')}
+    ${Input('dropdown', 'customer-edit-id', 'Customer ID:', data, "customer_id", 'hr')}
     ${Input('text', 'customer-edit-name', 'Name:')}
     ${Input('dropdown_level', 'customer-edit-level', 'Edit level:')}
   `;
@@ -289,13 +271,13 @@ const Customers = (data) => {
   return `
 
 ${Head('Customers')}
-${Header('customers')}
+${Header('Customers', 'customers')}
 
 ${Table(['Customer ID', 'Name', 'Level'], data)}
 
-${Form('add', 'POST', 'Add Customer', addInputs, 'Add')}
-${Form('edit', 'PUT', 'Edit Customer', editInputs, 'Edit')}
-${Form('delete', 'DELETE', 'Delete Customer', deleteInput, 'Delete')}
+${Form('add', 'POST', '/customers', 'POST', 'Add Customer', addInputs, 'Add')}
+${Form('edit', 'POST', '/customers', 'PUT', 'Edit Customer', editInputs, 'Edit')}
+${Form('delete', 'POST', '/customers', 'DELETE', 'Delete Customer', deleteInput, 'Delete')}
 
 ${Footer()}
 

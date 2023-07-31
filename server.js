@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+var methodOverride = require('method-override');
 
 PORT = 61178;
 
@@ -20,7 +21,7 @@ const {
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(methodOverride('_method'));
 
 
 /********
@@ -44,12 +45,17 @@ app.get('/customers', async (req, res) => {
 
     db.pool.query(query, function(error, rows, fields) {
       
+      if (error) {
+        console.error(`DB get customers error: \n${error}`);
+        res.status(400);
+        return ;
+      }
       let customers = rows;
       res.send(Customers(customers));
     });
 
   } catch (err) {
-    console.log(`GET / ERROR: \n${err}`);
+    console.log(`GET / error: \n${err}`);
     res.status(500);
   }
 });
@@ -57,11 +63,17 @@ app.get('/customers', async (req, res) => {
 app.post('/customers', (req,res) => {
 
   try {
-
     // add customer
     let data = req.body
     let level = parseInt(data["customer-add-level"]);
-    let query1 = `INSERT INTO Customers (name, level) VALUES ('${data["customer-add-name"]}', ${level}) ;`;
+    let name = data["customer-add-name"];
+
+    let query1 = `
+      INSERT INTO 
+        Customers (name, level) 
+      VALUES 
+        ("${name}", ${level}) ;`;
+
     db.pool.query(query1, function(error, rows, fields) {
       if (error) {
         console.error(`DB Add Customer error: \n${error}`);
@@ -71,14 +83,21 @@ app.post('/customers', (req,res) => {
     });
 
     // return new page
-    let query2 = "SELECT customer_id,name,level FROM Customers;";
+    let query2 = `
+      SELECT 
+        customer_id,
+        name,
+        level 
+      FROM 
+        Customers;`;
+
     db.pool.query(query2, (error, rows, fields) => {
       let customers = rows;
       res.send(Customers(customers));
     });
 
   } catch (err) {
-    console.log(`GET / ERROR: \n${err}`);
+    console.log(`POST / error: \n${err}`);
     res.status(400);
   }
 
@@ -86,30 +105,46 @@ app.post('/customers', (req,res) => {
 
 app.put('/customers', (req,res) => {
 
+  let customer_id = parseInt(req.body["customer-edit-id"]);
+  let name = req.body["customer-edit-name"];
+  let level = parseInt(req.body["customer-edit-level"]);
+
   try {
-    // edit customer
-    let data = req.params["customer-edit-ids"];
-    console.log(data)
-    return;
-    let level = parseInt(data["customer-add-level"]);
-    let query1 = `INSERT INTO Customers (name, level) VALUES ('${data["customer-add-name"]}', ${level}) ;`;
+
+    // add customer
+    let query1 = `
+      UPDATE Customers 
+      SET 
+        level = ${level}, 
+        name = "${name}"
+      WHERE 
+        customer_id = ${customer_id}`;
+
     db.pool.query(query1, function(error, rows, fields) {
       if (error) {
-        console.error(`DB Add Customer error: \n${error}`);
+        console.error(`DB Edit Customer error: \n${error}`);
         res.status(400);
         return ;
       }
     });
 
     // return new page
-    let query2 = "SELECT customer_id,name,level FROM Customers;";
+    let query2 = `
+      SELECT 
+        customer_id,
+        name,
+        level 
+      FROM 
+        Customers;`;
+
     db.pool.query(query2, (error, rows, fields) => {
       let customers = rows;
       res.send(Customers(customers));
     });
 
   } catch (err) {
-    console.log(`GET / ERROR: \n${err}`);
+
+    console.log(`PUT /customers error: \n${err}`);
     res.status(400);
   }
 
@@ -120,9 +155,15 @@ app.delete('/customers', (req,res) => {
   try {
 
     // add customer
-    let data = req.body
-    let query1 = `INSERT INTO Customers (name, level) VALUES ('${data["customer-add-name"]}', ${level}) ;`;
-    db.pool.query(query1, function(error, rows, fields) {
+    let name = req.body["customer-delete-name"];
+
+    let query1 = `
+      DELETE FROM
+        Customers
+      WHERE 
+        name = "${name}"`;
+
+    db.pool.query(query1, (error, rows, fields) => {
       if (error) {
         console.error(`DB Add Customer error: \n${error}`);
         res.status(400);
@@ -131,14 +172,22 @@ app.delete('/customers', (req,res) => {
     });
 
     // return new page
-    let query2 = "SELECT customer_id,name,level FROM Customers;";
+    let query2 = `
+      SELECT 
+        customer_id,
+        name,
+        level 
+      FROM 
+        Customers;`;
+
     db.pool.query(query2, (error, rows, fields) => {
       let customers = rows;
       res.send(Customers(customers));
     });
 
   } catch (err) {
-    console.log(`GET / ERROR: \n${err}`);
+
+    console.log(`DELETE /customers error: \n${err}`);
     res.status(400);
   }
 
