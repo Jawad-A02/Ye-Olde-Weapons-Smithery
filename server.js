@@ -39,12 +39,22 @@ app.get(['/', '/home'], async (req, res) => {
 });
 
 app.get('/customers', async (req, res) => {
-  let data = get_table("Customers");
-  if (data[1] === true) {
-    let customers = data[0];
+  // get new data
+  let query = `
+    SELECT 
+      customer_id,
+      name,
+      level 
+    FROM 
+      Customers;`;
+
+      //send new data
+  let data2 = get_table(query);
+  if (data2[1] === true) {
+    let customers = data2[0];
     res.send(Customers(customers));
   } else {
-    console.error(`DB get customers error: \n${data[0]}`);
+    console.error(`DB get customers error: \n${data2[0]}`);
     res.status(400);
   }
 });
@@ -68,8 +78,17 @@ app.post('/customers', (req,res) => {
       res.status(400);
   }
 
-  //new data
-  let data2 = get_table("Customers");
+  // get new data
+  let query2 = `
+    SELECT 
+      customer_id,
+      name,
+      level 
+    FROM 
+      Customers;`;
+
+      //send new data
+  let data2 = get_table(query2);
   if (data2[1] === true) {
     let customers = data2[0];
     res.send(Customers(customers));
@@ -101,8 +120,17 @@ app.put('/customers', (req,res) => {
       res.status(400);
   }
 
-  //send new data
-  let data2 = get_table("Customers");
+  // get new data
+  let query2 = `
+    SELECT 
+      customer_id,
+      name,
+      level 
+    FROM 
+      Customers;`;
+
+      //send new data
+  let data2 = get_table(query2);
   if (data2[1] === true) {
     let customers = data2[0];
     res.send(Customers(customers));
@@ -129,8 +157,17 @@ app.delete('/customers', (req,res) => {
       res.status(400);
   }
 
-  //send new data
-  let data2 = get_table("Customers");
+  // get new data
+  let query2 = `
+    SELECT 
+      customer_id,
+      name,
+      level 
+    FROM 
+      Customers;`;
+
+      //send new data
+  let data2 = get_table(query2);
   if (data2[1] === true) {
     let customers = data2[0];
     res.send(Customers(customers));
@@ -199,11 +236,10 @@ app.listen(PORT, function () {
 
 
 
-const get_table = async (table) => {
+const get_table = async (query) => {
   try {
 
     //get the data
-    query = `SELECT * FROM ${table};`;
     db.pool.query(query, function(error, rows, fields) {
       if (error) {
         return [error, false];
