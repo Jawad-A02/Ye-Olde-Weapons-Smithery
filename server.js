@@ -23,6 +23,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
+// Select queries
+const get_customers = `
+    SELECT 
+      customer_id, name, level 
+    FROM 
+      Customers;`;
+
+const get_invoices = `
+    SELECT 
+      Invoices.invoice_id, Customers.name, 
+      Invoices.date, SUM(Sales.price)
+    FROM Invoices
+      LEFT JOIN Sales ON Invoices.invoice_id = Sales.invoice_id
+      INNER JOIN Customers ON Invoices.customer_id = Customers.customer_id
+    GROUP BY Invoices.invoice_id, Invoices.total_price;`;
 
 /********
   Routes
@@ -39,17 +54,10 @@ app.get(['/', '/home'], async (req, res) => {
 });
 
 app.get('/customers', async (req, res) => {
-  // get new data
-  let query = `
-    SELECT 
-      customer_id,
-      name,
-      level 
-    FROM 
-      Customers;`;
 
-      //send new data
-  let data2 = get_table(query);
+    //send new data
+  let data2 = get_table(get_customers);
+
   if (data2[1] === true) {
     let customers = data2[0];
     res.send(Customers(customers));
@@ -78,17 +86,9 @@ app.post('/customers', (req,res) => {
       res.status(400);
   }
 
-  // get new data
-  let query2 = `
-    SELECT 
-      customer_id,
-      name,
-      level 
-    FROM 
-      Customers;`;
-
       //send new data
-  let data2 = get_table(query2);
+  let data2 = get_table(get_customers);
+
   if (data2[1] === true) {
     let customers = data2[0];
     res.send(Customers(customers));
@@ -120,17 +120,9 @@ app.put('/customers', (req,res) => {
       res.status(400);
   }
 
-  // get new data
-  let query2 = `
-    SELECT 
-      customer_id,
-      name,
-      level 
-    FROM 
-      Customers;`;
+    //send new data
+  let data2 = get_table(get_customers);
 
-      //send new data
-  let data2 = get_table(query2);
   if (data2[1] === true) {
     let customers = data2[0];
     res.send(Customers(customers));
@@ -157,17 +149,9 @@ app.delete('/customers', (req,res) => {
       res.status(400);
   }
 
-  // get new data
-  let query2 = `
-    SELECT 
-      customer_id,
-      name,
-      level 
-    FROM 
-      Customers;`;
+    //send new data
+  let data2 = get_table(get_customers);
 
-      //send new data
-  let data2 = get_table(query2);
   if (data2[1] === true) {
     let customers = data2[0];
     res.send(Customers(customers));
@@ -178,18 +162,113 @@ app.delete('/customers', (req,res) => {
 });
 
 
-
-
-
-
-
-
+// Invoices route
 app.get('/invoices', async (req, res) => {
-  try {
-    res.send(Invoices());
-  } catch (err) {
-    console.log(`GET / ERROR: \n${err}`);
-    res.status(500);
+  //send new data
+  let data2 = get_table(get_invoices);
+
+  if (data2[1] === true) {
+    let invoices = data2[0];
+    res.send(Invoices(invoices));
+  } else {
+    console.error(`DB get invoices error: \n${data2[0]}`);
+    res.status(400);
+  }
+});
+
+app.post('/invoices', (req,res) => {
+  // add customer
+  let data = req.body;
+  let customer_name = data["invoice-add-customer-name"];
+  let date = data["invoice-add-date"];
+
+  let query = `
+    INSERT INTO 
+      Invoices (customer_id, date) 
+    VALUES 
+      ((
+        Select customer_id FROM Customers WHERE name = "${customer_name}"
+        ), ${date}) ;`;
+
+  //result of adding customer
+  let result = insert_table(query);
+  if (result[1] === false) {
+      console.error(`DB Add Customer error: \n${error}`);
+      res.status(400);
+  }
+
+    //send new data
+  let data2 = get_table(get_invoices);
+  if (data2[1] === true) {
+    let invoices = data2[0];
+    res.send(Invoices(invoices));
+  } else {
+    console.error(`DB get invoices error: \n${data2[0]}`);
+    res.status(400);
+  }
+});
+
+app.put('/invoices', (req,res) => {
+
+  let invoice_id = parseInt(req.body["invoice-edit-ids"]);
+  let name = req.body["invoice-edit-customer-name"];
+  let date = req.body["invoice-edit-date"];
+
+  // edit customer
+  let query = `
+    UPDATE Invoices 
+    SET 
+      customer_id = ((
+        Select customer_id FROM Customers WHERE name = "${name}"
+        )), 
+      date = "${date}"
+    WHERE 
+      invoice_id = ${invoice_id}`;
+
+  //result of editing customer
+  let result = edit_table(query);
+  if (result[1] === false) {
+      console.error(`DB Edit invoice error: \n${error}`);
+      res.status(400);
+  }
+
+  //send new data
+  let data2 = get_table(get_invoices);
+
+  if (data2[1] === true) {
+    let invoices = data2[0];
+    res.send(Invoices(invoices));
+  } else {
+    console.error(`DB get invoices error: \n${data2[0]}`);
+    res.status(400);
+  }
+});
+
+app.delete('/invoices', (req,res) => {
+  // query for deleting customer
+  let invoice_id = parseInt(req.body["invoice-edit-ids"]);
+
+  let query = `
+    DELETE FROM
+      Invoices
+    WHERE 
+      invoice_id = "${invoice_id}"`;
+
+//result of adding customer
+let result = delete_table(query);
+if (result[1] === false) {
+    console.error(`DB delete Invoice error: \n${error}`);
+    res.status(400);
+}
+
+  //send new data
+  let data2 = get_table(get_invoices);
+  if (data2[1] === true) {
+    let invoices = data2[0];
+    res.send(Invoices(invoices));
+  } else {
+    console.error(`DB get invoices error: \n${data2[0]}`);
+    res.status(400);
   }
 });
 

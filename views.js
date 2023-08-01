@@ -285,21 +285,21 @@ ${Footer()}
 
 
 // Invoices
-const Invoices = () => {
+const Invoices = (data) => {
 
   let addInputs = `
-    ${Input('text', 'invoice-add-customer-id', 'Customer ID:')}
+    ${Input('dropdown', 'invoice-add-customer-name', 'Customer Name:', data, 'customer_name', 'name')}
     ${Input('date', 'invoice-add-date', 'Date:')}
   `;
 
   let editInputs = `
-    ${Input('dropdown', 'invoice-edit-ids', 'Invoice ID:', 'hr')}
-    ${Input('text', 'invoice-add-customer-id', 'Customer ID:')}
-    ${Input('date', 'invoice-add-date', 'Date:')}
+    ${Input('dropdown', 'invoice-edit-ids', 'Invoice ID:', data, 'invoice_id', 'hr')}
+    ${Input('dropdown', 'invoice-edit-customer-name', 'Customer Name:', data, 'name')}
+    ${Input('date', 'invoice-edit-date', 'Date:')}
   `;
 
   let deleteInput = `
-    ${Input('dropdown', 'invoice-delete-ids', 'Invoice ID:', 'hr')}
+    ${Input('dropdown', 'invoice-delete-ids', 'Invoice ID:', data, 'invoice_id', 'hr')}
   `;
 
   return `
@@ -307,7 +307,7 @@ const Invoices = () => {
 ${Head('Invoices')}
 ${Header('invoices')}
 
-${Table(['Invoice ID', 'Customer ID', 'Total price', 'Date'])}
+${Table(['Invoice ID', 'Customer ID', 'Date', 'Total price'], data)}
 
 ${Form('add', 'POST', '/invoices', 'POST', 'Add Invoice', addInputs, 'Add')}
 ${Form('edit', 'POST', '/invoices', 'PUT', 'Edit Invoice', editInputs, 'Edit')}
