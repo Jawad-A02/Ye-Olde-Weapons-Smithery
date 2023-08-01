@@ -134,7 +134,6 @@ const Table = (arr, data) => {
 const Form = (divClass, method, path, action, legend, inputs, button) => {
   return /*html*/`
 
-<div class="forms-container">
   <div class="${divClass}">
     <form method="${method}" action="${path}?_method=${action}">
       <fieldset>
@@ -144,7 +143,6 @@ const Form = (divClass, method, path, action, legend, inputs, button) => {
       </fieldset>
     </form>
   </div>
-</div>
 
 `};
 
@@ -275,9 +273,11 @@ ${Header('Customers', 'customers')}
 
 ${Table(['Customer ID', 'Name', 'Level'], data)}
 
-${Form('add', 'POST', '/customers', 'POST', 'Add Customer', addInputs, 'Add')}
-${Form('edit', 'POST', '/customers', 'PUT', 'Edit Customer', editInputs, 'Edit')}
-${Form('delete', 'POST', '/customers', 'DELETE', 'Delete Customer', deleteInput, 'Delete')}
+<div class="forms-container">
+  ${Form('add', 'POST', '/customers', 'POST', 'Add Customer', addInputs, 'Add')}
+  ${Form('edit', 'POST', '/customers', 'PUT', 'Edit Customer', editInputs, 'Edit')}
+  ${Form('delete', 'POST', '/customers', 'DELETE', 'Delete Customer', deleteInput, 'Delete')}
+</div>
 
 ${Footer()}
 
@@ -288,7 +288,7 @@ ${Footer()}
 const Invoices = (data) => {
 
   let addInputs = `
-    ${Input('dropdown', 'invoice-add-customer-name', 'Customer Name:', data, 'customer_name', 'name')}
+    ${Input('dropdown', 'invoice-add-customer-name', 'Customer Name:', data, 'customer', 'name')}
     ${Input('date', 'invoice-add-date', 'Date:')}
   `;
 
@@ -309,9 +309,11 @@ ${Header('invoices')}
 
 ${Table(['Invoice ID', 'Customer ID', 'Date', 'Total price'], data)}
 
-${Form('add', 'POST', '/invoices', 'POST', 'Add Invoice', addInputs, 'Add')}
-${Form('edit', 'POST', '/invoices', 'PUT', 'Edit Invoice', editInputs, 'Edit')}
-${Form('delete', 'POST', '/invoices', 'DELETE', 'Delete Invoice', deleteInput, 'Delete')}
+<div class="forms-container">
+  ${Form('add', 'POST', '/invoices', 'POST', 'Add Invoice', addInputs, 'Add')}
+  ${Form('edit', 'POST', '/invoices', 'PUT', 'Edit Invoice', editInputs, 'Edit')}
+  ${Form('delete', 'POST', '/invoices', 'DELETE', 'Delete Invoice', deleteInput, 'Delete')}
+</div>
 
 ${Footer()}
 
@@ -345,9 +347,11 @@ ${Header('materials')}
 
 ${Table(['Material ID', 'Name', 'Pounds available', 'Cost per pound'])}
 
-${Form('add', 'POST', '/materials', 'POST', 'Add Material', addInputs, 'Add')}
-${Form('edit', 'POST', '/materials', 'PUT', 'Edit Material', editInputs, 'Edit')}
-${Form('delete', 'POST', '/materials', 'DELETE', 'Delete Material', deleteInput, 'Delete')}
+<div class="forms-container">
+  ${Form('add', 'POST', '/materials', 'POST', 'Add Material', addInputs, 'Add')}
+  ${Form('edit', 'POST', '/materials', 'PUT', 'Edit Material', editInputs, 'Edit')}
+  ${Form('delete', 'POST', '/materials', 'DELETE', 'Delete Material', deleteInput, 'Delete')}
+</div>
 
 ${Footer()}
 
@@ -381,9 +385,11 @@ ${Header('sales')}
 
 ${Table(['Sale ID', 'Invoice ID', 'Weapon ID', 'Price'])}
 
-${Form('add', 'POST', '/sales', 'POST', 'Add Sale', addInputs, 'Add')}
-${Form('edit', 'POST', '/sales', 'PUT', 'Edit Sale', editInputs, 'Edit')}
-${Form('delete', 'POST', '/sales', 'DELETE', 'Delete Sale', deleteInput, 'Delete')}
+<div class="forms-container">
+  ${Form('add', 'POST', '/sales', 'POST', 'Add Sale', addInputs, 'Add')}
+  ${Form('edit', 'POST', '/sales', 'PUT', 'Edit Sale', editInputs, 'Edit')}
+  ${Form('delete', 'POST', '/sales', 'DELETE', 'Delete Sale', deleteInput, 'Delete')}
+</div>
 
 ${Footer()}
 
@@ -420,9 +426,11 @@ ${Header('weapons')}
 
 ${Table(['Weapon ID', 'Name', 'Level', 'Magical Ability', 'Total Cost'])}
 
-${Form('add', 'POST', '/weapons', 'POST', 'Add Weapon', addInputs, 'Add')}
-${Form('edit', 'POST', '/weapons', 'PUT', 'Edit Weapon', editInputs, 'Edit')}
-${Form('delete', 'POST', '/weapons', 'DELETE', 'Delete Weapon', deleteInput, 'Delete')}
+<div class="forms-container">
+  ${Form('add', 'POST', '/weapons', 'POST', 'Add Weapon', addInputs, 'Add')}
+  ${Form('edit', 'POST', '/weapons', 'PUT', 'Edit Weapon', editInputs, 'Edit')}
+  ${Form('delete', 'POST', '/weapons', 'DELETE', 'Delete Weapon', deleteInput, 'Delete')}
+</div>
 
 ${Footer()}
 
@@ -456,9 +464,11 @@ ${Header('weaponMaterials')}
 
 ${Table(['Weapon ID', 'Material ID', 'Pounds Used'])}
 
-${Form('add', 'POST', '/weaponMaterials', 'POST', 'Add Weapon Material', addInputs, 'Add')}
-${Form('edit', 'POST', '/weaponMaterials', 'PUT', 'Edit Weapon Material', editInputs, 'Edit')}
-${Form('delete', 'POST', '/weaponMaterials', 'DELETE', 'Delete Weapon Material', deleteInput, 'Delete')}
+<div class="forms-container">
+  ${Form('add', 'POST', '/weaponMaterials', 'POST', 'Add Weapon Material', addInputs, 'Add')}
+  ${Form('edit', 'POST', '/weaponMaterials', 'PUT', 'Edit Weapon Material', editInputs, 'Edit')}
+  ${Form('delete', 'POST', '/weaponMaterials', 'DELETE', 'Delete Weapon Material', deleteInput, 'Delete')}
+</div>
 
 ${Footer()}
 ${Scripts()}
