@@ -10,41 +10,18 @@ const setAnchor = (page, href) => {
   return page === href ? 'style=pointer-events:none' : `href="/${href}"`;
 }
 
-
 /**************
   Page Scripts
  **************/
 
 const Scripts = () => {
+  return /*js*/`
 
-  /*
-    Add dropdown menu options
-    -------------------------
-    selectId = 'customer-add-name'
-    options = ['1', '2', '3']
-  */
-  const addOpts = `
+<script>
 
-    const addOptions = (selectId, options) => {
+</script>
 
-      // TODO: fetch options
-
-      const selectElem = document.getElementById(selectId);
-      options.forEach((val) => {
-        const option = document.createElement('option');
-        option.value = val;
-        option.text = val;
-        selectElem.appendChild(option);
-      });
-    };
-
-  `;
-
-  return `
-    <script>
-      ${addOpts}
-    </script>
-  `;
+`;
 };
 
 
@@ -70,13 +47,14 @@ const Head = (title) => {
 
 
 // Header
-const Header = (page) => {
+const Header = (title, page) => {
   return /*html*/`
 
 <body>
   <header>
     <nav>
       <h1>Ye Olde Weapons Smithery</h1>
+      <h2>${title}</h2>
       <ul>
         <li><a ${setAnchor(page, 'home')}>Home</a></li>
         <li><a ${setAnchor(page, 'customers')}>Customers</a></li>
@@ -112,12 +90,23 @@ const Footer = () => {
   -------------
   arr = [<th>, <th>, <th>]
 */
-const Table = (arr) => {
+const Table = (arr, data) => {
 
+  // th 
   let ths = '';
   arr.forEach((th) => {
     ths += `<th>${th}</th>`;
   });
+
+  // td 
+  let rows = ``;
+  for (let i = 0; i < data.length; i++) {
+    let tds = "";
+    for (let [key, value] of Object.entries(data[i])) {
+      tds += `<td>${value}</td>`;
+    }
+    rows += `<tr>${tds}</tr>`;
+  }
 
   return /*html*/`
 
@@ -126,6 +115,7 @@ const Table = (arr) => {
     <tr>
       ${ths}
     </tr>
+    ${rows}
   </table>
 </div>
 
@@ -141,22 +131,22 @@ const Table = (arr) => {
   button = 'Add'
 
 */
-const Form = (divClass, method, legend, inputs, button) => {
+const Form = (divClass, method, path, action, legend, inputs, button) => {
   return /*html*/`
 
-<div class="forms-container">
   <div class="${divClass}">
-    <form action="/submit" method="${method}">
+    <form method="${method}" action="${path}?_method=${action}">
       <fieldset>
         <legend><strong>${legend}</strong></legend>
-        ${inputs}
-        <button type="button">${button}</button>
+          ${inputs}
+        <button type="submit">${button}</button>
       </fieldset>
     </form>
   </div>
-</div>
 
 `};
+
+
 
 
 /*
@@ -165,10 +155,11 @@ const Form = (divClass, method, legend, inputs, button) => {
   type = 'text', 'dropdown'
   forId = 'customer-add-name'
   label = 'Name:'
-  selectVals = ['1', '2', '3']
+  data = database object
+  query = attribute match e.g. "customer_id"
   hr = 'hr', 'none'
 */
-const Input = (type, forId, label, selectVals, hr='none') => {
+const Input = (type, forId, label, data, query, hr='') => {
 
   let input = '';
   let hr_elem = hr === true ? "<hr>" : "";
@@ -180,14 +171,51 @@ const Input = (type, forId, label, selectVals, hr='none') => {
       ${hr_elem}
     `;
   } else if (type === 'dropdown') {
-    input = /*html*/`
+
+    let options = ``;
+    if (data) {
+      for (let i = 0; i < data.length; i++) {
+        for (let [key, value] of Object.entries(data[i])){
+          if (key === query){
+            options += `<option value="${value}">${value}</option>`;
+          }
+        }
+      }
+      input = /*html*/`
+      <label for="${forId}">${label}</label>
+      <select name="${forId}" id="${forId}">
+        ${options}
+      </select>
+      ${hr_elem}
+    `;
+    } else {
+      input = /*html*/`
       <label for="${forId}">${label}</label>
       <select name="${forId}" id="${forId}">
         <!-- populated with addOptions() -->
       </select>
       ${hr_elem}
     `;
-  };
+    }
+  } else if (type === 'date') {
+    input = /*html*/`
+      <label for="${forId}">${label}</label>
+      <input id="${forId}" name="${forId}" type="date" />
+      ${hr_elem}
+    `;
+  } else if (type === 'dropdown_level') {
+    let options = "";
+    for (let i = 1; i<=10; i++){
+      options += `<option value="${i}">${i}</option>`;
+    }
+    input = /*html*/`
+      <label for="${forId}">${label}</label>
+      <select name="${forId}" id="${forId}">
+        ${options}
+      </select>
+      ${hr_elem}
+    `;
+  }
 
   return input;
 };
@@ -221,33 +249,35 @@ ${Footer()}
 
 
 // Customers
-const Customers = () => {
+const Customers = (data) => {
 
   let addInputs = `
     ${Input('text', 'customer-add-name', 'Name:')}
-    ${Input('dropdown', 'customer-add-level', 'Level:')}
+    ${Input('dropdown_level', 'customer-add-level', 'Level:')}
   `;
 
   let editInputs = `
-    ${Input('dropdown', 'customer-edit-ids', 'Customer ID:', 'hr')}
+    ${Input('dropdown', 'customer-edit-id', 'Customer ID:', data, "customer_id", 'hr')}
     ${Input('text', 'customer-edit-name', 'Name:')}
-    ${Input('dropdown', 'customer-edit-level', 'Edit level:')}
+    ${Input('dropdown_level', 'customer-edit-level', 'Edit level:')}
   `;
 
   let deleteInput = `
-    ${Input('dropdown', 'customer-delete-name', 'Customer:', 'hr')}
+    ${Input('dropdown', 'customer-delete-name', 'Customer Name:', data, "name", 'hr')}
   `;
 
   return `
 
 ${Head('Customers')}
-${Header('customers')}
+${Header('Customers', 'customers')}
 
-${Table(['Customer ID', 'Name', 'Level'])}
+${Table(['Customer ID', 'Name', 'Level'], data)}
 
-${Form('add', 'POST', 'Add Customer', addInputs, 'Add')}
-${Form('edit', 'PUT', 'Edit Customer', editInputs, 'Edit')}
-${Form('delete', 'DELETE', 'Delete Customer', deleteInput, 'Delete')}
+<div class="forms-container">
+  ${Form('add', 'POST', '/customers', 'POST', 'Add Customer', addInputs, 'Add')}
+  ${Form('edit', 'POST', '/customers', 'PUT', 'Edit Customer', editInputs, 'Edit')}
+  ${Form('delete', 'POST', '/customers', 'DELETE', 'Delete Customer', deleteInput, 'Delete')}
+</div>
 
 ${Footer()}
 
@@ -255,21 +285,21 @@ ${Footer()}
 
 
 // Invoices
-const Invoices = () => {
+const Invoices = (data) => {
 
   let addInputs = `
-    ${Input('text', 'invoice-add-customer-id', 'Customer ID;')}
+    ${Input('dropdown', 'invoice-add-customer-name', 'Customer Name:', data, 'customer', 'name')}
     ${Input('date', 'invoice-add-date', 'Date:')}
   `;
 
   let editInputs = `
-    ${Input('dropdown', 'invoice-edit-ids', 'Invoice ID:', 'hr')}
-    ${Input('text', 'invoice-add-customer-id', 'Customer ID:')}
-    ${Input('date', 'invoice-add-date', 'Date:')}
+    ${Input('dropdown', 'invoice-edit-ids', 'Invoice ID:', data, 'invoice_id', 'hr')}
+    ${Input('dropdown', 'invoice-edit-customer-name', 'Customer Name:', data, 'name')}
+    ${Input('date', 'invoice-edit-date', 'Date:')}
   `;
 
   let deleteInput = `
-    ${Input('dropdown', 'invoice-delete-ids', 'Invoice ID:', 'hr')}
+    ${Input('dropdown', 'invoice-delete-ids', 'Invoice ID:', data, 'invoice_id', 'hr')}
   `;
 
   return `
@@ -277,11 +307,13 @@ const Invoices = () => {
 ${Head('Invoices')}
 ${Header('invoices')}
 
-${Table(['Invoice ID', 'Customer ID', 'Total price', 'Date'])}
+${Table(['Invoice ID', 'Customer ID', 'Date', 'Total price'], data)}
 
-${Form('add', 'POST', 'Add Invoice', addInputs, 'Add')}
-${Form('edit', 'PUT', 'Edit Invoice', editInputs, 'Edit')}
-${Form('delete', 'DELETE', 'Delete Invoice', deleteInput, 'Delete')}
+<div class="forms-container">
+  ${Form('add', 'POST', '/invoices', 'POST', 'Add Invoice', addInputs, 'Add')}
+  ${Form('edit', 'POST', '/invoices', 'PUT', 'Edit Invoice', editInputs, 'Edit')}
+  ${Form('delete', 'POST', '/invoices', 'DELETE', 'Delete Invoice', deleteInput, 'Delete')}
+</div>
 
 ${Footer()}
 
@@ -315,9 +347,11 @@ ${Header('materials')}
 
 ${Table(['Material ID', 'Name', 'Pounds available', 'Cost per pound'])}
 
-${Form('add', 'POST', 'Add Material', addInputs, 'Add')}
-${Form('edit', 'PUT', 'Edit Material', editInputs, 'Edit')}
-${Form('delete', 'DELETE', 'Delete Material', deleteInput, 'Delete')}
+<div class="forms-container">
+  ${Form('add', 'POST', '/materials', 'POST', 'Add Material', addInputs, 'Add')}
+  ${Form('edit', 'POST', '/materials', 'PUT', 'Edit Material', editInputs, 'Edit')}
+  ${Form('delete', 'POST', '/materials', 'DELETE', 'Delete Material', deleteInput, 'Delete')}
+</div>
 
 ${Footer()}
 
@@ -351,9 +385,11 @@ ${Header('sales')}
 
 ${Table(['Sale ID', 'Invoice ID', 'Weapon ID', 'Price'])}
 
-${Form('add', 'POST', 'Add Sale', addInputs, 'Add')}
-${Form('edit', 'PUT', 'Edit Sale', editInputs, 'Edit')}
-${Form('delete', 'DELETE', 'Delete Sale', deleteInput, 'Delete')}
+<div class="forms-container">
+  ${Form('add', 'POST', '/sales', 'POST', 'Add Sale', addInputs, 'Add')}
+  ${Form('edit', 'POST', '/sales', 'PUT', 'Edit Sale', editInputs, 'Edit')}
+  ${Form('delete', 'POST', '/sales', 'DELETE', 'Delete Sale', deleteInput, 'Delete')}
+</div>
 
 ${Footer()}
 
@@ -390,9 +426,11 @@ ${Header('weapons')}
 
 ${Table(['Weapon ID', 'Name', 'Level', 'Magical Ability', 'Total Cost'])}
 
-${Form('add', 'POST', 'Add Weapon', addInputs, 'Add')}
-${Form('edit', 'PUT', 'Edit Weapon', editInputs, 'Edit')}
-${Form('delete', 'DELETE', 'Delete Weapon', deleteInput, 'Delete')}
+<div class="forms-container">
+  ${Form('add', 'POST', '/weapons', 'POST', 'Add Weapon', addInputs, 'Add')}
+  ${Form('edit', 'POST', '/weapons', 'PUT', 'Edit Weapon', editInputs, 'Edit')}
+  ${Form('delete', 'POST', '/weapons', 'DELETE', 'Delete Weapon', deleteInput, 'Delete')}
+</div>
 
 ${Footer()}
 
@@ -426,9 +464,11 @@ ${Header('weaponMaterials')}
 
 ${Table(['Weapon ID', 'Material ID', 'Pounds Used'])}
 
-${Form('add', 'POST', 'Add Weapon Material', addInputs, 'Add')}
-${Form('edit', 'PUT', 'Edit Weapon Material', editInputs, 'Edit')}
-${Form('delete', 'DELETE', 'Delete Weapon Material', deleteInput, 'Delete')}
+<div class="forms-container">
+  ${Form('add', 'POST', '/weaponMaterials', 'POST', 'Add Weapon Material', addInputs, 'Add')}
+  ${Form('edit', 'POST', '/weaponMaterials', 'PUT', 'Edit Weapon Material', editInputs, 'Edit')}
+  ${Form('delete', 'POST', '/weaponMaterials', 'DELETE', 'Delete Weapon Material', deleteInput, 'Delete')}
+</div>
 
 ${Footer()}
 ${Scripts()}

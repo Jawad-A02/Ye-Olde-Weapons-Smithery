@@ -1,7 +1,8 @@
 const Styles = () => {
-  return `
+  return /*css*/`
 
 <style>
+
   body {
     display: flex;
     flex-direction: column;

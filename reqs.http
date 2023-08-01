@@ -1,0 +1,2 @@
+### GET /customers
+GET http://localhost:61178/customers HTTP/1.1
