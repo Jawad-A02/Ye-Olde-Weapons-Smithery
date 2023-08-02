@@ -78,14 +78,37 @@ CREATE TABLE Invoices (
         ON DELETE SET NULL
 );
 
--- Set Invoices.total_price to sum of Sales.price values
-DELIMITER//
-CREATE TRIGGER update_total_price AFTER INSERT ON Sales
+-- Create triggers to update the total_price after each insert in the Sales table
+-- on insert
+DELIMITER //
+CREATE TRIGGER update_total_price_after_insert AFTER INSERT ON Sales
 FOR EACH ROW
 BEGIN
     UPDATE Invoices
     SET total_price = COALESCE((SELECT SUM(price) FROM Sales WHERE Sales.invoice_id = NEW.invoice_id), 0)
     WHERE invoice_id = NEW.invoice_id;
+END;
+//
+DELIMITER ;
+-- on update
+DELIMITER //
+CREATE TRIGGER update_total_price_after_update AFTER UPDATE ON Sales
+FOR EACH ROW
+BEGIN
+    UPDATE Invoices
+    SET total_price = COALESCE((SELECT SUM(price) FROM Sales WHERE Sales.invoice_id = NEW.invoice_id), 0)
+    WHERE invoice_id = NEW.invoice_id;
+END;
+//
+DELIMITER ;
+-- on delete
+DELIMITER //
+CREATE TRIGGER update_total_price_after_delete AFTER DELETE ON Sales
+FOR EACH ROW
+BEGIN
+    UPDATE Invoices
+    SET total_price = COALESCE((SELECT SUM(price) FROM Sales WHERE Sales.invoice_id = OLD.invoice_id), 0)
+    WHERE invoice_id = OLD.invoice_id;
 END;
 //
 DELIMITER ;
