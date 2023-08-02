@@ -285,19 +285,31 @@ ${Footer()}
 // Invoices
 const Invoices = (invoiceData, customerData) => {
 
+  // format date values to yyyy-mm-dd, total_price to two decimal places
+  const invoiceObj = invoiceData.map(item => {
+    const date = new Date(item.date);
+    const formattedDate = date.toISOString().slice(0, 10);
+    const formattedPrice = item.total_price.toFixed(2);
+    return {
+      ...item,
+      date: formattedDate,
+      total_price: formattedPrice
+    };
+  });
+
   let addInputs = `
     ${Input("dropdown", "invoice-add-customer-name", "Customer Name:", customerData, "name")}
     ${Input("date", "invoice-add-date", "Date:")}
   `;
 
   let editInputs = `
-    ${Input("dropdown", "invoice-edit-ids", "Invoice ID:", invoiceData, "invoice_id", "hr")}
+    ${Input("dropdown", "invoice-edit-ids", "Invoice ID:", invoiceObj, "invoice_id", "hr")}
     ${Input("dropdown", "invoice-edit-customer-name", "Customer Name:", customerData, "name")}
     ${Input("date", "invoice-edit-date", "Date:")}
   `;
 
   let deleteInput = `
-    ${Input("dropdown", "invoice-delete-ids", "Invoice ID:", invoiceData, "invoice_id", "hr")}
+    ${Input("dropdown", "invoice-delete-ids", "Invoice ID:", invoiceObj, "invoice_id", "hr")}
   `;
 
   return `
@@ -305,7 +317,7 @@ const Invoices = (invoiceData, customerData) => {
 ${Head("Invoices")}
 ${Header("Invoices", "invoices")}
 
-${Table(["Invoice ID", "Customer Name", "Date", "Total price"], invoiceData)}
+${Table(["Invoice ID", "Customer Name", "Date", "Total price"], invoiceObj)}
 
 <div class="forms-container">
   ${Form("add", "POST", "/invoices", "POST", "Add Invoice", addInputs, "Add")}
@@ -442,22 +454,23 @@ ${Footer()}
 };
 
 // WeaponMaterials
-const WeaponMaterials = (data) => {
+const WeaponMaterials = (weapMatData, weaponData, materialData) => {
+
   let addInputs = `
-    ${Input("dropdown", "weapmat-add-weapon-name", "Weapon Name:", data, "weaponName")}
-    ${Input("dropdown", "weapmat-add-material-name", "Material Name:", data, "materialName")}
+    ${Input("dropdown", "weapmat-add-weapon-name", "Weapon Name:", weaponData, "name")}
+    ${Input("dropdown", "weapmat-add-material-name", "Material Name:", materialData, "name")}
     ${Input("text", "weapmat-add-pounds", "Pounds used:")}
   `;
 
   let editInputs = `
-    ${Input("dropdown", "weapmat-edit-weapon-name", "Weapon Name:", data, "weaponName", "hr")}
-    ${Input("dropdown", "weapmat-edit-material-name", "Material Name:", data, "materialName")}
+    ${Input("dropdown", "weapmat-edit-weapon-name", "Weapon Name:", weaponData, "name", "hr")}
+    ${Input("dropdown", "weapmat-edit-material-name", "Material Name:", materialData, "name")}
     ${Input("text", "weapmat-add-pounds", "Pounds used:")}
   `;
 
   let deleteInput = `
-    ${Input("dropdown", "weapmat-delete-weapon-name", "Weapon Name:", data, "weaponName")}
-    ${Input("dropdown", "weapmat-delete-material-name", "Material Name:", data, "materialName")}
+    ${Input("dropdown", "weapmat-delete-weapon-name", "Weapon Name:", weapMatData, "weaponName")}
+    ${Input("dropdown", "weapmat-delete-material-name", "Material Name:", weapMatData, "materialName")}
   `;
 
   return `
@@ -465,7 +478,7 @@ const WeaponMaterials = (data) => {
 ${Head("Weapon Materials")}
 ${Header("Weapon Materials", "weaponmaterials")}
 
-${Table(["Weapon Name", "Material Name", "Pounds Used"], data)}
+${Table(["Weapon Name", "Material Name", "Pounds Used"], weapMatData)}
 
 <div class="forms-container">
   ${Form("add", "POST", "/weaponMaterials", "POST", "Add Weapon Material", addInputs, "Add")}
@@ -489,7 +502,7 @@ const addOptions = (valsArr, dropdown) => {
 }
 
 
-// remove duplicate materials from dropdowns
+// remove duplicate options from dropdowns
 const removeMaterialDuplicates = (inputId) => {
   let optionVals = [];
   const dropdown = document.getElementById(inputId);
@@ -504,41 +517,65 @@ const removeMaterialDuplicates = (inputId) => {
 removeMaterialDuplicates('weapmat-add-material-name'); 
 removeMaterialDuplicates('weapmat-edit-material-name'); 
 removeMaterialDuplicates('weapmat-delete-material-name'); 
+removeMaterialDuplicates('weapmat-delete-weapon-name');
 
 
 // autopopulate material dropdown based on weapon selection
-const adjustEditMaterials = (weapDropdown, matDropdown) => {
+// assoc === true -> materials already used in weapon
+const adjustEditMaterials = (weapDropdown, matDropdown, assoc) => {
 
   let weapon = weapDropdown.value;
 
   // get materials associated with weapon
   const table = document.getElementsByTagName('table')[0];
   let materials = [];
+  let tableMaterials = [];
   for (let i = 0; i < table.rows.length; i++) {
     const row = table.rows[i];
-    if (weapon === row.children[0].innerText) {
-      materials.push(row.children[1].innerText);
+    const matName = row.children[1].innerText;
+    if (matName !== "Material Name" && !materials.includes(matName)) {
+      materials.push(matName);
     }
+    if (weapon === row.children[0].innerText) {
+      tableMaterials.push(matName);
+    }
+  }
+
+  // get materials not associated with weapon if assoc === false
+  let finalMaterials = [];
+  if (!assoc) {
+    finalMaterials = materials.filter(m => !tableMaterials.includes(m)); 
+  } else {
+    finalMaterials = tableMaterials;
   }
 
   // repopulate material dropdown with those associated with weapon selection
   matDropdown.innerHTML = '';
-  addOptions(materials, matDropdown);
+  addOptions(finalMaterials, matDropdown);
 };
 
 
 // adjust edit materials based on weapon selection for edit, delete forms
+const weaponAddDropdown = document.getElementById('weapmat-add-weapon-name');
+const materialAddDropdown = document.getElementById('weapmat-add-material-name');
 const weaponEditDropdown = document.getElementById('weapmat-edit-weapon-name');
 const materialEditDropdown = document.getElementById('weapmat-edit-material-name');
 const weaponDeleteDropdown = document.getElementById('weapmat-delete-weapon-name');
 const materialDeleteDropdown = document.getElementById('weapmat-delete-material-name');
 
+adjustEditMaterials(weaponAddDropdown, materialAddDropdown, false);
+adjustEditMaterials(weaponEditDropdown, materialEditDropdown, true);
+adjustEditMaterials(weaponDeleteDropdown, materialDeleteDropdown, true);
+
+weaponAddDropdown.addEventListener('change', (e) => {
+  adjustEditMaterials(weaponAddDropdown, materialAddDropdown, false);
+});
 weaponEditDropdown.addEventListener('change', (e) => {
-  adjustEditMaterials(weaponEditDropdown, materialEditDropdown);
-})
+  adjustEditMaterials(weaponEditDropdown, materialEditDropdown, true);
+});
 weaponDeleteDropdown.addEventListener('change', (e) => {
-  adjustEditMaterials(weaponDeleteDropdown, materialDeleteDropdown);
-})
+  adjustEditMaterials(weaponDeleteDropdown, materialDeleteDropdown, true);
+});
 
 </script>
 

@@ -632,9 +632,13 @@ app.delete('/weapons', async (req,res) => {
 
 // get weaponsmaterials page
 app.get('/weaponmaterials', async (req, res) => {
-  let data2 = await get_table(get_weapon_materials);
-  if (data2) {
-     res.send(WeaponMaterials(data2));
+
+  let weapMatData = await get_table(get_weapon_materials);
+  let weaponData = await get_table(get_weapons);
+  let materialData = await get_table(get_materials);
+
+  if (weaponData) {
+     res.send(WeaponMaterials(weapMatData, weaponData, materialData));
   } else {
     res.status(400);
   }
@@ -660,10 +664,13 @@ app.post('/WeaponMaterials', async (req,res) => {
   await insert_table(query);
 
   //send updated page
-  let data2 = await get_table(get_weapons);
-  if (data2) {
-     res.send(Weapons(data2));
-  } else {
+  let weapMatData = await get_table(get_weapon_materials);
+  let weaponData = await get_table(get_weapons);
+  let materialData = await get_table(get_materials);
+
+  if (weaponData) {
+     res.send(WeaponMaterials(weapMatData, weaponData, materialData));
+} else {
     res.status(400);
   }
 });
@@ -690,10 +697,13 @@ app.put('/weaponmaterials', async (req,res) => {
   await edit_table(query);
 
   //send new page
-  let data2 = await get_table(get_weapon_materials);
-  if (data2) {
-     res.send(weapons(data2));
-  } else {
+  let weapMatData = await get_table(get_weapon_materials);
+  let weaponData = await get_table(get_weapons);
+  let materialData = await get_table(get_materials);
+
+  if (weaponData) {
+     res.send(WeaponMaterials(weapMatData, weaponData, materialData));
+} else {
     res.status(400);
   }
 });
@@ -716,10 +726,13 @@ app.delete('/weaponmaterials', async (req,res) => {
   await delete_table(query);
 
   //send new page
-  let data2 = await get_table(get_weapon_materials);
-  if (data2) {
-     res.send(Weapons(data2));
-  } else {
+  let weapMatData = await get_table(get_weapon_materials);
+  let weaponData = await get_table(get_weapons);
+  let materialData = await get_table(get_materials);
+
+  if (weaponData) {
+     res.send(WeaponMaterials(weapMatData, weaponData, materialData));
+} else {
     res.status(400);
   }
 });
