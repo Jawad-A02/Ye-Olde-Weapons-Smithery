@@ -44,7 +44,7 @@ const get_invoices = `
       Invoices.invoice_id, 
       Customers.name, 
       Invoices.date, 
-      SUM(Sales.price)
+      Invoices.total_price
     FROM Invoices
       LEFT JOIN Sales ON Invoices.invoice_id = Sales.invoice_id
       LEFT JOIN Customers ON Invoices.customer_id = Customers.customer_id
