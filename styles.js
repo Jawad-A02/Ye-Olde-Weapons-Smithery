@@ -33,10 +33,6 @@ const Styles = () => {
       flex: 1;
   }
 
-  #main-home {
-    background-color: #A13D51;
-  }
-
   footer {
       position: fixed;
       background-color: #464CA9;
@@ -83,6 +79,7 @@ const Styles = () => {
     padding-bottom: 25px;
   }
 
+  #home-container,
   .forms-container {
     padding-top: 25px;
     display: flex;

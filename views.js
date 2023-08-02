@@ -39,13 +39,13 @@ const Header = (title, page) => {
       <h1>Ye Olde Weapons Smithery</h1>
       <h2>${title}</h2>
       <ul>
-        <li><a ${setAnchor(page, "home")}>Home</a></li>
-        <li><a ${setAnchor(page, "customers")}>Customers</a></li>
-        <li><a ${setAnchor(page, "invoices")}>Invoices</a></li>
-        <li><a ${setAnchor(page, "sales")}>Sales</a></li>
-        <li><a ${setAnchor(page, "weapons")}>Weapons</a></li>
-        <li><a ${setAnchor(page, "materials")}>Materials</a></li>
-        <li><a ${setAnchor(page, "weaponmaterials")}>Weapon Materials</a></li>
+        <li><a href="/home">Home</a></li>
+        <li><a href="/customers">Customers</a></li>
+        <li><a href="/invoices">Invoices</a></li>
+        <li><a href="/sales">Sales</a></li>
+        <li><a href="/weapons">Weapons</a></li>
+        <li><a href="/materials">Materials</a></li>
+        <li><a href="/weaponmaterials">Weapon Materials</a></li>
       </ul>
     </nav>
   </header>
@@ -233,6 +233,7 @@ const Home = () => {
 ${Head("home")}
 ${Header("home")}
 
+<div id="home-container">
 <div id="home-img-container">
   <img
     id="home-img"
@@ -240,6 +241,7 @@ ${Header("home")}
   />
   <p style="text-align: right;"><cite>The Gorleston Psalter</cite></p>
   <p style="text-align: right;">British Library</p>
+</div>
 </div>
 
 ${Footer()}
@@ -392,7 +394,7 @@ const Sales = (salesData, weaponData, invoiceData) => {
 ${Head("Sales")}
 ${Header("Sales", "sales")}
 
-${Table(["Sale ID", "Invoice ID", "Weapon ID", "Price"], salesData)}
+${Table(["Sale ID", "Invoice ID", "Weapon Name", "Price"], salesData)}
 
 <div class="forms-container">
   ${Form("add", "POST", "/sales", "POST", "Add Sale", addInputs, "Add")}
@@ -462,7 +464,7 @@ const WeaponMaterials = (weapMatData, weaponData, materialData) => {
   let editInputs = `
     ${Input("dropdown", "weapmat-edit-weapon-name", "Weapon Name:", weaponData, "name", "hr")}
     ${Input("dropdown", "weapmat-edit-material-name", "Material Name:", materialData, "name")}
-    ${Input("text", "weapmat-add-pounds", "Pounds used:")}
+    ${Input("text", "weapmat-edit-pounds", "Pounds used:")}
   `;
 
   let deleteInput = `

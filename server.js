@@ -89,7 +89,8 @@ const get_weapon_materials = `
   JOIN Weapons w
       ON wm.weapon_id = w.weapon_id
   JOIN Materials m
-      ON wm.material_id = m.material_id;
+      ON wm.material_id = m.material_id
+  ORDER BY w.Name ASC;
 `;
 
 
@@ -645,7 +646,7 @@ app.get('/weaponmaterials', async (req, res) => {
 });
 
 // add weapon material
-app.post('/WeaponMaterials', async (req,res) => {
+app.post('/weaponmaterials', async (req,res) => {
 
   let data = req.body;
   let weapon_name = data["weapmat-add-weapon-name"];
@@ -658,7 +659,7 @@ app.post('/WeaponMaterials', async (req,res) => {
       (weapon_id, material_id, pounds_used)
     VALUES ( 
       (SELECT weapon_id FROM Weapons WHERE name = "${weapon_name}"), 
-      (SELECT material_id FROM Materials WHERE name = "${material_id}", 
+      (SELECT material_id FROM Materials WHERE name = "${material_name}"), 
       ${pounds});
   `;
   await insert_table(query);
@@ -680,7 +681,7 @@ app.put('/weaponmaterials', async (req,res) => {
 
   let weapon_name = req.body["weapmat-edit-weapon-name"];
   let material_name = req.body["weapmat-edit-material-name"];
-  let pounds = parseInt(req.body["weapmat-add-pounds"]);
+  let pounds = parseInt(req.body["weapmat-edit-pounds"]);
 
   // edit customer
   let query = `
@@ -689,10 +690,13 @@ app.put('/weaponmaterials', async (req,res) => {
     SET 
       material_id = 
         (SELECT material_id FROM Materials WHERE name = "${material_name}"), 
-      pounds = ${pounds}
+      pounds_used = ${pounds}
     WHERE 
       weapon_id = 
-        (SELECT weapon_id FROM Weapons WHERE name = "${weapon_name}");
+        (SELECT weapon_id FROM Weapons WHERE name = "${weapon_name}")
+      AND 
+      material_id = 
+        (SELECT material_id FROM Materials WHERE name = "${material_name}");
   `;
   await edit_table(query);
 
@@ -721,8 +725,8 @@ app.delete('/weaponmaterials', async (req,res) => {
     WHERE 
       weapon_id = (SELECT weapon_id FROM Weapons WHERE name = "${weapon_name}") 
     AND 
-      material_id = (SELECT material_id FROM Materials WHERE name = "${material_name})
-      `;
+      material_id = (SELECT material_id FROM Materials WHERE name = "${material_name}");
+  `;
   await delete_table(query);
 
   //send new page
