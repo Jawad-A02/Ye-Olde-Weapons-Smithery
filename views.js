@@ -370,9 +370,6 @@ ${Footer()}
 // Sales
 const Sales = (salesData, weaponData, invoiceData) => {
 
-  console.log(salesData);
-  console.log(weaponData);
-
   let addInputs = `
     ${Input("dropdown", "sale-add-invoice-id", "Invoice ID:", invoiceData, "invoice_id")}
     ${Input("dropdown", "sale-add-weapon-name", "Weapon Name:", weaponData, "name")}

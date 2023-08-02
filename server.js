@@ -327,7 +327,7 @@ app.delete('/invoices', async (req,res) => {
 app.get('/sales', async (req, res) => {
   
   //send new data
-    let salesData = await get_table(get_sales);
+  let salesData = await get_table(get_sales);
   let weaponData = await get_table(get_sale_weapons);
   let invoiceData = await get_table(get_invoices);
 
