@@ -175,10 +175,11 @@ SELECT invoice_id FROM Invoices;
       m.Name AS materialName,
       wm.pounds_used
   FROM WeaponMaterials wm
-  JOIN Weapons w
+  LEFT JOIN Weapons w
       ON wm.weapon_id = w.weapon_id
-  JOIN Materials m
-      ON wm.material_id = m.material_id;
+  LEFT JOIN Materials m
+      ON wm.material_id = m.material_id
+    ORDER BY w.Name ASC;
 
 
 -- Add new Weapon Materials
@@ -198,7 +199,10 @@ SELECT invoice_id FROM Invoices;
       pounds = ${pounds}
     WHERE 
       weapon_id = 
-        (SELECT weapon_id FROM Weapons WHERE name = :weapon_name);
+        (SELECT weapon_id FROM Weapons WHERE name = :weapon_name)
+    AND 
+      material_id = 
+        (SELECT material_id FROM Materials WHERE name = :material_name);
 
 -- Delete a Weapon Materials
 DELETE FROM

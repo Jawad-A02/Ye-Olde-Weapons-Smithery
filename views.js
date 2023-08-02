@@ -489,6 +489,18 @@ ${Footer()}
 
 <script>
   
+const weaponAddDropdown = document.getElementById('weapmat-add-weapon-name');
+const materialAddDropdown = document.getElementById('weapmat-add-material-name');
+const weaponEditDropdown = document.getElementById('weapmat-edit-weapon-name');
+const materialEditDropdown = document.getElementById('weapmat-edit-material-name');
+const weaponDeleteDropdown = document.getElementById('weapmat-delete-weapon-name');
+const materialDeleteDropdown = document.getElementById('weapmat-delete-material-name');
+
+// store all materials from dropdown
+let allMaterials = [];
+for (let i = 0; i < materialAddDropdown.options.length; i++) {
+  allMaterials.push(materialAddDropdown.options[i].value);
+}
 
 // add options to dropdown from array of values
 const addOptions = (valsArr, dropdown) => {
@@ -527,14 +539,10 @@ const adjustEditMaterials = (weapDropdown, matDropdown, assoc) => {
 
   // get materials associated with weapon
   const table = document.getElementsByTagName('table')[0];
-  let materials = [];
   let tableMaterials = [];
   for (let i = 0; i < table.rows.length; i++) {
     const row = table.rows[i];
     const matName = row.children[1].innerText;
-    if (matName !== "Material Name" && !materials.includes(matName)) {
-      materials.push(matName);
-    }
     if (weapon === row.children[0].innerText) {
       tableMaterials.push(matName);
     }
@@ -543,7 +551,7 @@ const adjustEditMaterials = (weapDropdown, matDropdown, assoc) => {
   // get materials not associated with weapon if assoc === false
   let finalMaterials = [];
   if (!assoc) {
-    finalMaterials = materials.filter(m => !tableMaterials.includes(m)); 
+    finalMaterials = allMaterials.filter(m => !tableMaterials.includes(m)); 
   } else {
     finalMaterials = tableMaterials;
   }
@@ -555,13 +563,6 @@ const adjustEditMaterials = (weapDropdown, matDropdown, assoc) => {
 
 
 // adjust edit materials based on weapon selection for edit, delete forms
-const weaponAddDropdown = document.getElementById('weapmat-add-weapon-name');
-const materialAddDropdown = document.getElementById('weapmat-add-material-name');
-const weaponEditDropdown = document.getElementById('weapmat-edit-weapon-name');
-const materialEditDropdown = document.getElementById('weapmat-edit-material-name');
-const weaponDeleteDropdown = document.getElementById('weapmat-delete-weapon-name');
-const materialDeleteDropdown = document.getElementById('weapmat-delete-material-name');
-
 adjustEditMaterials(weaponAddDropdown, materialAddDropdown, false);
 adjustEditMaterials(weaponEditDropdown, materialEditDropdown, true);
 adjustEditMaterials(weaponDeleteDropdown, materialDeleteDropdown, true);

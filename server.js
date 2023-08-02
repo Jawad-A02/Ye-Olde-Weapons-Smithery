@@ -44,7 +44,7 @@ const get_invoices = `
       Invoices.invoice_id, 
       Customers.name, 
       Invoices.date, 
-      Invoices.total_price
+      SUM(Sales.price)
     FROM Invoices
       LEFT JOIN Sales ON Invoices.invoice_id = Sales.invoice_id
       LEFT JOIN Customers ON Invoices.customer_id = Customers.customer_id
@@ -86,9 +86,9 @@ const get_weapon_materials = `
       m.Name AS materialName,
       wm.pounds_used
   FROM WeaponMaterials wm
-  JOIN Weapons w
+  LEFT JOIN Weapons w
       ON wm.weapon_id = w.weapon_id
-  JOIN Materials m
+  LEFT JOIN Materials m
       ON wm.material_id = m.material_id
   ORDER BY w.Name ASC;
 `;
@@ -434,7 +434,7 @@ app.delete('/sales', async (req,res) => {
   Materials
  **********/
 
-// get invoices page
+// get materials page
 app.get('/materials', async (req, res) => {
   
   // TODO: parse JS date form data

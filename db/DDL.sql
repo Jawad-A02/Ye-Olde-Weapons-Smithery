@@ -71,47 +71,11 @@ DROP TABLE IF EXISTS Invoices;
 CREATE TABLE Invoices (
     invoice_id INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
     customer_id INT(11),
-    total_price DECIMAL(10, 2) NOT NULL DEFAULT 0,
     date DATE NOT NULL,
     PRIMARY KEY (invoice_id),
     FOREIGN KEY (customer_id) REFERENCES Customers (customer_id)
         ON DELETE SET NULL
 );
-
--- Create triggers to update the total_price after each insert in the Sales table
--- on insert
-DELIMITER //
-CREATE TRIGGER update_total_price_after_insert AFTER INSERT ON Sales
-FOR EACH ROW
-BEGIN
-    UPDATE Invoices
-    SET total_price = COALESCE((SELECT SUM(price) FROM Sales WHERE Sales.invoice_id = NEW.invoice_id), 0)
-    WHERE invoice_id = NEW.invoice_id;
-END;
-//
-DELIMITER ;
--- on update
-DELIMITER //
-CREATE TRIGGER update_total_price_after_update AFTER UPDATE ON Sales
-FOR EACH ROW
-BEGIN
-    UPDATE Invoices
-    SET total_price = COALESCE((SELECT SUM(price) FROM Sales WHERE Sales.invoice_id = NEW.invoice_id), 0)
-    WHERE invoice_id = NEW.invoice_id;
-END;
-//
-DELIMITER ;
--- on delete
-DELIMITER //
-CREATE TRIGGER update_total_price_after_delete AFTER DELETE ON Sales
-FOR EACH ROW
-BEGIN
-    UPDATE Invoices
-    SET total_price = COALESCE((SELECT SUM(price) FROM Sales WHERE Sales.invoice_id = OLD.invoice_id), 0)
-    WHERE invoice_id = OLD.invoice_id;
-END;
-//
-DELIMITER ;
 
 -- Insert sample data into Customers table
 INSERT INTO Customers 
@@ -137,7 +101,11 @@ VALUES
     (1, "Great Sword", 1, "Increase max health by 5%", 180),
     (2, "Crossbow", 3, "Engulf arrows in fire", 165),
     (3, "Axe", 2, "Destroy Shields", 110),
-    (4, "Boomerang", 3, "Freeze surroundings", 85);
+    (4, "Boomerang", 3, "Freeze surroundings", 85),
+    (5, "Great Axe", 1, "Big Axe", 70),
+    (6, "Lance", 3, "looks nice", 202),
+    (7, "Sword", 2, "destroys itself after 100 days", 105),
+    (8, "Air fan", 5, "blows surroundings", 500);
 
 -- Insert sample data into WeaponMaterials intersection table
 INSERT INTO WeaponMaterials 
@@ -165,11 +133,11 @@ VALUES
 
 -- Insert sample data into Invoices table
 INSERT INTO Invoices 
-    (invoice_id, date, total_price, customer_id)
+    (invoice_id, date, customer_id)
 VALUES 
-    (1, '1200-10-07', 575.75, 1),
-    (2, '1200-07-05', 150.00, 3),
-    (3, '1200-04-03', 100.75, 2);
+    (1, '1200-10-07', 1),
+    (2, '1200-07-05', 3),
+    (3, '1200-04-03', 2);
 
 
 SET FOREIGN_KEY_CHECKS=1;
