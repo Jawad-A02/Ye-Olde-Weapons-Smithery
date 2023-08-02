@@ -71,12 +71,24 @@ DROP TABLE IF EXISTS Invoices;
 CREATE TABLE Invoices (
     invoice_id INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
     customer_id INT(11),
-    total_price DECIMAL(10,2) NOT NULL,
+    total_price DECIMAL(10, 2) NOT NULL DEFAULT 0,
     date DATE NOT NULL,
     PRIMARY KEY (invoice_id),
     FOREIGN KEY (customer_id) REFERENCES Customers (customer_id)
         ON DELETE SET NULL
 );
+
+-- Set Invoices.total_price to sum of Sales.price values
+DELIMITER//
+CREATE TRIGGER update_total_price AFTER INSERT ON Sales
+FOR EACH ROW
+BEGIN
+    UPDATE Invoices
+    SET total_price = COALESCE((SELECT SUM(price) FROM Sales WHERE Sales.invoice_id = NEW.invoice_id), 0)
+    WHERE invoice_id = NEW.invoice_id;
+END;
+//
+DELIMITER ;
 
 -- Insert sample data into Customers table
 INSERT INTO Customers 

@@ -1,38 +1,21 @@
-const { Styles } = require('./styles');
+const { Styles } = require("./styles");
 
 /*********
   Scripts
  *********/
 
-
 // set Header nav anchors, skip current page
 const setAnchor = (page, href) => {
-  return page === href ? 'style=pointer-events:none' : `href="/${href}"`;
-}
-
-/**************
-  Page Scripts
- **************/
-
-const Scripts = () => {
-  return /*js*/`
-
-<script>
-
-</script>
-
-`;
+  return page === href ? "style=pointer-events:none" : `href="/${href}"`;
 };
-
-
 
 /************
   Components
  ************/
 
 // Head
-const Head = (title) => {
-  return /*html*/`
+const Head = title => {
+  return /*html*/ `
 
 <!DOCTYPE html>
 <html lang="en">
@@ -43,12 +26,12 @@ const Head = (title) => {
   ${Styles()}
 </head>
 
-`};
-
+`;
+};
 
 // Header
 const Header = (title, page) => {
-  return /*html*/`
+  return /*html*/ `
 
 <body>
   <header>
@@ -56,24 +39,24 @@ const Header = (title, page) => {
       <h1>Ye Olde Weapons Smithery</h1>
       <h2>${title}</h2>
       <ul>
-        <li><a ${setAnchor(page, 'home')}>Home</a></li>
-        <li><a ${setAnchor(page, 'customers')}>Customers</a></li>
-        <li><a ${setAnchor(page, 'invoices')}>Invoices</a></li>
-        <li><a ${setAnchor(page, 'sales')}>Sales</a></li>
-        <li><a ${setAnchor(page, 'weapons')}>Weapons</a></li>
-        <li><a ${setAnchor(page, 'materials')}>Materials</a></li>
-        <li><a ${setAnchor(page, 'weaponMaterials')}>Weapon Materials</a></li>
+        <li><a ${setAnchor(page, "home")}>Home</a></li>
+        <li><a ${setAnchor(page, "customers")}>Customers</a></li>
+        <li><a ${setAnchor(page, "invoices")}>Invoices</a></li>
+        <li><a ${setAnchor(page, "sales")}>Sales</a></li>
+        <li><a ${setAnchor(page, "weapons")}>Weapons</a></li>
+        <li><a ${setAnchor(page, "materials")}>Materials</a></li>
+        <li><a ${setAnchor(page, "weaponmaterials")}>Weapon Materials</a></li>
       </ul>
     </nav>
   </header>
   <main>
 
-`};
-
+`;
+};
 
 // Footer
 const Footer = () => {
-  return /*html*/`
+  return /*html*/ `
 
   </main>
   <footer>
@@ -82,23 +65,23 @@ const Footer = () => {
 </body>
 </html>
 
-`};
-
+`;
+};
 
 /*
   Table
   -------------
   arr = [<th>, <th>, <th>]
+  data = obj
 */
 const Table = (arr, data) => {
-
-  // th 
-  let ths = '';
-  arr.forEach((th) => {
+  // th
+  let ths = "";
+  arr.forEach(th => {
     ths += `<th>${th}</th>`;
   });
 
-  // td 
+  // td
   let rows = ``;
   for (let i = 0; i < data.length; i++) {
     let tds = "";
@@ -108,7 +91,7 @@ const Table = (arr, data) => {
     rows += `<tr>${tds}</tr>`;
   }
 
-  return /*html*/`
+  return /*html*/ `
 
 <div class="table-container">
   <table>
@@ -119,7 +102,8 @@ const Table = (arr, data) => {
   </table>
 </div>
 
-`};
+`;
+};
 
 /*
   Form
@@ -132,7 +116,7 @@ const Table = (arr, data) => {
 
 */
 const Form = (divClass, method, path, action, legend, inputs, button) => {
-  return /*html*/`
+  return /*html*/ `
 
   <div class="${divClass}">
     <form method="${method}" action="${path}?_method=${action}">
@@ -144,10 +128,8 @@ const Form = (divClass, method, path, action, legend, inputs, button) => {
     </form>
   </div>
 
-`};
-
-
-
+`;
+};
 
 /*
   Input
@@ -157,82 +139,99 @@ const Form = (divClass, method, path, action, legend, inputs, button) => {
   label = 'Name:'
   data = database object
   query = attribute match e.g. "customer_id"
-  hr = 'hr', 'none'
+  hr = 'hr', ''
 */
-const Input = (type, forId, label, data, query, hr='') => {
+const Input = (type, forId, label, data, query, hr = "") => {
+  let input = "";
+  let hr_elem = hr === "hr" ? "<hr>" : "";
 
-  let input = '';
-  let hr_elem = hr === true ? "<hr>" : "";
-
-  if (type === 'text') {
+  if (type === "text") {
     input = /*html*/`
+
       <label for="${forId}">${label}</label>
       <input id="${forId}" name="${forId}" type="text" />
       ${hr_elem}
-    `;
-  } else if (type === 'dropdown') {
 
-    let options = ``;
+    `;
+
+  } else if (type === "dropdown") {
+    let options = "";
     if (data) {
       for (let i = 0; i < data.length; i++) {
-        for (let [key, value] of Object.entries(data[i])){
-          if (key === query){
-            options += `<option value="${value}">${value}</option>`;
+        for (let [key, value] of Object.entries(data[i])) {
+          if (key === query) {
+            options += /*html*/`
+
+              <option value="${value}">${value}</option>
+
+            `;
           }
         }
       }
       input = /*html*/`
+
       <label for="${forId}">${label}</label>
       <select name="${forId}" id="${forId}">
         ${options}
       </select>
       ${hr_elem}
+
     `;
     } else {
       input = /*html*/`
+
       <label for="${forId}">${label}</label>
       <select name="${forId}" id="${forId}">
         <!-- populated with addOptions() -->
       </select>
+
       ${hr_elem}
     `;
     }
-  } else if (type === 'date') {
+
+  } else if (type === "date") {
     input = /*html*/`
+
       <label for="${forId}">${label}</label>
-      <input id="${forId}" name="${forId}" type="date" />
+      <input id="${forId}" name="${forId}" type="date"
+             placeholder="dd-mm-yyy" />
       ${hr_elem}
+
     `;
-  } else if (type === 'dropdown_level') {
+
+  } else if (type === "dropdown_level") {
     let options = "";
-    for (let i = 1; i<=10; i++){
-      options += `<option value="${i}">${i}</option>`;
+    for (let i = 1; i <= 10; i++) {
+      options += `
+
+        <option value="${i}">${i}</option>
+
+      `;
     }
     input = /*html*/`
+
       <label for="${forId}">${label}</label>
       <select name="${forId}" id="${forId}">
         ${options}
       </select>
       ${hr_elem}
+
     `;
   }
 
   return input;
 };
 
-
-
 /*******
   Views
  *******/
-
 
 // Home
 const Home = () => {
   return `
 
-${Head('home')}
-${Header('home')}
+${Head("home")}
+${Header("home")}
 
 <div id="home-img-container">
   <img
@@ -245,235 +244,307 @@ ${Header('home')}
 
 ${Footer()}
 
-`};
-
+`;
+};
 
 // Customers
-const Customers = (data) => {
-
+const Customers = data => {
   let addInputs = `
-    ${Input('text', 'customer-add-name', 'Name:')}
-    ${Input('dropdown_level', 'customer-add-level', 'Level:')}
+    ${Input("text", "customer-add-name", "Name:")}
+    ${Input("dropdown_level", "customer-add-level", "Level:")}
   `;
 
   let editInputs = `
-    ${Input('dropdown', 'customer-edit-id', 'Customer ID:', data, "customer_id", 'hr')}
-    ${Input('text', 'customer-edit-name', 'Name:')}
-    ${Input('dropdown_level', 'customer-edit-level', 'Edit level:')}
+    ${Input("dropdown", "customer-edit-id", "Customer ID:", data, "customer_id", "hr")}
+    ${Input("text", "customer-edit-name", "Name:")}
+    ${Input("dropdown_level", "customer-edit-level", "Edit level:")}
   `;
 
   let deleteInput = `
-    ${Input('dropdown', 'customer-delete-name', 'Customer Name:', data, "name", 'hr')}
+    ${Input("dropdown", "customer-delete-name", "Customer Name:", data, "name", "hr")}
   `;
 
   return `
 
-${Head('Customers')}
-${Header('Customers', 'customers')}
+${Head("Customers")}
+${Header("Customers", "customers")}
 
-${Table(['Customer ID', 'Name', 'Level'], data)}
+${Table(["Customer ID", "Name", "Level"], data)}
 
 <div class="forms-container">
-  ${Form('add', 'POST', '/customers', 'POST', 'Add Customer', addInputs, 'Add')}
-  ${Form('edit', 'POST', '/customers', 'PUT', 'Edit Customer', editInputs, 'Edit')}
-  ${Form('delete', 'POST', '/customers', 'DELETE', 'Delete Customer', deleteInput, 'Delete')}
+  ${Form("add", "POST", "/customers", "POST", "Add Customer", addInputs, "Add")}
+  ${Form("edit", "POST", "/customers", "PUT", "Edit Customer", editInputs, "Edit")}
+  ${Form("delete", "POST", "/customers", "DELETE", "Delete Customer", deleteInput, "Delete")}
 </div>
 
 ${Footer()}
 
-`};
-
+`;
+};
 
 // Invoices
-const Invoices = (data) => {
+const Invoices = (invoiceData, customerData) => {
 
   let addInputs = `
-    ${Input('dropdown', 'invoice-add-customer-name', 'Customer Name:', data, 'customer', 'name')}
-    ${Input('date', 'invoice-add-date', 'Date:')}
+    ${Input("dropdown", "invoice-add-customer-name", "Customer Name:", customerData, "name")}
+    ${Input("date", "invoice-add-date", "Date:")}
   `;
 
   let editInputs = `
-    ${Input('dropdown', 'invoice-edit-ids', 'Invoice ID:', data, 'invoice_id', 'hr')}
-    ${Input('dropdown', 'invoice-edit-customer-name', 'Customer Name:', data, 'name')}
-    ${Input('date', 'invoice-edit-date', 'Date:')}
+    ${Input("dropdown", "invoice-edit-ids", "Invoice ID:", invoiceData, "invoice_id", "hr")}
+    ${Input("dropdown", "invoice-edit-customer-name", "Customer Name:", customerData, "name")}
+    ${Input("date", "invoice-edit-date", "Date:")}
   `;
 
   let deleteInput = `
-    ${Input('dropdown', 'invoice-delete-ids', 'Invoice ID:', data, 'invoice_id', 'hr')}
+    ${Input("dropdown", "invoice-delete-ids", "Invoice ID:", invoiceData, "invoice_id", "hr")}
   `;
 
   return `
 
-${Head('Invoices')}
-${Header('invoices')}
+${Head("Invoices")}
+${Header("Invoices", "invoices")}
 
-${Table(['Invoice ID', 'Customer ID', 'Date', 'Total price'], data)}
+${Table(["Invoice ID", "Customer Name", "Date", "Total price"], invoiceData)}
 
 <div class="forms-container">
-  ${Form('add', 'POST', '/invoices', 'POST', 'Add Invoice', addInputs, 'Add')}
-  ${Form('edit', 'POST', '/invoices', 'PUT', 'Edit Invoice', editInputs, 'Edit')}
-  ${Form('delete', 'POST', '/invoices', 'DELETE', 'Delete Invoice', deleteInput, 'Delete')}
+  ${Form("add", "POST", "/invoices", "POST", "Add Invoice", addInputs, "Add")}
+  ${Form("edit", "POST", "/invoices", "PUT", "Edit Invoice", editInputs, "Edit")}
+  ${Form("delete", "POST", "/invoices", "DELETE", "Delete Invoice", deleteInput, "Delete")}
 </div>
 
 ${Footer()}
 
-`};
-
+`;
+};
 
 // Materials
-const Materials = () => {
-
+const Materials = data => {
   let addInputs = `
-    ${Input('text', 'material-add-name', 'Name:')}
-    ${Input('text', 'material-add-pounds', 'Pounds available:')}
-    ${Input('text', 'material-add-cost', 'Cost per pound:')}
+    ${Input("text", "material-add-name", "Name:")}
+    ${Input("text", "material-add-pounds", "Pounds available:")}
+    ${Input("text", "material-add-cost", "Cost per pound:")}
   `;
 
   let editInputs = `
-    ${Input('dropdown', 'material-edit-ids', 'Material ID:', 'hr')}
-    ${Input('text', 'material-edit-name', 'Name:')}
-    ${Input('text', 'material-edit-pounds', 'Pounds available:')}
-    ${Input('text', 'material-edit-cost', 'Cost per pound:')}
+    ${Input("dropdown", "material-edit-ids", "Material ID:", data, "material_id", "hr")}
+    ${Input("text", "material-edit-name", "Name:")}
+    ${Input("text", "material-edit-pounds", "Pounds available:")}
+    ${Input("text", "material-edit-cost", "Cost per pound:")}
   `;
 
   let deleteInput = `
-    ${Input('dropdown', 'material-delete-ids', 'Material ID:', 'hr')}
+    ${Input("dropdown", "material-delete-name", "Material Name:", data, "name", "hr")}
   `;
 
   return `
 
-${Head('Materials')}
-${Header('materials')}
+${Head("Materials")}
+${Header("Materials", "materials")}
 
-${Table(['Material ID', 'Name', 'Pounds available', 'Cost per pound'])}
+${Table(["Material ID", "Name", "Pounds available", "Cost per pound"], data)}
 
 <div class="forms-container">
-  ${Form('add', 'POST', '/materials', 'POST', 'Add Material', addInputs, 'Add')}
-  ${Form('edit', 'POST', '/materials', 'PUT', 'Edit Material', editInputs, 'Edit')}
-  ${Form('delete', 'POST', '/materials', 'DELETE', 'Delete Material', deleteInput, 'Delete')}
+  ${Form("add", "POST", "/materials", "POST", "Add Material", addInputs, "Add")}
+  ${Form("edit", "POST", "/materials", "PUT", "Edit Material", editInputs, "Edit")}
+  ${Form("delete", "POST", "/materials", "DELETE", "Delete Material", deleteInput, "Delete")}
 </div>
 
 ${Footer()}
 
-`};
-
+`;
+};
 
 // Sales
-const Sales = () => {
+const Sales = (salesData, weaponData, invoiceData) => {
+
+  console.log(salesData);
+  console.log(weaponData);
 
   let addInputs = `
-    ${Input('dropdown', 'sale-add-invoice-id', 'Invoice ID:')}
-    ${Input('dropdown', 'sale-add-weapon-id', 'Weapon ID:')}
-    ${Input('text', 'sale-add-price', 'Price:')}
+    ${Input("dropdown", "sale-add-invoice-id", "Invoice ID:", invoiceData, "invoice_id")}
+    ${Input("dropdown", "sale-add-weapon-name", "Weapon Name:", weaponData, "name")}
+    ${Input("text", "sale-add-price", "Price:")}
   `;
 
   let editInputs = `
-    ${Input('dropdown', 'sale-edit-sale-id', 'Sale ID:', 'hr')}
-    ${Input('dropdown', 'sale-edit-invoice-id', 'Invoice ID:')}
-    ${Input('dropdown', 'sale-edit-weapon-id', 'Weapon ID:')}
-    ${Input('text', 'sale-edit-price', 'Price:')}
+    ${Input("dropdown", "sale-edit-sale-id", "Sale ID:", salesData, "sale_id", "hr")}
+    ${Input("dropdown", "sale-edit-invoice-id", "Invoice ID:", invoiceData, "invoice_id")}
+    ${Input("dropdown", "sale-edit-weapon-name", "Weapon Name:", weaponData, "name")}
+    ${Input("text", "sale-edit-price", "Price:")}
   `;
 
   let deleteInput = `
-    ${Input('dropdown', 'sale-delete-ids', 'Sale ID:', 'hr')}
+    ${Input("dropdown", "sale-delete-ids", "Sale ID:", salesData, "sale_id", "hr")}
   `;
 
   return `
 
-${Head('Sales')}
-${Header('sales')}
+${Head("Sales")}
+${Header("Sales", "sales")}
 
-${Table(['Sale ID', 'Invoice ID', 'Weapon ID', 'Price'])}
+${Table(["Sale ID", "Invoice ID", "Weapon ID", "Price"], salesData)}
 
 <div class="forms-container">
-  ${Form('add', 'POST', '/sales', 'POST', 'Add Sale', addInputs, 'Add')}
-  ${Form('edit', 'POST', '/sales', 'PUT', 'Edit Sale', editInputs, 'Edit')}
-  ${Form('delete', 'POST', '/sales', 'DELETE', 'Delete Sale', deleteInput, 'Delete')}
+  ${Form("add", "POST", "/sales", "POST", "Add Sale", addInputs, "Add")}
+  ${Form("edit", "POST", "/sales", "PUT", "Edit Sale", editInputs, "Edit")}
+  ${Form("delete", "POST", "/sales", "DELETE", "Delete Sale", deleteInput, "Delete")}
 </div>
 
 ${Footer()}
 
-`};
+<script>
+  
 
+
+</script>
+
+`;
+};
 
 // Weapons
-const Weapons = () => {
-
+const Weapons = (data) => {
   let addInputs = `
-    ${Input('text', 'weapon-add-name', 'Name:')}
-    ${Input('dropdown', 'weapon-add-level', 'Level:')}
-    ${Input('text', 'weapon-add-magic', 'Magical ability:')}
-    ${Input('dropdown', 'weapon-add-weapon-id', 'Weapon ID:')}
-    ${Input('text', 'weapon-add-cost', 'Total cost:')}
+    ${Input("text", "weapon-add-name", "Name:")}
+    ${Input("dropdown_level", "weapon-add-level", "Level:")}
+    ${Input("text", "weapon-add-magic", "Magical ability:")}
+    ${Input("text", "weapon-add-cost", "Total cost:")}
   `;
 
   let editInputs = `
-    ${Input('dropdown', 'weapon-edit-weapon-id', 'Weapon ID:', 'hr')}
-    ${Input('text', 'weapon-edit-name', 'Name:')}
-    ${Input('dropdown', 'weapon-edit-level', 'Level:')}
-    ${Input('text', 'weapon-edit-magic', 'Magical ability:')}
-    ${Input('text', 'weapon-edit-cost', 'Total cost:')}
+    ${Input("dropdown", "weapon-edit-weapon-id", "Weapon ID:", data, "weapon_id", "hr")}
+    ${Input("text", "weapon-edit-name", "Name:")}
+    ${Input("dropdown_level", "weapon-edit-level", "Level:")}
+    ${Input("text", "weapon-edit-magic", "Magical ability:")}
+    ${Input("text", "weapon-edit-cost", "Total cost:")}
   `;
 
   let deleteInput = `
-    ${Input('dropdown', 'weapon-delete-id', 'Weapon ID:', 'hr')}
+    ${Input("dropdown", "weapon-delete-name", "Weapon Name:", data, "name", "hr")}
   `;
 
   return `
 
-${Head('Weapons')}
-${Header('weapons')}
+${Head("Weapons")}
+${Header("Weapons", "weapons")}
 
-${Table(['Weapon ID', 'Name', 'Level', 'Magical Ability', 'Total Cost'])}
+${Table(["Weapon ID", "Name", "Level", "Magical Ability", "Total Cost"], data)}
 
 <div class="forms-container">
-  ${Form('add', 'POST', '/weapons', 'POST', 'Add Weapon', addInputs, 'Add')}
-  ${Form('edit', 'POST', '/weapons', 'PUT', 'Edit Weapon', editInputs, 'Edit')}
-  ${Form('delete', 'POST', '/weapons', 'DELETE', 'Delete Weapon', deleteInput, 'Delete')}
+  ${Form("add", "POST", "/weapons", "POST", "Add Weapon", addInputs, "Add")}
+  ${Form("edit", "POST", "/weapons", "PUT", "Edit Weapon", editInputs, "Edit")}
+  ${Form("delete", "POST", "/weapons", "DELETE", "Delete Weapon", deleteInput, "Delete")}
 </div>
 
 ${Footer()}
 
-`};
-
+`;
+};
 
 // WeaponMaterials
-const WeaponMaterials = () => {
-
+const WeaponMaterials = (data) => {
   let addInputs = `
-    ${Input('dropdown', 'weapmat-add-weapon-id', 'Weapon ID:')}
-    ${Input('dropdown', 'weapmat-add-material-id', 'Material ID:')}
-    ${Input('text', 'weapmat-add-pounds', 'Pounds used:')}
+    ${Input("dropdown", "weapmat-add-weapon-name", "Weapon Name:", data, "weaponName")}
+    ${Input("dropdown", "weapmat-add-material-name", "Material Name:", data, "materialName")}
+    ${Input("text", "weapmat-add-pounds", "Pounds used:")}
   `;
 
   let editInputs = `
-    ${Input('dropdown', 'weapmat-edit-weapon-id', 'Weapon ID:')}
-    ${Input('dropdown', 'weapmat-edit-material-id', 'Material:')}
-    ${Input('text', 'weapmat-add-pounds', 'Pounds used:')}
+    ${Input("dropdown", "weapmat-edit-weapon-name", "Weapon Name:", data, "weaponName", "hr")}
+    ${Input("dropdown", "weapmat-edit-material-name", "Material Name:", data, "materialName")}
+    ${Input("text", "weapmat-add-pounds", "Pounds used:")}
   `;
 
   let deleteInput = `
-    ${Input('dropdown', 'weapmat-delete-weapon-id', 'Weapon ID:')}
-    ${Input('dropdown', 'weapmat-delete-material-id', 'Material ID:')}
+    ${Input("dropdown", "weapmat-delete-weapon-name", "Weapon Name:", data, "weaponName")}
+    ${Input("dropdown", "weapmat-delete-material-name", "Material Name:", data, "materialName")}
   `;
 
   return `
 
-${Head('Weapon Materials')}
-${Header('weaponMaterials')}
+${Head("Weapon Materials")}
+${Header("Weapon Materials", "weaponmaterials")}
 
-${Table(['Weapon ID', 'Material ID', 'Pounds Used'])}
+${Table(["Weapon Name", "Material Name", "Pounds Used"], data)}
 
 <div class="forms-container">
-  ${Form('add', 'POST', '/weaponMaterials', 'POST', 'Add Weapon Material', addInputs, 'Add')}
-  ${Form('edit', 'POST', '/weaponMaterials', 'PUT', 'Edit Weapon Material', editInputs, 'Edit')}
-  ${Form('delete', 'POST', '/weaponMaterials', 'DELETE', 'Delete Weapon Material', deleteInput, 'Delete')}
+  ${Form("add", "POST", "/weaponMaterials", "POST", "Add Weapon Material", addInputs, "Add")}
+  ${Form("edit", "POST", "/weaponMaterials", "PUT", "Edit Weapon Material", editInputs, "Edit")}
+  ${Form("delete", "POST", "/weaponMaterials", "DELETE", "Delete Weapon Material", deleteInput, "Delete")}
 </div>
 
 ${Footer()}
-${Scripts()}
 
-`};
+<script>
+  
+
+// add options to dropdown from array of values
+const addOptions = (valsArr, dropdown) => {
+  valsArr.forEach(val => {
+    const option = document.createElement('option');
+    option.value = val;
+    option.innerText = val;
+    dropdown.appendChild(option);
+  });
+}
+
+
+// remove duplicate materials from dropdowns
+const removeMaterialDuplicates = (inputId) => {
+  let optionVals = [];
+  const dropdown = document.getElementById(inputId);
+  for (let i = 0; i < dropdown.length; i++) {
+    if (!optionVals.includes(dropdown.options[i].value)) {
+      optionVals.push(dropdown.options[i].value);
+    }
+  }
+  dropdown.innerHTML = '';
+  addOptions(optionVals, dropdown);
+};
+removeMaterialDuplicates('weapmat-add-material-name'); 
+removeMaterialDuplicates('weapmat-edit-material-name'); 
+removeMaterialDuplicates('weapmat-delete-material-name'); 
+
+
+// autopopulate material dropdown based on weapon selection
+const adjustEditMaterials = (weapDropdown, matDropdown) => {
+
+  let weapon = weapDropdown.value;
+
+  // get materials associated with weapon
+  const table = document.getElementsByTagName('table')[0];
+  let materials = [];
+  for (let i = 0; i < table.rows.length; i++) {
+    const row = table.rows[i];
+    if (weapon === row.children[0].innerText) {
+      materials.push(row.children[1].innerText);
+    }
+  }
+
+  // repopulate material dropdown with those associated with weapon selection
+  matDropdown.innerHTML = '';
+  addOptions(materials, matDropdown);
+};
+
+
+// adjust edit materials based on weapon selection for edit, delete forms
+const weaponEditDropdown = document.getElementById('weapmat-edit-weapon-name');
+const materialEditDropdown = document.getElementById('weapmat-edit-material-name');
+const weaponDeleteDropdown = document.getElementById('weapmat-delete-weapon-name');
+const materialDeleteDropdown = document.getElementById('weapmat-delete-material-name');
+
+weaponEditDropdown.addEventListener('change', (e) => {
+  adjustEditMaterials(weaponEditDropdown, materialEditDropdown);
+})
+weaponDeleteDropdown.addEventListener('change', (e) => {
+  adjustEditMaterials(weaponDeleteDropdown, materialDeleteDropdown);
+})
+
+</script>
+
+`;
+};
+
 
 module.exports = {
   Home,
@@ -482,5 +553,5 @@ module.exports = {
   Sales,
   Weapons,
   Materials,
-  WeaponMaterials
+  WeaponMaterials,
 };

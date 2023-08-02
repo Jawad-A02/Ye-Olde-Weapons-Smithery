@@ -3,12 +3,12 @@ const app = express();
 var methodOverride = require('method-override');
 const util = require('util');
 
-
 PORT = 61178;
 
 // database
 const db = require('./db/db-connector.js')
 const queryPromise = util.promisify(db.pool.query).bind(db.pool);
+
 // views
 const {
   Home,
@@ -25,25 +25,86 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
+
+
+/************************
+  Get table data queries
+ ************************/
+
 // Select queries
 const get_customers = `
     SELECT 
       customer_id, name, level 
     FROM 
-      Customers;`;
+      Customers;
+`;
 
 const get_invoices = `
     SELECT 
-      Invoices.invoice_id, Customers.name, 
-      Invoices.date, SUM(Sales.price)
+      Invoices.invoice_id, 
+      Customers.name, 
+      Invoices.date, 
+      SUM(Sales.price)
     FROM Invoices
       LEFT JOIN Sales ON Invoices.invoice_id = Sales.invoice_id
-      INNER JOIN Customers ON Invoices.customer_id = Customers.customer_id
-    GROUP BY Invoices.invoice_id, Invoices.total_price;`;
+      LEFT JOIN Customers ON Invoices.customer_id = Customers.customer_id
+    GROUP BY Invoices.invoice_id, Invoices.total_price;
+`;
+
+const get_weapons = `SELECT * FROM Weapons`;
+
+const get_materials = `
+  SELECT 
+      material_id,
+      name,
+      pounds_available,
+      cost_per_pound as "Cost per Pound"
+  FROM Materials;
+`;
+
+const get_sales = `
+  SELECT
+      s.sale_id,
+      s.invoice_id,
+      w.name,
+      s.price
+  FROM Sales s
+  INNER JOIN Weapons w
+      ON s.weapon_id = w.weapon_id;
+`;
+
+const get_sale_weapons = `
+  SELECT name
+  FROM Weapons
+  LEFT JOIN Sales ON Weapons.weapon_id = Sales.weapon_id
+  WHERE Sales.weapon_id IS NULL;
+`;
+
+const get_weapon_materials = `
+  SELECT 
+      w.Name AS weaponName,
+      m.Name AS materialName,
+      wm.pounds_used
+  FROM WeaponMaterials wm
+  JOIN Weapons w
+      ON wm.weapon_id = w.weapon_id
+  JOIN Materials m
+      ON wm.material_id = m.material_id;
+`;
+
+
+
 
 /********
+ ********
   Routes
+ ********
  ********/
+
+
+/***********
+  Home page 
+ ***********/
 
 app.get(['/', '/home'], async (req, res) => {
   try {
@@ -55,6 +116,10 @@ app.get(['/', '/home'], async (req, res) => {
   }
 });
 
+/***********
+  Customers
+ ***********/
+
 // get customers page
 app.get('/customers', async (req, res) => {
   let data2 = await get_table(get_customers);
@@ -65,8 +130,9 @@ app.get('/customers', async (req, res) => {
   }
 });
 
+// add customer
 app.post('/customers', async (req,res) => {
-  // add customer
+
   let data = req.body;
   let level = parseInt(data["customer-add-level"]);
   let name = data["customer-add-name"];
@@ -88,6 +154,7 @@ app.post('/customers', async (req,res) => {
   }
 });
 
+// edit customer
 app.put('/customers', async (req,res) => {
 
   let customer_id = parseInt(req.body["customer-edit-id"]);
@@ -104,7 +171,7 @@ app.put('/customers', async (req,res) => {
       customer_id = ${customer_id}`;
   await edit_table(query);
 
-  //send new data
+  //send new page
   let data2 = await get_table(get_customers);
   if (data2) {
      res.send(Customers(data2));
@@ -113,8 +180,9 @@ app.put('/customers', async (req,res) => {
   }
 });
 
+// delete customer
 app.delete('/customers', async (req,res) => {
-  // query for deleting customer
+  
   let name = req.body["customer-delete-name"];
 
   // delete customer
@@ -125,7 +193,7 @@ app.delete('/customers', async (req,res) => {
       name = "${name}"`;
   await delete_table(query);
 
-  //send new data
+  //send new page
   let data2 = await get_table(get_customers);
   if (data2) {
      res.send(Customers(data2));
@@ -134,25 +202,29 @@ app.delete('/customers', async (req,res) => {
   }
 });
 
+
+
 /**********
   Invoices
  **********/
 
-
-// Invoices route
+// get invoices page
 app.get('/invoices', async (req, res) => {
-  //send new data
-  let data2 = get_table(get_invoices);
+  
+   //send new data
+  const invoiceData = await get_table(get_invoices);
+  const customerData = await get_table(get_customers);
 
-  if (data2) {
-    res.send(Invoices(data2));
- } else {
+  if (invoiceData) {
+    res.send(Invoices(invoiceData, customerData));
+} else {
    res.status(400);
 }
 });
 
-app.post('/invoices', (req,res) => {
-  // add customer
+// add invoice
+app.post('/invoices', async (req,res) => {
+  // add invoice
   let data = req.body;
   let customer_name = data["invoice-add-customer-name"];
   let date = data["invoice-add-date"];
@@ -160,134 +232,500 @@ app.post('/invoices', (req,res) => {
   let query = `
     INSERT INTO 
       Invoices (customer_id, date) 
-    VALUES 
-      ((
-        Select customer_id FROM Customers WHERE name = "${customer_name}"
-        ), ${date}) ;`;
+    VALUES (
+      (SELECT customer_id FROM Customers WHERE name = "${customer_name}"),      
+      "${date}"
+      );
+  `;
 
-  //result of adding customer
-  let result = insert_table(query);
-  if (result[1] === false) {
-      console.error(`DB Add Customer error: \n${error}`);
-      res.status(400);
-  }
+  //result of adding invoice
+  await insert_table(query);
 
-    //send new data
-  let data2 = get_table(get_invoices);
-  if (data2[1] === true) {
-    let invoices = data2[0];
-    res.send(Invoices(invoices));
+  //send new data
+  const invoiceData = await get_table(get_invoices);
+  const customerData = await get_table(get_customers);
+
+  if (invoiceData) {
+    res.send(Invoices(invoiceData, customerData));
   } else {
-    console.error(`DB get invoices error: \n${data2[0]}`);
-    res.status(400);
-  }
+   res.status(400);
+}
 });
 
-app.put('/invoices', (req,res) => {
+// edit invoice
+app.put('/invoices', async (req,res) => {
 
   let invoice_id = parseInt(req.body["invoice-edit-ids"]);
   let name = req.body["invoice-edit-customer-name"];
   let date = req.body["invoice-edit-date"];
 
-  console.log(`DATE: ${data}`);
+  // edit invoice
+  let query = '';
+  const buildQuery = (date) => {
+    return `
 
-  // edit customer
-  let query = `
-    UPDATE Invoices 
+    UPDATE 
+      Invoices 
     SET 
-      customer_id = ((
-        Select customer_id FROM Customers WHERE name = "${name}"
-        )), 
-      date = "${date}"
-    WHERE 
-      invoice_id = ${invoice_id}`;
+      customer_id = (SELECT customer_id FROM Customers WHERE name = "${name}")
+      ${date}
+    WHERE invoice_id = ${invoice_id};
+  `};
 
-  //result of editing customer
-  let result = edit_table(query);
-  if (result[1] === false) {
-      console.error(`DB Edit invoice error: \n${error}`);
-      res.status(400);
+  if (date) {
+    query = buildQuery(`, date = "${date}"`);
+  } else {
+    query = buildQuery('');
   }
 
-  //send new data
-  let data2 = get_table(get_invoices);
+  //result of editing invoice
+  await edit_table(query);
 
-  if (data2[1] === true) {
-    let invoices = data2[0];
-    res.send(Invoices(invoices));
+  //send new data
+  const invoiceData = await get_table(get_invoices);
+  const customerData = await get_table(get_customers);
+
+  if (invoiceData) {
+    res.send(Invoices(invoiceData, customerData));
   } else {
-    console.error(`DB get invoices error: \n${data2[0]}`);
     res.status(400);
   }
 });
 
-app.delete('/invoices', (req,res) => {
-  // query for deleting customer
+// delete invoice
+app.delete('/invoices', async (req,res) => {
+  
   let invoice_id = parseInt(req.body["invoice-delete-ids"]);
 
+  // delete invoice
   let query = `
     DELETE FROM
       Invoices
     WHERE 
-      invoice_id = "${invoice_id}"`;
-
-//result of adding customer
-let result = delete_table(query);
-if (result[1] === false) {
-    console.error(`DB delete Invoice error: \n${error}`);
-    res.status(400);
-}
+      invoice_id = "${invoice_id}"
+  `;
+  await delete_table(query);
 
   //send new data
-  let data2 = get_table(get_invoices);
-  if (data2[1] === true) {
-    let invoices = data2[0];
-    res.send(Invoices(invoices));
+  const invoiceData = await get_table(get_invoices);
+  const customerData = await get_table(get_customers);
+
+  if (invoiceData) {
+    res.send(Invoices(invoiceData, customerData));
   } else {
-    console.error(`DB get invoices error: \n${data2[0]}`);
     res.status(400);
   }
 });
 
+
+/*******
+  Sales
+ *******/
+
+
+// get sales page
 app.get('/sales', async (req, res) => {
-  try {
-    res.send(Sales());
-  } catch (err) {
-    console.log(`GET / ERROR: \n${err}`);
-    res.status(500);
+  
+  //send new data
+    let salesData = await get_table(get_sales);
+  let weaponData = await get_table(get_sale_weapons);
+  let invoiceData = await get_table(get_invoices);
+
+  if (salesData) {
+    res.send(Sales(salesData, weaponData, invoiceData));
+} else {
+      res.status(400);
   }
 });
 
-app.get('/weapons', async (req, res) => {
-  try {
-    res.send(Weapons());
-  } catch (err) {
-    console.log(`GET / ERROR: \n${err}`);
-    res.status(500);
+// add sale
+app.post('/sales', async (req,res) => {
+
+  let data = req.body;
+  let invoice_id = parseInt(data["sale-add-invoice-id"]);
+  let weapon_name = data["sale-add-weapon-name"];
+  let price = parseFloat(data["sale-add-price"]);
+
+  // add sale
+  let query = `
+    INSERT INTO Sales
+        (invoice_id, weapon_id, price)
+    VALUES (
+        ${invoice_id},
+        (SELECT weapon_id FROM Weapons WHERE name = "${weapon_name}"),   
+        ${price});
+  `;
+  await insert_table(query);
+
+  //send new data
+  let salesData = await get_table(get_sales);
+  let weaponData = await get_table(get_sale_weapons);
+  let invoiceData = await get_table(get_invoices);
+
+  if (salesData) {
+    res.send(Sales(salesData, weaponData, invoiceData));
+  } else {
+    res.status(400);
   }
 });
 
+// edit sale
+app.put('/sales', async (req,res) => {
+
+  let sale_id = parseInt(req.body["sale-edit-sale-id"]);
+  let invoice_id = parseInt(req.body["sale-edit-invoice-id"]);
+  let weapon_name = req.body["sale-edit-weapon-name"];
+  let price = parseFloat(req.body["sale-edit-price"]);
+
+  // edit invoice
+  let query = `
+    UPDATE Sales
+    SET 
+      price = ${price}, 
+      weapon_id = (SELECT weapon_id FROM Weapons WHERE name = "${weapon_name}"), 
+      invoice_id = ${invoice_id}
+    WHERE 
+      sale_id = ${sale_id};
+  `;
+
+  //result of editing sale
+  await edit_table(query);
+
+  //send new data
+  let salesData = await get_table(get_sales);
+  let weaponData = await get_table(get_sale_weapons);
+  let invoiceData = await get_table(get_invoices);
+
+  if (salesData) {
+    res.send(Sales(salesData, weaponData, invoiceData));
+} else {
+    res.status(400);
+  }
+});
+
+// delete sales
+app.delete('/sales', async (req,res) => {
+  
+  let sale_id = parseInt(req.body["sale-delete-ids"]);
+
+  // delete sale
+  let query = `
+    DELETE FROM
+      Sales
+    WHERE 
+      sale_id = "${sale_id}"`;
+  await delete_table(query);
+
+  //send new page
+  let salesData = await get_table(get_sales);
+  let weaponData = await get_table(get_sale_weapons);
+  let invoiceData = await get_table(get_invoices);
+
+  if (salesData) {
+    res.send(Sales(salesData, weaponData, invoiceData));
+} else {
+    res.status(400);
+  }
+});
+
+
+/**********
+  Materials
+ **********/
+
+// get invoices page
 app.get('/materials', async (req, res) => {
-  try {
-    res.send(Materials());
-  } catch (err) {
-    console.log(`GET / ERROR: \n${err}`);
-    res.status(500);
+  
+  // TODO: parse JS date form data
+
+  //send new data
+  let data2 = await get_table(get_materials);
+
+  if (data2) {
+    res.send(Materials(data2));
+ } else {
+   res.status(400);
+}
+});
+
+// add material
+app.post('/materials', async (req,res) => {
+  // add material
+  let data = req.body;
+  let material_name = data["material-add-name"];
+  let pounds = parseInt(data["material-add-pounds"]);
+  let cost = parseFloat(data["material-add-cost"]);
+
+  let query = `
+    INSERT INTO Materials
+      (name, pounds_available, cost_per_pound)
+    VALUES
+      ("${material_name}", ${pounds}, ${cost});
+  `;
+  console.log(query);
+  //result of adding material
+  await insert_table(query);
+
+  //send new data
+  let data2 = await get_table(get_materials);
+
+  if (data2) {
+    res.send(Materials(data2));
+  } else {
+   res.status(400);
+}
+});
+
+// edit material
+app.put('/materials', async (req,res) => {
+  
+  let material_id = parseInt(req.body["material-edit-ids"]);
+  let material_name = req.body["material-edit-name"];
+  let pounds = parseInt(req.body["material-edit-pounds"]);
+  let cost = parseFloat(req.body["material-edit-cost"]);
+
+  // edit material
+  let query = `
+  UPDATE Materials
+    SET name = "${material_name}", 
+    pounds_available = ${pounds}, 
+    cost_per_pound = ${cost}
+  WHERE material_id = ${material_id}`;
+  //result of editing material
+  await edit_table(query);
+
+  //send new data
+  let data2 = await get_table(get_materials);
+
+  if (data2) {
+    res.send(Materials(data2));
+  } else {
+   res.status(400);
+}
+});
+
+// delete Material
+app.delete('/materials', async (req,res) => {
+  
+  let material_name = req.body["material-delete-name"];
+
+  // delete customer
+  let query = `
+    DELETE FROM
+      Materials
+    WHERE 
+      name = "${material_name}"`;
+  await delete_table(query);
+
+  //send new page
+  let data2 = await get_table(get_materials);
+  if (data2) {
+  res.send(Materials(data2));
+  } else {
+  res.status(400);
   }
 });
 
-app.get('/weaponMaterials', async (req, res) => {
-  try {
-    res.send(WeaponMaterials());
-  } catch (err) {
-    console.log(`GET / ERROR: \n${err}`);
-    res.status(500);
+
+/*********
+  Weapons
+ *********/
+
+// get weapons page
+app.get('/weapons', async (req, res) => {
+  let data2 = await get_table(get_weapons);
+  if (data2) {
+     res.send(Weapons(data2));
+  } else {
+    res.status(400);
   }
 });
 
-app.listen(PORT, function () {
-  console.log(`Express started on http://localhost:${PORT} -- Press Ctrl-C to terminate.`);
+// add weapon
+app.post('/weapons', async (req,res) => {
+
+  let data = req.body;
+  let name = data["weapon-add-name"];
+  let level = parseInt(data["weapon-add-level"]);
+  let magic = data["weapon-add-magic"];
+  let cost = parseFloat(data["weapon-add-cost"]);
+
+  // add weapon
+  let query = `
+    INSERT INTO Weapons
+      (name, level, magical_ability, total_cost)
+    VALUES
+      ("${name}", ${level}, "${magic}", ${cost});
+  `;
+  await insert_table(query);
+
+  //send updated page
+  let data2 = await get_table(get_weapons);
+  if (data2) {
+     res.send(Weapons(data2));
+  } else {
+    res.status(400);
+  }
 });
+
+// edit weapon
+app.put('/weapons', async (req,res) => {
+
+  let weapon_id = parseInt(req.body["weapon-edit-weapon-id"]);
+  let name = req.body["weapon-edit-name"];
+  let level = parseInt(req.body["weapon-edit-level"]);
+  let magic = req.body["weapon-edit-magic"];
+  let cost = parseFloat(req.body["weapon-edit-cost"]);
+
+  // edit weapon
+  let query = `
+    UPDATE Weapons 
+    SET 
+      level = ${level}, 
+      name = "${name}",
+      magical_ability = "${magic}",
+      total_cost = ${cost}
+    WHERE 
+      weapon_id = ${weapon_id}`;
+  await edit_table(query);
+
+  //send new page
+  let data2 = await get_table(get_weapons);
+  if (data2) {
+     res.send(Weapons(data2));
+  } else {
+    res.status(400);
+  }
+});
+
+// delete weapon
+app.delete('/weapons', async (req,res) => {
+  
+  let name = req.body["weapon-delete-name"];
+
+  // delete customer
+  let query = `
+    DELETE FROM
+      Weapons
+    WHERE 
+      name = "${name}";
+  `;
+  await delete_table(query);
+
+  //send new page
+  let data2 = await get_table(get_weapons);
+  if (data2) {
+     res.send(Weapons(data2));
+  } else {
+    res.status(400);
+  }
+});
+
+
+
+
+
+/******************
+  Weapon Materials
+ ******************/
+
+
+// get weaponsmaterials page
+app.get('/weaponmaterials', async (req, res) => {
+  let data2 = await get_table(get_weapon_materials);
+  if (data2) {
+     res.send(WeaponMaterials(data2));
+  } else {
+    res.status(400);
+  }
+});
+
+// add weapon material
+app.post('/WeaponMaterials', async (req,res) => {
+
+  let data = req.body;
+  let weapon_name = data["weapmat-add-weapon-name"];
+  let material_name = data["weapmat-add-material-name"];
+  let pounds = parseInt(data["weapmat-add-pounds"]);
+
+  // add weapon materials
+  let query = `
+    INSERT INTO WeaponMaterials
+      (weapon_id, material_id, pounds_used)
+    VALUES ( 
+      (SELECT weapon_id FROM Weapons WHERE name = "${weapon_name}"), 
+      (SELECT material_id FROM Materials WHERE name = "${material_id}", 
+      ${pounds});
+  `;
+  await insert_table(query);
+
+  //send updated page
+  let data2 = await get_table(get_weapons);
+  if (data2) {
+     res.send(Weapons(data2));
+  } else {
+    res.status(400);
+  }
+});
+
+// edit weapon material
+app.put('/weaponmaterials', async (req,res) => {
+
+  let weapon_name = req.body["weapmat-edit-weapon-name"];
+  let material_name = req.body["weapmat-edit-material-name"];
+  let pounds = parseInt(req.body["weapmat-add-pounds"]);
+
+  // edit customer
+  let query = `
+    UPDATE 
+      WeaponMaterials
+    SET 
+      material_id = 
+        (SELECT material_id FROM Materials WHERE name = "${material_name}"), 
+      pounds = ${pounds}
+    WHERE 
+      weapon_id = 
+        (SELECT weapon_id FROM Weapons WHERE name = "${weapon_name}");
+  `;
+  await edit_table(query);
+
+  //send new page
+  let data2 = await get_table(get_weapon_materials);
+  if (data2) {
+     res.send(weapons(data2));
+  } else {
+    res.status(400);
+  }
+});
+
+// delete weaponMaterials
+app.delete('/weaponmaterials', async (req,res) => {
+  
+  let weapon_name = req.body["weapmat-delete-weapon-name"];
+  let material_name = req.body["weapmat-delete-material-name"]
+
+  // delete customer
+  let query = `
+    DELETE FROM
+      WeaponMaterials
+    WHERE 
+      weapon_id = (SELECT weapon_id FROM Weapons WHERE name = "${weapon_name}") 
+    AND 
+      material_id = (SELECT material_id FROM Materials WHERE name = "${material_name})
+      `;
+  await delete_table(query);
+
+  //send new page
+  let data2 = await get_table(get_weapon_materials);
+  if (data2) {
+     res.send(Weapons(data2));
+  } else {
+    res.status(400);
+  }
+});
+
+
+
 
 
 //get the data
@@ -314,8 +752,7 @@ const insert_table = async (query) => {
 
 const edit_table = async (query) => {
   try {
-    const rows = await queryPromise(query);
-    return;
+    await queryPromise(query);
   } catch (error) {
     console.error(`edit_table error: ${error}`);
     throw error; // Re-throw the error to be caught in the route handler
@@ -326,9 +763,14 @@ const edit_table = async (query) => {
 const delete_table = async (query) => {
   try {
     const rows = await queryPromise(query);
-    return;
   } catch (error) {
     console.error(`get_table error: ${error}`);
     throw error; // Re-throw the error to be caught in the route handler
   }
 };
+
+
+app.listen(PORT, (err) => {
+  if (err) console.log(`Express listen error: \n${err}`);
+  else console.log(`Server running on port ${PORT}`);
+})

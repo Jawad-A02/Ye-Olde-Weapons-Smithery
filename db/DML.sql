@@ -11,9 +11,9 @@ Sample data manipulation queries
 
 -- populate table
 SELECT 
-    customer_id as ID,
-    name as Name,
-    level as Level
+    customer_id,
+    NAMES,
+    level
 FROM Customers;
 
 
@@ -70,10 +70,10 @@ SELECT weapon_id FROM Weapons;
 
 -- populate table
 SELECT 
-    material_id as "ID",
-    name as "Name",
-    pounds_available as "Pounds available",
-    cost_per_pound as "Cost per Pound"
+    material_id,
+    name,
+    pounds_available,
+    cost_per_pound
 FROM Materials;
 
 
@@ -103,7 +103,7 @@ SELECT material_id from Materials;
 SELECT
     s.sale_id,
     s.invoice_id,
-    w.name AS "Weapon's name",
+    w.name,
     s.price
 FROM Sales s
 INNER JOIN Weapons w
@@ -133,22 +133,22 @@ SELECT sale_id FROM Sales;
 */
 
 -- Populate table
-SELECT Invoices.invoice_id, Customers.name AS "cutomer's name", 
-    Invoices.date, SUM(Sales.price) AS "total cost"
+SELECT Invoices.invoice_id, Customers.name, 
+    Invoices.date, SUM(Sales.price)
 FROM Invoices
 LEFT JOIN Sales ON Invoices.invoice_id = Sales.invoice_id
-INNER JOIN Customers ON Invoices.customer_id = Customers.customer_id
+LEFT JOIN Customers ON Invoices.customer_id = Customers.customer_id
 GROUP BY Invoices.invoice_id, Invoices.total_price;
 
 -- Add new invoice
 INSERT INTO Invoices
     (customer_id, date)
 VALUES
-    (:customer_id, :date);
+    ((Select customer_id FROM Customers WHERE name = :customer_name), :date);
     
 -- Update Existing invoices
 UPDATE Invoices
-    SET customer_id = :customer_id, data = :date
+    SET customer_id = (Select customer_id FROM Customers WHERE name = :customer_name), data = :date
     WHERE invoice_id = :invoice_id;
 
 -- Delete an Invoice
@@ -164,9 +164,9 @@ SELECT invoice_id FROM Invoices;
 
 -- Populate Weapon Materials
 SELECT 
-    w.name as "Weapon",
-    m.name as "Material",
-    wm.pounds_used as "Pounds Used"
+    w.name,
+    m.name,
+    wm.pounds_used
 FROM WeaponMaterials wm
 JOIN Weapons w
     ON wm.weapon_id = w.weapon_id
@@ -181,7 +181,7 @@ VALUES
     (:weapon_id, :material_id, :pounds);
 
 -- Update Existing Weapon Materials
-UPDATE Invoices
+UPDATE WeaponMaterials
     SET material_id = :material_id, pounds = :pounds
     WHERE weapon_id = :weapon_id;
 

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+    }
+  </style>
+  </head>
+
+  <body>
+
+    <form action="/submit" method="PUT">
+      <fieldset>
+        <legend><strong>Edit Weapon</strong></legend>
+        <label for="weapon-edit-weapon-id">Weapon Name:</label>
+        <select name="weapon-edit-weapon-id" id="weapon-edit-weapon-id">
+          <option value="Axe">Axe</option>
+          <option value="Boomerang">Boomerang</option>
+          <option value="Crossbow">Crossbow</option>
+        </select>
+        <hr>
+        <label for="weapon-edit-material-id">Material Name:</label>
+        <select name="weapon-edit-material-id" id="weapon-edit-material-id">
+          <option value="Wood">Wood</option>
+          <option value="Steel">Steel</option>
+          <option value="Ruby">Ruby</option>
+        </select>
+        <label for="weapmat-add-pounds">Pounds used:</label>
+        <input id="weapmat-add-pounds" name="weapmat-add-pounds" type="text" />
+        <button type="button">Edit</button>
+      </fieldset>
+    </form>
+
+    <table id="myTable">
+      <tr>
+        <th>Weapon</th>
+        <th>Material</th>
+        <th>Pounds  Used</th>
+      </tr>
+      <tr>
+        <td>Axe</td>
+        <td>Steel</td>
+        <td>4</td>
+      </tr>
+      <tr>
+        <td>Axe</td>
+        <td>Wood</td>
+        <td>3</td>
+      </tr>
+      <tr>
+        <td>Boomerang</td>
+        <td>wood</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>Crossbow</td>
+        <td>Steel</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td>Crossbow</td>
+        <td>Wood</td>
+        <td>3</td>
+      </tr>
+    </table>
+
+    <script>
+
+      let weapon = "";
+      const weaponDropdown = document.getElementById('weapon-edit-weapon-id');
+      weaponDropdown.addEventListener('change', (e) => {
+        
+        // dropdown weapon selection
+        weapon = weaponDropdown.value;
+
+        // get materials associated with weapon
+        const table = document.getElementById("myTable");
+        let materials = [];
+        for (let i = 0; i < table.rows.length; i++) {
+          const row = table.rows[i];
+          if (weapon === row.children[0].innerText) {
+            materials.push(row.children[1].innerText);
+          }
+        }
+
+        // repopulate material dropdown
+        let materialDropdown = document.getElementById('weapon-edit-material-id');
+        materialDropdown.innerHTML = '';
+        materials.forEach(material => {
+          const option = document.createElement('option');
+          option.value = material;
+          option.innerText = material;
+          materialDropdown.appendChild(option);
+        });
+      })
+      
+    </script>
+
+  </body>
+</html>
