@@ -658,7 +658,7 @@ app.post('/WeaponMaterials', async (req,res) => {
       (weapon_id, material_id, pounds_used)
     VALUES ( 
       (SELECT weapon_id FROM Weapons WHERE name = "${weapon_name}"), 
-      (SELECT material_id FROM Materials WHERE name = "${material_id}", 
+      (SELECT material_id FROM Materials WHERE name = "${material_name}", 
       ${pounds});
   `;
   await insert_table(query);
@@ -721,7 +721,7 @@ app.delete('/weaponmaterials', async (req,res) => {
     WHERE 
       weapon_id = (SELECT weapon_id FROM Weapons WHERE name = "${weapon_name}") 
     AND 
-      material_id = (SELECT material_id FROM Materials WHERE name = "${material_name})
+      material_id = (SELECT material_id FROM Materials WHERE name = "${material_name}")
       `;
   await delete_table(query);
 

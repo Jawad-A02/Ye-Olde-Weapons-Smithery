@@ -73,7 +73,7 @@ SELECT
     material_id,
     name,
     pounds_available,
-    cost_per_pound
+    cost_per_pound as "Cost per Pound"
 FROM Materials;
 
 
@@ -109,15 +109,22 @@ FROM Sales s
 INNER JOIN Weapons w
     ON s.weapon_id = w.weapon_id;
     
+-- populate the weapon's not assoicated with a sale
+SELECT name
+  FROM Weapons
+LEFT JOIN Sales ON Weapons.weapon_id = Sales.weapon_id
+  WHERE Sales.weapon_id IS NULL;
+
 -- add new sale
 INSERT INTO Sales
     (invoice_id, weapon_id, price)
 VALUES
-    (:invoice_id, :weapon_id, :price);
+    (:invoice_id, (SELECT weapon_id FROM Weapons WHERE name = :weapon_name), :price);
 
 -- update existing sale
 UPDATE Sales
-    SET price = :price, weapon_id = weapon_id, invoice_id = :invoice_id
+    SET price = :price, 
+    weapon_id = (SELECT weapon_id FROM Weapons WHERE name = :weapon_name), invoice_id = :invoice_id
     WHERE sale_id = :sale_id;
 
 -- delete sale
@@ -134,7 +141,7 @@ SELECT sale_id FROM Sales;
 
 -- Populate table
 SELECT Invoices.invoice_id, Customers.name, 
-    Invoices.date, SUM(Sales.price)
+    Invoices.date, Invoices.total_price
 FROM Invoices
 LEFT JOIN Sales ON Invoices.invoice_id = Sales.invoice_id
 LEFT JOIN Customers ON Invoices.customer_id = Customers.customer_id
@@ -163,31 +170,41 @@ SELECT invoice_id FROM Invoices;
 */
 
 -- Populate Weapon Materials
-SELECT 
-    w.name,
-    m.name,
-    wm.pounds_used
-FROM WeaponMaterials wm
-JOIN Weapons w
-    ON wm.weapon_id = w.weapon_id
-JOIN Materials m
-    ON wm.material_id = m.material_id;
+  SELECT 
+      w.Name AS weaponName,
+      m.Name AS materialName,
+      wm.pounds_used
+  FROM WeaponMaterials wm
+  JOIN Weapons w
+      ON wm.weapon_id = w.weapon_id
+  JOIN Materials m
+      ON wm.material_id = m.material_id;
 
 
 -- Add new Weapon Materials
-INSERT INTO WeaponMaterials
-    (weapon_id, material_id, pounds)
-VALUES 
-    (:weapon_id, :material_id, :pounds);
+    INSERT INTO WeaponMaterials
+      (weapon_id, material_id, pounds_used)
+    VALUES ( 
+      (SELECT weapon_id FROM Weapons WHERE name = :weapon_name), 
+      (SELECT material_id FROM Materials WHERE name = :material_name), 
+      ${pounds});
 
 -- Update Existing Weapon Materials
-UPDATE WeaponMaterials
-    SET material_id = :material_id, pounds = :pounds
-    WHERE weapon_id = :weapon_id;
+    UPDATE 
+      WeaponMaterials
+    SET 
+      material_id = 
+        (SELECT material_id FROM Materials WHERE name = :material_name), 
+      pounds = ${pounds}
+    WHERE 
+      weapon_id = 
+        (SELECT weapon_id FROM Weapons WHERE name = :weapon_name);
 
 -- Delete a Weapon Materials
-DELETE FROM WeaponMaterials WHERE weapon_id = :weapon_id AND material_id = :material_id;
+DELETE FROM
+      WeaponMaterials
+    WHERE 
+      weapon_id = (SELECT weapon_id FROM Weapons WHERE name = :weapon_name) 
+    AND 
+      material_id = (SELECT material_id FROM Materials WHERE name = :material_name)
 
--- update dropdowns
-SELECT weapon_id FROM WeaponMaterials;
-SELECT material_id FROM WeaponMaterials;
