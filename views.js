@@ -293,11 +293,11 @@ const Invoices = (invoiceData, customerData) => {
   const invoiceObj = invoiceData.map(item => {
     const date = new Date(item.date);
     const formattedDate = date.toISOString().slice(0, 10);
-    const formattedPrice = item.total_price.toFixed(2);
+    //const formattedPrice = item.total_price.toFixed(2);
     return {
       ...item,
       date: formattedDate,
-      total_price: formattedPrice
+      //total_price: formattedPrice
     };
   });
 
