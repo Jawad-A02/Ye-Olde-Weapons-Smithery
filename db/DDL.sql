@@ -77,6 +77,14 @@ CREATE TABLE Invoices (
         ON DELETE SET NULL
 );
 
+
+
+
+/*
+    Sample Data
+*/
+
+
 -- Insert sample data into Customers table
 INSERT INTO Customers 
     (customer_id, name, level)

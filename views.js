@@ -230,8 +230,8 @@ const Input = (type, forId, label, data, query, hr = "") => {
 const Home = () => {
   return `
 
-${Head("home")}
-${Header("home")}
+${Head("Home")}
+${Header("Home", "home")}
 
 <div id="home-container">
 <div id="home-img-container">
@@ -373,6 +373,9 @@ ${Footer()}
 
 // Sales
 const Sales = (salesData, weaponData, invoiceData) => {
+
+  // TODO: Fix Edit Sale "Weapon Name dropdown to include current weapon"
+  // TODO: Autopopulate Price with current price
 
   let addInputs = `
     ${Input("dropdown", "sale-add-invoice-id", "Invoice ID:", invoiceData, "invoice_id")}

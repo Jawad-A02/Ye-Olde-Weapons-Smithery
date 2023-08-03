@@ -601,6 +601,8 @@ app.put('/weapons', async (req,res) => {
 
 // delete weapon
 app.delete('/weapons', async (req,res) => {
+
+  // TODO: Should the WeaponMaterials columns be set to NULL?
   
   let name = req.body["weapon-delete-name"];
 
@@ -652,6 +654,8 @@ app.post('/weaponmaterials', async (req,res) => {
   let weapon_name = data["weapmat-add-weapon-name"];
   let material_name = data["weapmat-add-material-name"];
   let pounds = parseInt(data["weapmat-add-pounds"]);
+
+  // TODO: subtract amount of material used here from Materials table 
 
   // add weapon materials
   let query = `
