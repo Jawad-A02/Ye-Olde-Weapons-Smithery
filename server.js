@@ -44,11 +44,11 @@ const get_invoices = `
       Invoices.invoice_id, 
       Customers.name, 
       Invoices.date, 
-      SUM(Sales.price)
+      SUM(Sales.price) as total_price
     FROM Invoices
       LEFT JOIN Sales ON Invoices.invoice_id = Sales.invoice_id
       LEFT JOIN Customers ON Invoices.customer_id = Customers.customer_id
-    GROUP BY Invoices.invoice_id, Invoices.total_price;
+    GROUP BY Invoices.invoice_id;
 `;
 
 const get_weapons = `SELECT * FROM Weapons`;

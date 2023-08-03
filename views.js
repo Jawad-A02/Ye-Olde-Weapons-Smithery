@@ -287,6 +287,8 @@ ${Footer()}
 // Invoices
 const Invoices = (invoiceData, customerData) => {
 
+  console.log(invoiceData)
+
   // format date values to yyyy-mm-dd, total_price to two decimal places
   const invoiceObj = invoiceData.map(item => {
     const date = new Date(item.date);
