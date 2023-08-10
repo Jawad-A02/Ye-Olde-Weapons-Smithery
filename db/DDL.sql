@@ -47,7 +47,7 @@ CREATE TABLE WeaponMaterials (
     material_id INT(11),
     pounds_used INT(11),
     FOREIGN KEY (weapon_id) REFERENCES Weapons (weapon_id)
-        ON DELETE SET NULL,
+        ON DELETE CASCADE,
     FOREIGN KEY (material_id) REFERENCES Materials (material_id)
         ON DELETE SET NULL
 );

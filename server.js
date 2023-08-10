@@ -76,7 +76,8 @@ const get_sales = `
 const get_sale_weapons = `
   SELECT name
   FROM Weapons
-  LEFT JOIN Sales ON Weapons.weapon_id = Sales.weapon_id
+  LEFT JOIN Sales 
+    ON Weapons.weapon_id = Sales.weapon_id
   WHERE Sales.weapon_id IS NULL;
 `;
 
@@ -162,14 +163,17 @@ app.put('/customers', async (req,res) => {
   let name = req.body["customer-edit-name"];
   let level = parseInt(req.body["customer-edit-level"]);
 
-  // edit customer
   let query = `
-    UPDATE Customers 
-    SET 
-      level = ${level}, 
-      name = "${name}"
-    WHERE 
-      customer_id = ${customer_id}`;
+  UPDATE Customers 
+  SET 
+    level = ${level}, 
+    name = CASE
+      WHEN "${name}" = '' THEN name
+      ELSE "${name}"
+  END
+  WHERE 
+    customer_id = ${customer_id}
+  `;
   await edit_table(query);
 
   //send new page
@@ -376,15 +380,23 @@ app.put('/sales', async (req,res) => {
   let sale_id = parseInt(req.body["sale-edit-sale-id"]);
   let invoice_id = parseInt(req.body["sale-edit-invoice-id"]);
   let weapon_name = req.body["sale-edit-weapon-name"];
-  let price = parseFloat(req.body["sale-edit-price"]);
+  let price = undefined;
+  if (req.body["sale-edit-price"] === "") {
+    price = "";
+  }else { 
+    price = parseFloat(req.body["sale-edit-price"]);
+  }
+
+  const priceQuery = price === "" ? "" : `, price = ${price}`;
+  const wnameQuery = !weapon_name ? "" : `, weapon_id = (SELECT weapon_id FROM Weapons WHERE name = "${weapon_name}")`
 
   // edit invoice
   let query = `
     UPDATE Sales
     SET 
-      price = ${price}, 
-      weapon_id = (SELECT weapon_id FROM Weapons WHERE name = "${weapon_name}"), 
       invoice_id = ${invoice_id}
+      ${wnameQuery}
+      ${priceQuery}
     WHERE 
       sale_id = ${sale_id};
   `;
@@ -437,8 +449,6 @@ app.delete('/sales', async (req,res) => {
 // get materials page
 app.get('/materials', async (req, res) => {
   
-  // TODO: parse JS date form data
-
   //send new data
   let data2 = await get_table(get_materials);
 
@@ -463,7 +473,7 @@ app.post('/materials', async (req,res) => {
     VALUES
       ("${material_name}", ${pounds}, ${cost});
   `;
-  console.log(query);
+  
   //result of adding material
   await insert_table(query);
 
@@ -482,15 +492,31 @@ app.put('/materials', async (req,res) => {
   
   let material_id = parseInt(req.body["material-edit-ids"]);
   let material_name = req.body["material-edit-name"];
-  let pounds = parseInt(req.body["material-edit-pounds"]);
-  let cost = parseFloat(req.body["material-edit-cost"]);
+  let pounds = undefined;
+  let cost = undefined;
 
+  if (req.body["material-edit-pounds"] === "") {
+    pounds = "";
+  }else { 
+    pounds = parseInt(req.body["material-edit-pounds"]);
+  }
+  if (req.body["material-edit-cost"] === "") {
+    cost = "";
+  }else { 
+    cost = parseFloat(req.body["material-edit-cost"]);
+  }
+
+  const pounds_query = pounds === "" ? "" : `, pounds_available = ${pounds}`;
+  const cost_query = cost === "" ? "" : `, cost_per_pound = ${cost}`;
   // edit material
   let query = `
   UPDATE Materials
-    SET name = "${material_name}", 
-    pounds_available = ${pounds}, 
-    cost_per_pound = ${cost}
+    SET name = CASE
+      WHEN "${material_name}" = "" THEN name
+      ELSE "${material_name}"
+    END
+    ${pounds_query}
+    ${cost_query}
   WHERE material_id = ${material_id}`;
   //result of editing material
   await edit_table(query);
@@ -576,16 +602,29 @@ app.put('/weapons', async (req,res) => {
   let name = req.body["weapon-edit-name"];
   let level = parseInt(req.body["weapon-edit-level"]);
   let magic = req.body["weapon-edit-magic"];
-  let cost = parseFloat(req.body["weapon-edit-cost"]);
+  let cost = undefined;
 
+  if (req.body["weapon-edit-cost"] === "") {
+    cost = "";
+  }else { 
+    cost = parseFloat(req.body["weapon-edit-cost"]);
+  }
+
+  const cost_query = cost === "" ? "" : `, total_cost = ${cost}`;
   // edit weapon
   let query = `
     UPDATE Weapons 
     SET 
       level = ${level}, 
-      name = "${name}",
-      magical_ability = "${magic}",
-      total_cost = ${cost}
+      name = CASE 
+        WHEN "${name}" = "" THEN name
+        ELSE "${name}"
+      END,
+      magical_ability = CASE
+        WHEN "${magic}" = "" THEN magical_ability
+        ELSE "${magic}"
+      END
+      ${cost_query}
     WHERE 
       weapon_id = ${weapon_id}`;
   await edit_table(query);
@@ -685,16 +724,23 @@ app.put('/weaponmaterials', async (req,res) => {
 
   let weapon_name = req.body["weapmat-edit-weapon-name"];
   let material_name = req.body["weapmat-edit-material-name"];
-  let pounds = parseInt(req.body["weapmat-edit-pounds"]);
+  let pounds = undefined;
 
+  if (req.body["weapmat-edit-pounds"] === "") {
+    pounds = "";
+  }else { 
+    pounds = parseInt(req.body["weapmat-edit-pounds"]);
+  }
+
+  const pounds_query = cost === "" ? "" : `, pounds_used = ${pounds}`;
   // edit customer
   let query = `
     UPDATE 
       WeaponMaterials
     SET 
       material_id = 
-        (SELECT material_id FROM Materials WHERE name = "${material_name}"), 
-      pounds_used = ${pounds}
+        (SELECT material_id FROM Materials WHERE name = "${material_name}")
+      ${pounds_query}
     WHERE 
       weapon_id = 
         (SELECT weapon_id FROM Weapons WHERE name = "${weapon_name}")

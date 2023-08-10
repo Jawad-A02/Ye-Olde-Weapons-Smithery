@@ -105,6 +105,7 @@ const Table = (arr, data) => {
 `;
 };
 
+
 /*
   Form
   -----
@@ -141,21 +142,30 @@ const Form = (divClass, method, path, action, legend, inputs, button) => {
   query = attribute match e.g. "customer_id"
   hr = 'hr', ''
 */
-const Input = (type, forId, label, data, query, hr = "") => {
+const Input = (type, forId, label, data, query, hr = "", extra="") => {
+
+
   let input = "";
   let hr_elem = hr === "hr" ? "<hr>" : "";
 
   if (type === "text") {
+    let req = '';
+    if (extra === "required") {
+      req = 'required'; 
+    }
     input = /*html*/`
 
       <label for="${forId}">${label}</label>
-      <input id="${forId}" name="${forId}" type="text" />
+      <input id="${forId}" name="${forId}" type="text" ${req}/>
       ${hr_elem}
 
     `;
 
   } else if (type === "dropdown") {
     let options = "";
+    if (extra === "edit") {
+      options += `<option disabled selected value>-- No change --</option>`;
+    }
     if (data) {
       for (let i = 0; i < data.length; i++) {
         for (let [key, value] of Object.entries(data[i])) {
@@ -190,11 +200,15 @@ const Input = (type, forId, label, data, query, hr = "") => {
     }
 
   } else if (type === "date") {
+    let req = '';
+    if (extra === "required") {
+      req = 'required'; 
+    }
     input = /*html*/`
 
       <label for="${forId}">${label}</label>
       <input id="${forId}" name="${forId}" type="date"
-             placeholder="dd-mm-yyy" />
+             placeholder="dd-mm-yyy" ${req}/>
       ${hr_elem}
 
     `;
@@ -251,8 +265,12 @@ ${Footer()}
 
 // Customers
 const Customers = data => {
+
+  // TODO: allow for a blank option to reuse the same value
+  // TODO: fix edit to include "empty field won't be changed"
+
   let addInputs = `
-    ${Input("text", "customer-add-name", "Name:")}
+    ${Input("text", "customer-add-name", "Name:", undefined, undefined, "", "required")}
     ${Input("dropdown_level", "customer-add-level", "Level:")}
   `;
 
@@ -287,7 +305,7 @@ ${Footer()}
 // Invoices
 const Invoices = (invoiceData, customerData) => {
 
-  console.log(invoiceData)
+  // TODO: Fix Add Invoice "This creates the invoice but individual sales needs to be added seperately"
 
   // format date values to yyyy-mm-dd, total_price to two decimal places
   const invoiceObj = invoiceData.map(item => {
@@ -303,7 +321,7 @@ const Invoices = (invoiceData, customerData) => {
 
   let addInputs = `
     ${Input("dropdown", "invoice-add-customer-name", "Customer Name:", customerData, "name")}
-    ${Input("date", "invoice-add-date", "Date:")}
+    ${Input("date", "invoice-add-date", "Date:", "", "", "", "required")}
   `;
 
   let editInputs = `
@@ -336,10 +354,14 @@ ${Footer()}
 
 // Materials
 const Materials = data => {
+
+    // TODO: Alert user that deleting a material will make it nullable in the weapons material page if it was referenced
+    // TODO: fix edit to include "empty field willn't be changed"
+
   let addInputs = `
-    ${Input("text", "material-add-name", "Name:")}
-    ${Input("text", "material-add-pounds", "Pounds available:")}
-    ${Input("text", "material-add-cost", "Cost per pound:")}
+    ${Input("text", "material-add-name", "Name:", "", "", "", "required")}
+    ${Input("text", "material-add-pounds", "Pounds available:", "", "", "", "required")}
+    ${Input("text", "material-add-cost", "Cost per pound:", "", "", "", "required")}
   `;
 
   let editInputs = `
@@ -368,25 +390,34 @@ ${Table(["Material ID", "Name", "Pounds available", "Cost per pound"], data)}
 
 ${Footer()}
 
+<script>
+
+// alert info message before deleting a material
+const deleteSubmit = document.querySelector('.delete button');
+deleteSubmit.addEventListener('click', (e) => {
+  if(!confirm('Deleting a material will set all instances of that material in the Weapon Material table to null. Do  you wish to continue?')) {
+    e.preventDefault();
+  }
+})
+
+</script>
+
 `;
 };
 
 // Sales
 const Sales = (salesData, weaponData, invoiceData) => {
 
-  // TODO: Fix Edit Sale "Weapon Name dropdown to include current weapon"
-  // TODO: Autopopulate Price with current price
-
   let addInputs = `
     ${Input("dropdown", "sale-add-invoice-id", "Invoice ID:", invoiceData, "invoice_id")}
     ${Input("dropdown", "sale-add-weapon-name", "Weapon Name:", weaponData, "name")}
-    ${Input("text", "sale-add-price", "Price:")}
+    ${Input("text", "sale-add-price", "Price:", "", "", "", "required")}
   `;
-
+  // Input(type, forId, label, data, query, hr = "", edit=undefined)
   let editInputs = `
     ${Input("dropdown", "sale-edit-sale-id", "Sale ID:", salesData, "sale_id", "hr")}
     ${Input("dropdown", "sale-edit-invoice-id", "Invoice ID:", invoiceData, "invoice_id")}
-    ${Input("dropdown", "sale-edit-weapon-name", "Weapon Name:", weaponData, "name")}
+    ${Input("dropdown", "sale-edit-weapon-name", "Weapon Name:", weaponData, "name", "","edit")}
     ${Input("text", "sale-edit-price", "Price:")}
   `;
 
@@ -420,11 +451,13 @@ ${Footer()}
 
 // Weapons
 const Weapons = (data) => {
+
+  // TODO: fix edit to include "empty field willn't be changed"
   let addInputs = `
-    ${Input("text", "weapon-add-name", "Name:")}
+    ${Input("text", "weapon-add-name", "Name:", "", "", "", "required")}
     ${Input("dropdown_level", "weapon-add-level", "Level:")}
-    ${Input("text", "weapon-add-magic", "Magical ability:")}
-    ${Input("text", "weapon-add-cost", "Total cost:")}
+    ${Input("text", "weapon-add-magic", "Magical ability:", "", "", "", "required")}
+    ${Input("text", "weapon-add-cost", "Total cost:", "", "", "", "required")}
   `;
 
   let editInputs = `
@@ -459,11 +492,13 @@ ${Footer()}
 
 // WeaponMaterials
 const WeaponMaterials = (weapMatData, weaponData, materialData) => {
+  // TODO: Fix Weapons to be on delete cascade
+  // TODO: fix edit to include "empty field willn't be changed"
 
   let addInputs = `
     ${Input("dropdown", "weapmat-add-weapon-name", "Weapon Name:", weaponData, "name")}
     ${Input("dropdown", "weapmat-add-material-name", "Material Name:", materialData, "name")}
-    ${Input("text", "weapmat-add-pounds", "Pounds used:")}
+    ${Input("text", "weapmat-add-pounds", "Pounds used:", "", "", "", "required")}
   `;
 
   let editInputs = `
@@ -535,6 +570,9 @@ removeMaterialDuplicates('weapmat-edit-material-name');
 removeMaterialDuplicates('weapmat-delete-material-name'); 
 removeMaterialDuplicates('weapmat-delete-weapon-name');
 
+// TODO: Material Name in Edit Weapon Materials not populating correctly
+  // includes null
+  // doesn't include all other available materials
 
 // autopopulate material dropdown based on weapon selection
 // assoc === true -> materials already used in weapon
