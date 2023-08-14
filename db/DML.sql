@@ -11,10 +11,9 @@ Sample data manipulation queries
 
 -- populate table
 SELECT 
-    customer_id,
-    NAMES,
-    level
-FROM Customers;
+    customer_id, name, level 
+FROM 
+    Customers;
 
 
 -- create new customer
@@ -24,9 +23,15 @@ VALUES
     (:name, :level);
 
 -- update existing customer name, level
-UPDATE Customers
-    SET level = :level, name = :name
-    WHERE customer_id = :customer_id;
+UPDATE Customers 
+SET 
+    level = :level, 
+    name = CASE
+        WHEN :name = '' THEN name
+        ELSE :name
+    END
+WHERE 
+    customer_id = :customer_id;
 
 -- delete customer
 DELETE FROM Customers WHERE name = :name;
@@ -51,9 +56,20 @@ VALUES
     (:name, :level, :magical_ability, :total_cost);
 
 -- update existing weapon
-UPDATE Weapons
-    SET name = :name, level = :level, magical_ability = :magical_ability, total_cost = :total_cost
-    WHERE weapon_id = :weapon_id;
+UPDATE Weapons 
+SET 
+    level = :level, 
+    name = CASE 
+        WHEN :name = "" THEN name
+        ELSE :name
+    END,
+    magical_ability = CASE
+        WHEN :magic = "" THEN magical_ability
+        ELSE :magic
+    END
+    total_cost = :total_cost
+    WHERE 
+      weapon_id = :weapon_id;
 
 -- delete weapon 
 DELETE FROM Weapons 
@@ -85,8 +101,14 @@ VALUES
 
 -- update existing material
 UPDATE Materials
-    SET name = :name, pounds_available = :pounds_available, cost_per_pound = :cost_per_pound
-    WHERE material_id = :material_id;
+    SET name = CASE
+        WHEN :name = "" THEN name
+        ELSE :name
+    END, 
+    pounds_available = :pounds_available, 
+    cost_per_pound = :cost_per_pound
+    WHERE 
+    material_id = :material_id;
 
 -- delete weapon 
 DELETE FROM Materials
@@ -106,7 +128,7 @@ SELECT
     w.name,
     s.price
 FROM Sales s
-INNER JOIN Weapons w
+LEFT JOIN Weapons w
     ON s.weapon_id = w.weapon_id;
     
 -- populate the weapon's not assoicated with a sale
@@ -119,13 +141,19 @@ LEFT JOIN Sales ON Weapons.weapon_id = Sales.weapon_id
 INSERT INTO Sales
     (invoice_id, weapon_id, price)
 VALUES
-    (:invoice_id, (SELECT weapon_id FROM Weapons WHERE name = :weapon_name), :price);
+    (:invoice_id, 
+    (SELECT weapon_id FROM Weapons WHERE name = :weapon_name), 
+    :price);
 
 -- update existing sale
-UPDATE Sales
-    SET price = :price, 
-    weapon_id = (SELECT weapon_id FROM Weapons WHERE name = :weapon_name), invoice_id = :invoice_id
-    WHERE sale_id = :sale_id;
+UPDATE 
+    Sales
+SET 
+    price = :price, 
+    weapon_id = (SELECT weapon_id FROM Weapons WHERE name = :weapon_name), 
+    invoice_id = :invoice_id
+WHERE 
+    sale_id = :sale_id;
 
 -- delete sale
 DELETE FROM Sales WHERE sale_id = :sale_id;
@@ -154,9 +182,12 @@ VALUES
     ((Select customer_id FROM Customers WHERE name = :customer_name), :date);
     
 -- Update Existing invoices
-UPDATE Invoices
-    SET customer_id = (Select customer_id FROM Customers WHERE name = :customer_name), data = :date
-    WHERE invoice_id = :invoice_id;
+UPDATE 
+    Invoices
+SET 
+    customer_id = (Select customer_id FROM Customers WHERE name = :customer_name), 
+    data = :date
+WHERE invoice_id = :invoice_id;
 
 -- Delete an Invoice
 DELETE FROM Inoivces WHERE invoice_id = :invoice_id;
@@ -196,7 +227,7 @@ SELECT invoice_id FROM Invoices;
     SET 
       material_id = 
         (SELECT material_id FROM Materials WHERE name = :material_name), 
-      pounds = ${pounds}
+        pounds = ${pounds}
     WHERE 
       weapon_id = 
         (SELECT weapon_id FROM Weapons WHERE name = :weapon_name)
@@ -205,10 +236,10 @@ SELECT invoice_id FROM Invoices;
         (SELECT material_id FROM Materials WHERE name = :material_name);
 
 -- Delete a Weapon Materials
-DELETE FROM
+    DELETE FROM
       WeaponMaterials
     WHERE 
       weapon_id = (SELECT weapon_id FROM Weapons WHERE name = :weapon_name) 
     AND 
-      material_id = (SELECT material_id FROM Materials WHERE name = :material_name)
+      (material_id is NULL or material_id = (SELECT material_id FROM Materials WHERE name = :material_name));
 

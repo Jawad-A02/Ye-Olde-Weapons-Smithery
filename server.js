@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
-var methodOverride = require('method-override');
+const methodOverride = require('method-override');
 const util = require('util');
 
-PORT = 61178;
+const PORT = 61178;
 
 // database
 const db = require('./db/db-connector.js')
@@ -44,7 +44,7 @@ const get_invoices = `
       Invoices.invoice_id, 
       Customers.name, 
       Invoices.date, 
-      SUM(Sales.price) as total_price
+      COALESCE(SUM(Sales.price), 0) as total_price
     FROM Invoices
       LEFT JOIN Sales ON Invoices.invoice_id = Sales.invoice_id
       LEFT JOIN Customers ON Invoices.customer_id = Customers.customer_id
@@ -69,7 +69,7 @@ const get_sales = `
       w.name,
       s.price
   FROM Sales s
-  INNER JOIN Weapons w
+  LEFT JOIN Weapons w
       ON s.weapon_id = w.weapon_id;
 `;
 
@@ -172,7 +172,7 @@ app.put('/customers', async (req,res) => {
       ELSE "${name}"
   END
   WHERE 
-    customer_id = ${customer_id}
+    customer_id = ${customer_id};
   `;
   await edit_table(query);
 
@@ -264,24 +264,18 @@ app.put('/invoices', async (req,res) => {
   let name = req.body["invoice-edit-customer-name"];
   let date = req.body["invoice-edit-date"];
 
+  const dateQuery = date ?  `, date = "${date}"` : "";
+
   // edit invoice
-  let query = '';
-  const buildQuery = (date) => {
-    return `
+  let query = `
 
     UPDATE 
       Invoices 
     SET 
       customer_id = (SELECT customer_id FROM Customers WHERE name = "${name}")
-      ${date}
+      ${dateQuery}
     WHERE invoice_id = ${invoice_id};
-  `};
-
-  if (date) {
-    query = buildQuery(`, date = "${date}"`);
-  } else {
-    query = buildQuery('');
-  }
+  `;
 
   //result of editing invoice
   await edit_table(query);
@@ -626,7 +620,7 @@ app.put('/weapons', async (req,res) => {
       END
       ${cost_query}
     WHERE 
-      weapon_id = ${weapon_id}`;
+      weapon_id = ${weapon_id};`;
   await edit_table(query);
 
   //send new page
@@ -641,8 +635,6 @@ app.put('/weapons', async (req,res) => {
 // delete weapon
 app.delete('/weapons', async (req,res) => {
 
-  // TODO: Should the WeaponMaterials columns be set to NULL?
-  
   let name = req.body["weapon-delete-name"];
 
   // delete customer
@@ -694,8 +686,6 @@ app.post('/weaponmaterials', async (req,res) => {
   let material_name = data["weapmat-add-material-name"];
   let pounds = parseInt(data["weapmat-add-pounds"]);
 
-  // TODO: subtract amount of material used here from Materials table 
-
   // add weapon materials
   let query = `
     INSERT INTO WeaponMaterials
@@ -732,7 +722,7 @@ app.put('/weaponmaterials', async (req,res) => {
     pounds = parseInt(req.body["weapmat-edit-pounds"]);
   }
 
-  const pounds_query = cost === "" ? "" : `, pounds_used = ${pounds}`;
+  const pounds_query = pounds === "" ? "" : `, pounds_used = ${pounds}`;
   // edit customer
   let query = `
     UPDATE 
@@ -775,7 +765,7 @@ app.delete('/weaponmaterials', async (req,res) => {
     WHERE 
       weapon_id = (SELECT weapon_id FROM Weapons WHERE name = "${weapon_name}") 
     AND 
-      material_id = (SELECT material_id FROM Materials WHERE name = "${material_name}");
+      (material_id is NULL or material_id = (SELECT material_id FROM Materials WHERE name = "${material_name}"));
   `;
   await delete_table(query);
 
@@ -829,7 +819,7 @@ const edit_table = async (query) => {
 
 const delete_table = async (query) => {
   try {
-    const rows = await queryPromise(query);
+    await queryPromise(query);
   } catch (error) {
     console.error(`get_table error: ${error}`);
     throw error; // Re-throw the error to be caught in the route handler

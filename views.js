@@ -141,6 +141,7 @@ const Form = (divClass, method, path, action, legend, inputs, button) => {
   data = database object
   query = attribute match e.g. "customer_id"
   hr = 'hr', ''
+  extra = "required", "edit"
 */
 const Input = (type, forId, label, data, query, hr = "", extra="") => {
 
@@ -165,7 +166,9 @@ const Input = (type, forId, label, data, query, hr = "", extra="") => {
     let options = "";
     if (extra === "edit") {
       options += `<option disabled selected value>-- No change --</option>`;
-    }
+    } else if (extra == "add") {
+      options += `<option disabled selected value>-- No value --</option>`;
+    };
     if (data) {
       for (let i = 0; i < data.length; i++) {
         for (let [key, value] of Object.entries(data[i])) {
@@ -266,9 +269,6 @@ ${Footer()}
 // Customers
 const Customers = data => {
 
-  // TODO: allow for a blank option to reuse the same value
-  // TODO: fix edit to include "empty field won't be changed"
-
   let addInputs = `
     ${Input("text", "customer-add-name", "Name:", undefined, undefined, "", "required")}
     ${Input("dropdown_level", "customer-add-level", "Level:")}
@@ -302,31 +302,41 @@ ${Footer()}
 `;
 };
 
+function formatDate(dateString) {
+  
+  const date = new Date(dateString);
+
+  if (isNaN(date)) {
+    return "00-00-0000";
+  }
+
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Adding 1 to get the correct month number
+  const day = String(date.getDate()).padStart(2, '0');
+  const year = date.getFullYear();
+
+  return `${month}-${day}-${year}`;
+}
+
 // Invoices
 const Invoices = (invoiceData, customerData) => {
 
-  // TODO: Fix Add Invoice "This creates the invoice but individual sales needs to be added seperately"
-
-  // format date values to yyyy-mm-dd, total_price to two decimal places
+  // format date values to yyyy-mm-dd
   const invoiceObj = invoiceData.map(item => {
-    const date = new Date(item.date);
-    const formattedDate = date.toISOString().slice(0, 10);
-    //const formattedPrice = item.total_price.toFixed(2);
+    const formattedDate = formatDate(item.date);
     return {
       ...item,
       date: formattedDate,
-      //total_price: formattedPrice
     };
   });
 
   let addInputs = `
-    ${Input("dropdown", "invoice-add-customer-name", "Customer Name:", customerData, "name")}
+    ${Input("dropdown", "invoice-add-customer-name", "Customer Name:", customerData, "name", "", "add")}
     ${Input("date", "invoice-add-date", "Date:", "", "", "", "required")}
   `;
 
   let editInputs = `
     ${Input("dropdown", "invoice-edit-ids", "Invoice ID:", invoiceObj, "invoice_id", "hr")}
-    ${Input("dropdown", "invoice-edit-customer-name", "Customer Name:", customerData, "name")}
+    ${Input("dropdown", "invoice-edit-customer-name", "Customer Name:", customerData, "name", "", "edit")}
     ${Input("date", "invoice-edit-date", "Date:")}
   `;
 
@@ -354,9 +364,6 @@ ${Footer()}
 
 // Materials
 const Materials = data => {
-
-    // TODO: Alert user that deleting a material will make it nullable in the weapons material page if it was referenced
-    // TODO: fix edit to include "empty field willn't be changed"
 
   let addInputs = `
     ${Input("text", "material-add-name", "Name:", "", "", "", "required")}
@@ -410,7 +417,7 @@ const Sales = (salesData, weaponData, invoiceData) => {
 
   let addInputs = `
     ${Input("dropdown", "sale-add-invoice-id", "Invoice ID:", invoiceData, "invoice_id")}
-    ${Input("dropdown", "sale-add-weapon-name", "Weapon Name:", weaponData, "name")}
+    ${Input("dropdown", "sale-add-weapon-name", "Weapon Name:", weaponData, "name", "", "add")}
     ${Input("text", "sale-add-price", "Price:", "", "", "", "required")}
   `;
   // Input(type, forId, label, data, query, hr = "", edit=undefined)
@@ -452,7 +459,6 @@ ${Footer()}
 // Weapons
 const Weapons = (data) => {
 
-  // TODO: fix edit to include "empty field willn't be changed"
   let addInputs = `
     ${Input("text", "weapon-add-name", "Name:", "", "", "", "required")}
     ${Input("dropdown_level", "weapon-add-level", "Level:")}
@@ -492,19 +498,17 @@ ${Footer()}
 
 // WeaponMaterials
 const WeaponMaterials = (weapMatData, weaponData, materialData) => {
-  // TODO: Fix Weapons to be on delete cascade
-  // TODO: fix edit to include "empty field willn't be changed"
 
   let addInputs = `
     ${Input("dropdown", "weapmat-add-weapon-name", "Weapon Name:", weaponData, "name")}
-    ${Input("dropdown", "weapmat-add-material-name", "Material Name:", materialData, "name")}
+    ${Input("dropdown", "weapmat-add-material-name", "Material Name:", materialData, "name", "", "add")}
     ${Input("text", "weapmat-add-pounds", "Pounds used:", "", "", "", "required")}
   `;
 
   let editInputs = `
     ${Input("dropdown", "weapmat-edit-weapon-name", "Weapon Name:", weaponData, "name", "hr")}
-    ${Input("dropdown", "weapmat-edit-material-name", "Material Name:", materialData, "name")}
-    ${Input("text", "weapmat-edit-pounds", "Pounds used:")}
+    ${Input("dropdown", "weapmat-edit-material-name", "Material Name:", materialData, "name", "", "edit")}
+    ${Input("text", "weapmat-edit-pounds", "Pounds used:", "", "", "", "required")}
   `;
 
   let deleteInput = `
@@ -570,7 +574,6 @@ removeMaterialDuplicates('weapmat-edit-material-name');
 removeMaterialDuplicates('weapmat-delete-material-name'); 
 removeMaterialDuplicates('weapmat-delete-weapon-name');
 
-// TODO: Material Name in Edit Weapon Materials not populating correctly
   // includes null
   // doesn't include all other available materials
 
@@ -593,11 +596,14 @@ const adjustEditMaterials = (weapDropdown, matDropdown, assoc) => {
 
   // get materials not associated with weapon if assoc === false
   let finalMaterials = [];
-  if (!assoc) {
-    finalMaterials = allMaterials.filter(m => !tableMaterials.includes(m)); 
-  } else {
+  if (assoc === 'delete') {
     finalMaterials = tableMaterials;
+  } else if (assoc === 'edit') {
+    finalMaterials = allMaterials.filter(m => m !== 'null' && tableMaterials.includes(m)); 
+  } else {
+    finalMaterials = allMaterials.filter(m => !tableMaterials.includes(m)); 
   }
+  console.log(finalMaterials)
 
   // repopulate material dropdown with those associated with weapon selection
   matDropdown.innerHTML = '';
@@ -606,18 +612,18 @@ const adjustEditMaterials = (weapDropdown, matDropdown, assoc) => {
 
 
 // adjust edit materials based on weapon selection for edit, delete forms
-adjustEditMaterials(weaponAddDropdown, materialAddDropdown, false);
-adjustEditMaterials(weaponEditDropdown, materialEditDropdown, true);
-adjustEditMaterials(weaponDeleteDropdown, materialDeleteDropdown, true);
+adjustEditMaterials(weaponAddDropdown, materialAddDropdown, undefined);
+adjustEditMaterials(weaponEditDropdown, materialEditDropdown, 'edit');
+adjustEditMaterials(weaponDeleteDropdown, materialDeleteDropdown, 'delete');
 
 weaponAddDropdown.addEventListener('change', (e) => {
-  adjustEditMaterials(weaponAddDropdown, materialAddDropdown, false);
+  adjustEditMaterials(weaponAddDropdown, materialAddDropdown, undefined);
 });
 weaponEditDropdown.addEventListener('change', (e) => {
-  adjustEditMaterials(weaponEditDropdown, materialEditDropdown, true);
+  adjustEditMaterials(weaponEditDropdown, materialEditDropdown, 'edit');
 });
 weaponDeleteDropdown.addEventListener('change', (e) => {
-  adjustEditMaterials(weaponDeleteDropdown, materialDeleteDropdown, true);
+  adjustEditMaterials(weaponDeleteDropdown, materialDeleteDropdown, 'delete');
 });
 
 </script>
