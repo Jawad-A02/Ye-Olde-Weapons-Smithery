@@ -5,20 +5,20 @@ require('dotenv').config()
 // localhost mysql server
 const pool = mysql.createPool({
     connectionLimit : 10,
-    host            : 'localhost',
-    user            : 'jvalcher',
-    password        : '1234',
-    database        : 'project'
+    host            : '',
+    user            : '',
+    password        : '',
+    database        : ''
 })
 */
 
 // engr server
 const pool = mysql.createPool({
     connectionLimit : 10,
-    host            : 'classmysql.engr.oregonstate.edu',
-    user            : 'cs340_valcherj',
-    password        : process.env.DB_PASS,
-    database        : 'cs340_valcherj'
+    host            : '',
+    user            : '',
+    password        : ,
+    database        : ''
 })
 
 // Export it for use in our applicaiton
